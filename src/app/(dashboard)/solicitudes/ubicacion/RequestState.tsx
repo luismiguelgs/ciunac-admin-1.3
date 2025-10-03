@@ -1,5 +1,5 @@
 'use client'
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import SolicitudesService from '@/services/solicitudes.service';
 import React from 'react'
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, GridToolbar, GridToolbarContainerProps, GridToolbarQuickFilter } from '@mui/x-data-grid';
@@ -10,7 +10,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid2'
 import NewButton from '@/components/NewButton';
 import { Box, Chip, Portal } from '@mui/material';
-import { IBaseData } from '@/interfaces/types.interface';
+import { IBaseData } from '@/modules/opciones/interfaces/types.interface';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useRouter } from 'next/navigation';
 import { getIconByCode } from '@/lib/common';

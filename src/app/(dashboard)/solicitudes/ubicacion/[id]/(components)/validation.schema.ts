@@ -1,4 +1,4 @@
-import { Isolicitud } from "@/interfaces/solicitud.interface"
+import { Isolicitud } from "@/modules/solicitudes/interfaces/solicitud.interface"
 import * as yup from 'yup'
 
 const msgReq = 'Campo requerido'

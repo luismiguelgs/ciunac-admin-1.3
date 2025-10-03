@@ -1,22 +1,20 @@
 'use client'
 import React from 'react'
 import { MyAccordion, MyDialog } from '@/components/MUI'
-import SolicitudesService from '@/services/solicitudes.service'
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service'
 import Grid from '@mui/material/Grid2'
 import {  Button, Chip, Typography } from '@mui/material'
 import { PanelData } from '@/components/MUI/MyAccordion'
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import FaceIcon from '@mui/icons-material/Face';
 import PowerIcon from '@mui/icons-material/Power';
-import { Isolicitud } from '@/interfaces/solicitud.interface'
 import BackButton from '@/components/BackButton'
-import IProspecto from '@/interfaces/prospecto.interface'
-import ProspectosService from '@/services/prospectos.service'
-import FinanceInfo from '../../(componets)/FinanceInfo'
+import FinanceInfo from '@/modules/solicitudes/components/FinanceInfo';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
-import BasicInfo from '../../(componets)/BasicInfo'
-import InfoExtra from '../../(componets)/InfoExtra'
-import Info2010 from '../(components)/Info2010'
+import BasicInfo from '@/modules/solicitudes/components/BasicInfo';
+import InfoExtra from '@/modules/solicitudes/components/InfoExtra'
+import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 
 type Props = {
     id: string,
@@ -27,16 +25,13 @@ export default function RequestDetail({id, setOpen}:Props)
 {
     //Hooks *************************************************
     const [openDialog, setOpenDialog] = React.useState<boolean>(false);
-    const [solicitud, setSolicitud] = React.useState<Isolicitud>()
-    const [prospecto, setProspecto] = React.useState<IProspecto>()
+    const [solicitud, setSolicitud] = React.useState<ISolicitudRes>()
 
 	React.useEffect(()=>{
         const getData = async(id :string) =>{
             try{
-                const solicitud = await SolicitudesService.getItem(id) as Isolicitud
+                const solicitud = await SolicitudesService.getItemId(Number(id))
                 setSolicitud(solicitud)
-                const prospecto = await ProspectosService.getItem(solicitud.alumno_id as string)
-                setProspecto(prospecto)
             }
             catch(err){
                 if (err instanceof Error) {
@@ -51,24 +46,31 @@ export default function RequestDetail({id, setOpen}:Props)
     },[])
 
 	//Functions *************************************************
-	const saveItem = async (values:Isolicitud) =>{
-        if(values.fecha_pago){
-            SolicitudesService.updateItem({...values, id:id, fecha_pago: new Date(values.fecha_pago).toISOString().split('T')[0]})
-        }else{
-            SolicitudesService.updateItem({...values, id: id, pago:solicitud?.pago})
-        }
+	const saveItem = async (values:ISolicitudRes) =>{
+        const data = {
+            tipoSolicitudId: values.tipoSolicitudId,
+            estadoId: values.estadoId,
+            idiomaId: values.idiomaId,
+            nivelId: values.nivelId,
+            numeroVoucher: values.numeroVoucher,
+            pago: values.pago,
+            fechaPago: values.fechaPago,
+        } as unknown as Isolicitud
+       
+        SolicitudesService.updateItem(Number(id), data)
+        
         setOpenDialog(true)
     }
 	
 	const panels:PanelData[] = [
         {
             title: 'Información de solicitud',
-            content: solicitud && (<FinanceInfo item={solicitud as Isolicitud} saveItem={saveItem} />),
+            content: solicitud && (<FinanceInfo item={solicitud as ISolicitudRes} saveItem={saveItem} />),
             disabled: false
         },
 		{
             title: 'Información de Alumno',
-            content: solicitud && (<BasicInfo item={solicitud as Isolicitud} saveItem={saveItem} /> ),
+            content: solicitud && (<BasicInfo item={solicitud as ISolicitudRes} saveItem={saveItem} /> ),
             disabled: false
         },
 		{
@@ -77,13 +79,6 @@ export default function RequestDetail({id, setOpen}:Props)
             disabled: false
         },
     ]
-	if(solicitud?.antiguo){
-        panels.push({
-            title: 'Información de cursos anteriores al 2009',
-            content: <Info2010 id={solicitud?.id as string}/>,
-            disabled:false
-        })
-    }	
 
 	return (
 		<React.Fragment>
@@ -91,17 +86,15 @@ export default function RequestDetail({id, setOpen}:Props)
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }}>
                 {
-                        solicitud?.estado === 'NUEVO' ? 
+                        solicitud?.estadoId === 1 ? 
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Nueva" sx={{m:1}} color="error"/>) : 
-                        solicitud?.estado === 'ELABORADO' ?
+                        solicitud?.estadoId === 2 ?
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Elaborada" sx={{m:1}} color="warning"/>) : 
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Terminada" sx={{m:1}} color="success"/>)
                 }
                 {
-                        prospecto?.facultad !== 'PAR' ? 
+                        solicitud?.alumnoCiunac ? 
                         (<Chip icon={<FaceIcon />} label="Alumno UNAC" sx={{m:1}} color="primary"/>) : 
-                        solicitud?.trabajador ? 
-                        (<Chip icon={<FaceIcon />} label="Trabajador UNAC" sx={{m:1}} color="primary" />) :
                         (<Chip icon={<FaceIcon />} label="PARTICULAR" sx={{m:1}} color="primary"/>)
                 }
                 {

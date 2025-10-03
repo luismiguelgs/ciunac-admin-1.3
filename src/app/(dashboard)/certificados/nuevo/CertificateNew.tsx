@@ -4,17 +4,17 @@ import CertificateForm from "../(components)/(form)/CertificateForm";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
-import { Icertificado } from "@/interfaces/certificado.interface";
+import { Icertificado } from "@/modules/certificados/interfaces/certificado.interface";
 import {initialValues, validationSchema} from "../(components)/(form)/validation.schema";
 import dayjs from 'dayjs'
-import CertificadosService, { Collection } from "@/services/certificados.service";
+import CertificadosService, { Collection } from "@/modules/certificados/services/certificados.service";
 import { Box } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import BackButton from "@/components/BackButton";
 import CertificateDetail from "../(components)/CertificateDetail";
 import ButtonSave from "@/components/ButtonSave";
 import ButtonAsignRequest from "../../../../components/ButtonAsignRequest";
-import { Isolicitud } from "@/interfaces/solicitud.interface";
+import { Isolicitud } from "@/modules/solicitudes/interfaces/solicitud.interface";
 import { PROGRAMAS } from "@/lib/constants";
 import  LoadingDialog  from"@/components/MUI/Dialogs/DialogLoading"
 import SolicitudesService from "@/services/solicitudes.service";

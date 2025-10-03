@@ -3,7 +3,7 @@ import BackButton from '@/components/BackButton';
 import { MyDialog } from '@/components/MUI';
 import MyAccordion, { PanelData } from '@/components/MUI/MyAccordion';
 import IProspecto from '@/interfaces/prospecto.interface';
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import ProspectosService from '@/services/prospectos.service';
 import SolicitudesService from '@/services/solicitudes.service';
 import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';

@@ -1,30 +1,35 @@
 import MyTabs, { PanelTab } from '@/components/MUI/MyTabs'
 import { Box } from '@mui/material'
 import React from 'react'
-import OptText from './(components)/OptText'
-import OpDocuments from '@/modules/opciones/components/OpDocuments'
-import OptSubjects from './(components)/OptSubjects'
-import OptFaculties from './(components)/OptFaculties'
+import OptText from '../../../modules/opciones/components/OptText'
+import OpSolicitudes from '@/modules/opciones/components/OpSolicitudes'
+import OpIdiomas from '@/modules/opciones/components/OpIdiomas'
+import OptFacultades from '@/modules/opciones/components/OpFacultades'
+import OpEscuelas from '@/modules/opciones/components/OpEscuelas'
 
 export default function OptionsPage() 
 {
 	const panels:PanelTab[] = [
         {
           label: 'Solicitudes',
-          content: <OpDocuments />
+          content: <OpSolicitudes />
         },
         {
           label: 'Textos',
           content: <OptText />
         },
         {
-          label: 'Cursos',
-          content: <OptSubjects />
+          label: 'Idiomas',
+          content: <OpIdiomas />
         },
         {
           label: 'Facultades',
-          content: <OptFaculties />
-        }
+          content: <OptFacultades />
+        },
+		{
+			label: 'Escuelas',
+			content: <OpEscuelas />
+		}
     ]
 	return (
 		<React.Fragment>

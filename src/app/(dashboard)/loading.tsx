@@ -1,7 +1,7 @@
 'use client';
-import { IBaseData, Icertificado } from '@/interfaces/types.interface';
-import { Collection, OpcionesService } from '@/services/opciones.service';
-import {useDocumentsStore, useFacultiesStore, useSubjectsStore} from '@/store/types.stores';
+import { IBaseData, ITipoSolicitud } from '@/modules/opciones/interfaces/types.interface';
+import OpcionesService, { Collection } from '@/modules/opciones/services/opciones.service';
+import {useDocumentsStore, useFacultiesStore, useSubjectsStore} from '@/modules/opciones/store/types.stores';
 import { CircularProgress, Box, Typography } from '@mui/material';
 import React from 'react';
 
@@ -9,11 +9,11 @@ export default function Loading()
 {
     React.useEffect(() => {
         const types = async () => {
-            const docs = await OpcionesService.fetchItems<Icertificado>(Collection.Certificados);
+            const docs = await OpcionesService.fetchItems<ITipoSolicitud>(Collection.Tiposolicitud);
             useDocumentsStore.getState().setDocuments(docs);
             const facs = await OpcionesService.fetchItems<IBaseData>(Collection.Facultades);
             useFacultiesStore.getState().setFaculties(facs);
-            const subs = await OpcionesService.fetchItems<IBaseData>(Collection.Cursos);
+            const subs = await OpcionesService.fetchItems<IBaseData>(Collection.Idiomas);
             useSubjectsStore.getState().setSubjects(subs);
         }   
         types(); 

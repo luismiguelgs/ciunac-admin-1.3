@@ -1,4 +1,4 @@
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import React from 'react'
 import { ColumnTask, defaultCols } from './Tasks'
 import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'

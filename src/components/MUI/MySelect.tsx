@@ -14,9 +14,11 @@ type Props = {
     error?:boolean,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sx?:any
+    getOptionValue?: (item: any) => string
+    getOptionLabel?: (item: any) => string
 }
 
-export default function MySelect({variant='outlined', disabled=false,name,handleChange,label, helperText='', data,value,error=false, sx={}}:Props) {
+export default function MySelect({variant='outlined', disabled=false,name,handleChange,label, helperText='', data,value,error=false, sx={}, getOptionValue, getOptionLabel}:Props) {
   return (
     <React.Fragment>
         <TextField
@@ -33,11 +35,15 @@ export default function MySelect({variant='outlined', disabled=false,name,handle
             sx={sx}
         >
         {
-            data && data.map((option,index)=>(
-                <MenuItem key={index} value={option.value}>
-                    {option.label}
-                </MenuItem>
-            ))
+            data && data.map((item,index)=>{
+                const value = getOptionValue ? getOptionValue(item) : (item?.value ?? item?.id ?? String(index))
+                const label = getOptionLabel ? getOptionLabel(item) : (item?.label ?? item?.nombre ?? String(item))
+                return(
+                    <MenuItem key={index} value={value}>
+                        {label}
+                    </MenuItem>
+                )
+            })
         }
         </TextField>
     </React.Fragment>

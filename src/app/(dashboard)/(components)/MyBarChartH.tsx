@@ -1,5 +1,5 @@
 'use client'
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import { BarChart } from '@mui/x-charts'
 import React from 'react'
 

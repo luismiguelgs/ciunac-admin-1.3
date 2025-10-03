@@ -3,7 +3,7 @@ import IProspecto from '@/interfaces/prospecto.interface'
 import React from 'react'
 import { TextField } from '@mui/material'
 import useStore from '@/hooks/useStore';
-import {  useFacultiesStore } from '@/store/types.stores';
+import {  useFacultiesStore } from '@/modules/opciones/store/types.stores';
 import { MySelect } from '@/components/MUI';
 import { ESCUELAS } from '@/lib/constants';
 

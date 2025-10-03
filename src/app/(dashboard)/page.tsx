@@ -3,7 +3,6 @@ import { auth } from '@/auth';
 import { Typography } from '@mui/material';
 import Graphs from './(components)/Graphs';
 
-
 export default async function Page() 
 {
     const session = await auth();

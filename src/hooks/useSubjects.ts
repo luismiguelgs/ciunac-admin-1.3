@@ -1,6 +1,6 @@
-import { IBaseData } from "@/interfaces/types.interface";
+import { IBaseData } from "@/modules/opciones/interfaces/types.interface";
 import { Collection, OpcionesService } from "@/services/opciones.service";
-import { useSubjectsStore } from "@/store/types.stores";
+import { useSubjectsStore } from "@/modules/opciones/store/types.stores";
 import React from "react";
 import useStore from "./useStore";
 

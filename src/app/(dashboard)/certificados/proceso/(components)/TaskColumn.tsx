@@ -1,6 +1,6 @@
 import React from 'react'
 import { ColumnTask } from './Tasks';
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities'
 import { Box, Typography } from '@mui/material';

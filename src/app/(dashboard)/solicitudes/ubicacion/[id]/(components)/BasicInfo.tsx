@@ -6,7 +6,7 @@ import IProspecto from '@/interfaces/prospecto.interface'
 import { MySelect } from '@/components/MUI'
 import Grid from '@mui/material/Grid2'
 import useStore from '@/hooks/useStore';
-import {  useFacultiesStore } from '@/store/types.stores';
+import {  useFacultiesStore } from '@/modules/opciones/store/types.stores';
 
 type Props = {
     item: IProspecto

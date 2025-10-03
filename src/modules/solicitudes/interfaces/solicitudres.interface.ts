@@ -1,0 +1,45 @@
+export interface ISolicitudRes{
+    id?:number,
+    estudianteId:string,
+    tipoSolicitudId:number,
+    idiomaId:number,
+    nivelId:number,
+    estadoId:number,
+    periodo:string,
+    alumnoCiunac:boolean,
+    fechaPago: string,
+    pago: number,
+    numeroVoucher: string,
+    imgVoucher: string,
+    imgCertEstudio: string,
+    digital: boolean,
+    manual: boolean,
+    creadoEn: string,
+    modificadoEn: string,
+    estudiante?: {
+        id: string,
+        nombres: string,
+        apellidos: string,
+        numeroDocumento: string,
+        celular?: string,
+    },
+    tiposSolicitud?: {
+        id: number,
+        solicitud: string,
+        precio: number,
+    },
+    idioma?: {
+        id: number,
+        nombre: string,
+    },
+    nivel?: {
+        id: number,
+        nombre: string,
+        orden: number,
+    },
+    estado?: {
+        id: number,
+        nombre: string,
+        referencia: string
+    },
+}

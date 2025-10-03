@@ -1,5 +1,5 @@
 'use client'
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import SolicitudesService from '@/services/solicitudes.service';
 import { Box, Button } from '@mui/material';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from '@mui/x-data-grid';
@@ -7,7 +7,7 @@ import React from 'react'
 import LanguageIcon from '@mui/icons-material/Language';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
 import useStore from '@/hooks/useStore';
-import { useSubjectsStore } from '@/store/types.stores';
+import { useSubjectsStore } from '@/modules/opciones/store/types.stores';
 import PrintIcon from '@mui/icons-material/Print';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 

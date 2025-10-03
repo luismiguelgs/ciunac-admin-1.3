@@ -5,7 +5,7 @@ import CardChart from './CardChart';
 import SolicitudesService from '@/services/solicitudes.service';
 import MyLineChart from './MyLineChart';
 import MyPieChart from './MyPieChart';
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import MyBarChartH from './MyBarChartH';
 import MyBarChartV from './MyBarChartV';
 import { Skeleton } from '@mui/material';

@@ -2,10 +2,10 @@
 import React from 'react'
 import { MySelect } from './MUI'
 import useStore from '@/hooks/useStore'
-import { useDocumentsStore } from '@/store/types.stores'
-import { Collection, OpcionesService } from '@/services/opciones.service'
+import { useDocumentsStore } from '@/modules/opciones/store/types.stores'
+import OpcionesService, { Collection } from '@/modules/opciones/services/opciones.service'
 import { Skeleton } from '@mui/material'
-import { Icertificado } from '@/interfaces/types.interface'
+import { ITipoSolicitud } from '@/modules/opciones/interfaces/types.interface'
 
 type Props = {
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -17,11 +17,11 @@ type Props = {
 
 export default function SelectDocuments({handleChange, error, value, helperText, disabled}:Props) 
 {
-    const [data, setData] = React.useState<Icertificado[] | undefined>(useStore(useDocumentsStore, (state) => state.documents)); 
+    const [data, setData] = React.useState<ITipoSolicitud[] | undefined>(useStore(useDocumentsStore, (state) => state.documents)); 
 
     React.useEffect(() => {
         const getData = async () => {
-            const subs = await OpcionesService.fetchItems<Icertificado>(Collection.Certificados);    
+            const subs = await OpcionesService.fetchItems<ITipoSolicitud>(Collection.Tiposolicitud);    
             useDocumentsStore.getState().setDocuments(subs);
             setData(subs)
         } 
@@ -38,14 +38,16 @@ export default function SelectDocuments({handleChange, error, value, helperText,
     return (
         data && (
             <MySelect 
-            data={data}
-            handleChange={handleChange}
-            error={error}
-            label='Tipo de solicitud'
-            disabled={disabled}
-            name='solicitud'
-            value={value}
-            helperText={helperText}
+                data={data.filter((item) => item.id !== 8)}
+                handleChange={handleChange}
+                error={error}
+                label='Tipo de solicitud'
+                disabled={disabled}
+                name='solicitud'
+                value={value}
+                helperText={helperText}
+                getOptionValue={(option) => option.id}
+                getOptionLabel={(option) => option.solicitud}
         />)
     )
 }

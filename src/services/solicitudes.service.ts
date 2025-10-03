@@ -1,5 +1,5 @@
 import React from 'react';
-import { Isolicitud } from '../interfaces/solicitud.interface';
+import { Isolicitud } from '../modules/solicitudes/interfaces/solicitud.interface';
 import { firestore } from '@/lib/firebase';
 import { collection, doc, updateDoc, serverTimestamp, addDoc, deleteDoc, getDoc, onSnapshot, Timestamp, query, where, orderBy, Query, getDocs} from 'firebase/firestore'
 import { changeDate, obtenerPeriodo } from '@/lib/utils';

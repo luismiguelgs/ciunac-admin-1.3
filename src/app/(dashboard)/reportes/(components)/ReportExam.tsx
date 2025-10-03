@@ -3,7 +3,7 @@ import React from 'react'
 import { Button, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import DataTable, { Column } from '@/components/MUI/DataTable';
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import SolicitudesService from '@/services/solicitudes.service';
 import { exportToExcel } from '@/lib/utils';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';

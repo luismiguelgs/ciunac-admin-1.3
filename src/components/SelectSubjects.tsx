@@ -2,9 +2,9 @@
 import React from 'react'
 import { MySelect } from './MUI'
 import useStore from '@/hooks/useStore'
-import { useSubjectsStore } from '@/store/types.stores'
-import { Collection, OpcionesService } from '@/services/opciones.service'
-import { IBaseData } from '@/interfaces/types.interface'
+import { useSubjectsStore } from '@/modules/opciones/store/types.stores'
+import OpcionesService, { Collection } from '@/modules/opciones/services/opciones.service'
+import { IIdioma } from '@/modules/opciones/interfaces/types.interface'
 import { Skeleton } from '@mui/material'
 
 type Props = {
@@ -17,11 +17,11 @@ type Props = {
 
 export default function SelectSubjects({handleChange, error, value, helperText, disabled}:Props) 
 {
-    const [data, setData] = React.useState<IBaseData[] | undefined>(useStore(useSubjectsStore, (state) => state.subjects)); 
+    const [data, setData] = React.useState<IIdioma[] | undefined>(useStore(useSubjectsStore, (state) => state.subjects)); 
 
     React.useEffect(() => {
         const getData = async () => {
-            const subs = await OpcionesService.fetchItems<IBaseData>(Collection.Cursos);    
+            const subs = await OpcionesService.fetchItems<IIdioma>(Collection.Idiomas);    
             useSubjectsStore.getState().setSubjects(subs);
             setData(subs)
         } 

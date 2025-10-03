@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import * as ExcelJS from 'exceljs';
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import { IUsuario } from "@/interfaces/usuario.interface";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

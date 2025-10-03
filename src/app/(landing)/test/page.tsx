@@ -4,7 +4,7 @@ import SolicitudesService from "@/services/solicitudes.service";
 import { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Box } from "@mui/material";
-import { Isolicitud } from "@/interfaces/solicitud.interface"; // Asegúrate que la ruta sea correcta
+import { Isolicitud } from "@/modules/solicitudes/interfaces/solicitud.interface"; // Asegúrate que la ruta sea correcta
 import { formatDate } from "@/lib/utils";
 
 // Define las columnas para el DataGrid

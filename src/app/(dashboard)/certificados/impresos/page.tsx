@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
 import CertificateList from '../(components)/CertificateList'
-import CertificadosService from '@/services/certificados.service'
-import { Icertificado } from '@/interfaces/certificado.interface'
+import CertificadosService from '@/modules/certificados/services/certificados.service'
+import { Icertificado } from '@/modules/certificados/interfaces/certificado.interface'
 
 export default function CertifictesPrintedPage() 
 {

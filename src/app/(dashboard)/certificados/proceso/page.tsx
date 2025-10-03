@@ -1,5 +1,5 @@
 'use client'
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import SolicitudesService from '@/services/solicitudes.service'
 import React from 'react'
 import Grid from '@mui/material/Grid2'

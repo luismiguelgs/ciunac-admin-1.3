@@ -19,10 +19,11 @@ export const MESES = [
 ]
 
 export const ESTADO = [
-    {value:'NUEVO',label:'NUEVO'},
-    {value:'ASIGNADO',label:'ASIGNADO'},
-    {value:'ELABORADO',label:'EN PROCESO'},
-    {value:'ENTREGADO',label:'TERMINADO'},
+    {value:'1',label:'NUEVO'},
+    {value:'2',label:'PROCESO'},
+    {value:'3',label:'TERMINADO'},
+    {value:'4',label:'PAGADO'},
+    {value:'5',label:'RECHAZADO'},
 ]
 export const ESTADO_EXAMEN = [
     {value:'PROGRAMADO',label:'Programado'},
@@ -30,9 +31,9 @@ export const ESTADO_EXAMEN = [
     {value:'TERMINADO',label:'Terminado'},
 ]
 export const NIVEL = [
-    {value:'BASICO',label:'BÁSICO'},
-    {value:'INTERMEDIO',label:'INTERMEDIO'},
-    {value:'AVANZADO',label:'AVANZADO'},
+    {value:'1',label:'BÁSICO'},
+    {value:'2',label:'INTERMEDIO'},
+    {value:'3',label:'AVANZADO'},
 ]
 
 export const GENERO = [

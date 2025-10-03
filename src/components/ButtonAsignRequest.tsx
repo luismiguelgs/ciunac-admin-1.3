@@ -3,7 +3,7 @@ import React from 'react'
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DialogFull from '@/components/MUI/Dialogs/DialogFull';
 import RequestList from '../app/(dashboard)/certificados/(components)/RequestList';
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 
 type Props = {
     setReload: React.Dispatch<React.SetStateAction<boolean>>

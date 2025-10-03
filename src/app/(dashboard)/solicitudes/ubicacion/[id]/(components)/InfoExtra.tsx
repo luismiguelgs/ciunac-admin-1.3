@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid2'
 import { Card, CardContent, CardHeader, CardMedia, Link } from '@mui/material'
 import pdfLogo from '@/assets/pdf.png'
 import noImage from '@/assets/no_disponible.png'
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 
 type Props = {
     item: Isolicitud

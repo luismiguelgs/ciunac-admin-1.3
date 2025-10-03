@@ -1,10 +1,10 @@
 'use client'
 import useStore from '@/hooks/useStore'
 import { IexamenNotas } from '@/interfaces/examen.interface'
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import { Collection, ExamenesService } from '@/services/examenes.service'
 import SolicitudesService from '@/services/solicitudes.service'
-import { useSubjectsStore } from '@/store/types.stores'
+import { useSubjectsStore } from '@/modules/opciones/store/types.stores'
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid'
 import React from 'react'
 import LanguageIcon from '@mui/icons-material/Language';

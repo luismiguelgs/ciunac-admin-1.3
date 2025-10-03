@@ -1,4 +1,4 @@
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import React from 'react'
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";

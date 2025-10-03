@@ -1,10 +1,10 @@
 'use client'
-import { IcertificadoDetalle } from '@/interfaces/certificado.interface'
+import { IcertificadoDetalle } from '@/modules/certificados/interfaces/certificado.interface'
 import { Button } from '@mui/material'
 import { GridColDef, GridRowId, GridRowModel, GridRowModes, GridRowModesModel } from '@mui/x-data-grid'
 import React from 'react'
 import AddIcon from '@mui/icons-material/Add';
-import CertificadosService, { Collection } from '@/services/certificados.service'
+import CertificadosService, { Collection } from '@/modules/certificados/services/certificados.service'
 import EditableDataGrid from '@/components/MUI/EditableDataGrid'
 import { MyDialog } from '@/components/MUI'
 import { PROGRAMAS } from '@/lib/constants'

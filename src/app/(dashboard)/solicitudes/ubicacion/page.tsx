@@ -1,7 +1,7 @@
 'use client';
 import { MyDialog, MyTabs } from '@/components/MUI'
 import useStore from '@/hooks/useStore';
-import { useSubjectsStore } from '@/store/types.stores';
+import { useSubjectsStore } from '@/modules/opciones/store/types.stores';
 import { GridRowId } from '@mui/x-data-grid';
 import React from 'react'
 import { useRouter } from 'next/navigation';

@@ -1,5 +1,5 @@
-import { Icertificado, IcertificadoDetalle } from '@/interfaces/certificado.interface'
-import { IBaseData } from '@/interfaces/types.interface'
+import { Icertificado, IcertificadoDetalle } from '@/modules/certificados/interfaces/certificado.interface'
+import { IBaseData } from '@/modules/opciones/interfaces/types.interface'
 import { Button } from '@mui/material'
 import { FormikProps } from 'formik'
 import React from 'react'

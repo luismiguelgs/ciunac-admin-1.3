@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { DefaultizedPieValueType, PieChart, pieArcLabelClasses } from '@mui/x-charts';
-import { Isolicitud } from '@/interfaces/solicitud.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 
 export default function MyPieChart(props:{data:Isolicitud[]}) 
 {

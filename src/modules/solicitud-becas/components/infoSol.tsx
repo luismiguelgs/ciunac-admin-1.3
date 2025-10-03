@@ -1,4 +1,4 @@
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import React from 'react'
 import Grid from '@mui/material/Grid2'
 import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, TextField, Typography } from '@mui/material'

@@ -3,7 +3,7 @@
 import { Icalificacion } from '@/interfaces/calificacion.interface'
 import { Iexamen } from '@/interfaces/examen.interface'
 import { Iprofesor } from '@/interfaces/profesores.interface'
-import { Isalon } from '@/interfaces/types.interface'
+import { Isalon } from '@/modules/opciones/interfaces/types.interface'
 //import { useSubjectsStore } from '@/store/types.stores'
 import { useFormik } from 'formik'
 import React from 'react'

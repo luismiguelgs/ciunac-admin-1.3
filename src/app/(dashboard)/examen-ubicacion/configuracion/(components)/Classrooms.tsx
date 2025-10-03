@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditableDataGrid from '@/components/MUI/EditableDataGrid'
 import { MyDialog } from '@/components/MUI'
 import { Collection, OpcionesService } from '@/services/opciones.service'
-import { Isalon } from '@/interfaces/types.interface';
+import { Isalon } from '@/modules/opciones/interfaces/types.interface';
 
 const cols:GridColDef[] = [
     {field: 'value',  headerName: 'VALOR', editable: true, width:220},

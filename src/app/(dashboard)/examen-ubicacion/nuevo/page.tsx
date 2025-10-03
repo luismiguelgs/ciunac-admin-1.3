@@ -2,7 +2,7 @@
 import { Icalificacion } from '@/interfaces/calificacion.interface'
 import { Iexamen } from '@/interfaces/examen.interface'
 import { Iprofesor } from '@/interfaces/profesores.interface'
-import { Isalon } from '@/interfaces/types.interface'
+import { Isalon } from '@/modules/opciones/interfaces/types.interface'
 import { CalificacionesService } from '@/services/calificaciones.service'
 import { ExamenesService, Collection as CollectionExam } from '@/services/examenes.service'
 import { Collection, OpcionesService } from '@/services/opciones.service'

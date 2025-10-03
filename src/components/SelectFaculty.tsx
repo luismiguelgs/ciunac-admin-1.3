@@ -1,11 +1,11 @@
 'use client'
-import useStore from '@/hooks/useStore'
-import { Collection, OpcionesService } from '@/services/opciones.service'
-import { useFacultiesStore } from '@/store/types.stores'
 import React from 'react'
+import useStore from '@/hooks/useStore'
+import OpcionesService, { Collection } from '@/modules/opciones/services/opciones.service'
+import { useFacultiesStore } from '@/modules/opciones/store/types.stores'
 import { MySelect } from './MUI'
 import { Skeleton } from '@mui/material'
-import { IBaseData } from '@/interfaces/types.interface'
+import { IFacultad } from '@/modules/opciones/interfaces/types.interface'
 
 type Props = {
     handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -17,11 +17,11 @@ type Props = {
 export default function SelectFaculty({handleChange, error, value, helperText, disabled}:Props) 
 {
     const init = useStore(useFacultiesStore, (state) => state.faculties)
-    const [data, setData] = React.useState<IBaseData[] | undefined>(init);
+    const [data, setData] = React.useState<IFacultad[] | undefined>(init);
 
     React.useEffect(() => {
         const getData = async () => {
-            const subs = await OpcionesService.fetchItems<IBaseData>(Collection.Facultades);
+            const subs = await OpcionesService.fetchItems<IFacultad>(Collection.Facultades);
             useFacultiesStore.setState({ faculties: subs })
             setData(subs)
         }

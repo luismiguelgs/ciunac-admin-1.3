@@ -1,7 +1,7 @@
 'use client';
 
 import IProspecto from '@/interfaces/prospecto.interface'
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import SolicitudesService from '@/services/solicitudes.service';
 import { Chip, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'

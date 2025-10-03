@@ -11,9 +11,9 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import SaveIcon from '@mui/icons-material/Save';
 import noImage from '@/assets/no_disponible.png'
 import validationSchema from './validation.schema'
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import useStore from '@/hooks/useStore';
-import { useDocumentsStore,  useSubjectsStore } from '@/store/types.stores';
+import { useDocumentsStore,  useSubjectsStore } from '@/modules/opciones/store/types.stores';
 import { MySelect } from '@/components/MUI';
 import { ESTADO, NIVEL } from '@/lib/constants';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

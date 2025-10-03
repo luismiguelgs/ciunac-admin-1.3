@@ -1,4 +1,4 @@
-import { Icertificado } from '@/interfaces/certificado.interface'
+import { Icertificado } from '@/modules/certificados/interfaces/certificado.interface'
 import * as yup from 'yup'
 
 const msgReq = 'Campo requerido'

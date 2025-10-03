@@ -5,7 +5,7 @@ import React from 'react'
 import DialogFull from "@/components/MUI/Dialogs/DialogFull";
 import { GridRowId } from '@mui/x-data-grid';
 import useStore from '@/hooks/useStore';
-import { useDocumentsStore, useSubjectsStore } from '@/store/types.stores';
+import { useDocumentsStore, useSubjectsStore } from '@/modules/opciones/store/types.stores';
 import { RequestState } from './(components)/RequestStage';
 import RequestDetail from './[id]/(components)/RequestDetail';
 

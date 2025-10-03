@@ -1,4 +1,4 @@
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import { Box, TextField, Button } from '@mui/material'
 import Grid from '@mui/material/Grid2'; // Grid de MUI v5
 import React from 'react'

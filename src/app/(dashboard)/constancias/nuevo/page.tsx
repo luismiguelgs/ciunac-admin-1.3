@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import Grid from '@mui/material/Grid2';
 import { initialValues, validationSchema } from '../(components)/validations.schema'
-import { Isolicitud } from '@/interfaces/solicitud.interface'
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import { Box } from '@mui/material'
 import BackButton from '@/components/BackButton'
 import ButtonSave from '@/components/ButtonSave'

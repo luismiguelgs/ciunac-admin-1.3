@@ -2,7 +2,7 @@
 import React from 'react'
 import Grid from '@mui/material/Grid2'
 import { FormikProps } from 'formik'
-import { Icertificado } from '@/interfaces/certificado.interface'
+import { Icertificado } from '@/modules/certificados/interfaces/certificado.interface'
 import { TextField } from '@mui/material'
 import { MySelect, MySwitch } from '@/components/MUI'
 import { NIVEL } from '@/lib/constants'
