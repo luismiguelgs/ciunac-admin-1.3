@@ -5,37 +5,36 @@ import NewButton from '@/components/NewButton'
 import { Box, Checkbox, Chip } from '@mui/material'
 import MyDataGrid from '@/components/MUI/MyDataGrid'
 import { MyDialog } from '@/components/MUI'
-import { GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid'
-import { Icertificado } from '@/modules/certificados/interfaces/certificado.interface'
+import { GridActionsCellItem, GridColDef, GridRowId, GridValueFormatter } from '@mui/x-data-grid'
+import { ICertificado } from '@/modules/certificados/interfaces/certificado.interface'
 import { useRouter } from 'next/navigation'
-import CertificadosService, { Collection } from '@/modules/certificados/services/certificados.service'
+import CertificadosService from '@/modules/certificados/services/certificados.service'
 import { NIVEL } from '@/lib/constants'
 import PrintIcon from '@mui/icons-material/Print';
 import { PDFViewer, pdf } from '@react-pdf/renderer'
-import CertificateFormat from './(formats)/CertificateFormat'
-import CertificateFormatVirtual from './(formats)/CertificateFormatVirtual'
+import CertificateFormat from './formats/CertificateFormat'
+import CertificateFormatVirtual from './formats/CertificateFormatVirtual'
 import DownloadIcon from '@mui/icons-material/Download';
 import dayjs from 'dayjs'
-import SolicitudesService from '@/services/solicitudes.service'
-import useSubjects from '@/hooks/useSubjects'
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service'
 import 'dayjs/locale/es';
 dayjs.locale('es');
 
 type Props = {
-	rows: Icertificado[],
-	setRows: React.Dispatch<React.SetStateAction<Icertificado[]>>
+	rows: ICertificado[],
+	setRows: React.Dispatch<React.SetStateAction<ICertificado[]>>
 	printed: boolean
 }
 
 export default function CertificateList({rows, setRows, printed}:Props) 
 {
 	//Hooks ************************************************************
-	const { data } = useSubjects()
-    const subjects = data;
+	//const { data } = useSubjects()
+    //const subjects = data;
     const navigate = useRouter()
     const [ openDialog, setOpenDialog ] = React.useState<boolean>(false)
     const [ openPrint, setOpenPrint ] = React.useState<boolean>(false)
-    const [ selectData, setSelectData ] = React.useState<Icertificado | undefined>()
+    const [ selectData, setSelectData ] = React.useState<ICertificado | undefined>()
     const [ID, setID] = React.useState<GridRowId | null>(null);
 
     
@@ -46,22 +45,25 @@ export default function CertificateList({rows, setRows, printed}:Props)
                 row.id === id ? { ...row, impreso: checked } : row
             )
         );
-        await CertificadosService.updateStatus(Collection.Certificados,id as string, checked)
+        await CertificadosService.updateStatus(id as string, checked)
         const info = rows.find((row) => row.id === id)
         if(checked)
-            await SolicitudesService.updateStatus(info?.id_solicitud as string, 'ENTREGADO')
+            await SolicitudesService.updateStatus(Number(info?.solicitudId), 3)
         else
-            await SolicitudesService.updateStatus(info?.id_solicitud as string, 'ELABORADO')
+            await SolicitudesService.updateStatus(Number(info?.solicitudId), 2)
     }
+    const handleAccept = async (id:GridRowId, checked:boolean) => {
+        setRows((prevRows) =>
+            prevRows.map((row) =>
+                row.id === id ? { ...row, aceptado: checked } : row
+            )
+        );
+        await CertificadosService.updateAccept(id as string, checked)
+    }
+
     const handleConfirmDelete = async () => {
         if (ID) {
-            //borrar su detalle
-            const data = await CertificadosService.fetchItemsDetail(ID as string)
-            for(const element of data){
-                await CertificadosService.deleteItem(Collection.CertificadosDetalle, element.id as string)
-            }
-            //borrar el item
-            await CertificadosService.deleteItem(Collection.Certificados,ID as string);
+            await CertificadosService.deleteItem(String(ID));
             setRows(rows.filter((row) => row.id !== ID));
             setID(null);
             setOpenDialog(false);
@@ -85,12 +87,12 @@ export default function CertificateList({rows, setRows, printed}:Props)
         setOpenPrint(true)
         //alert(JSON.stringify(selectData))
     }
-    const buildFileName = (row: Icertificado) => {
-        const alumno = (row.alumno || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9-_ ]/g, '').replace(/\s+/g, '_');
+    const buildFileName = (row: ICertificado) => {
+        const alumno = (row.estudiante || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9-_ ]/g, '').replace(/\s+/g, '_');
         const idioma = (row.idioma || '').toString();
         const nivel = (row.nivel || '').toString();
-        const folio = (row.numero_registro || '').toString();
-        const fecha = dayjs(row.fecha_emision).format('YYYYMMDD');
+        const folio = (row.numeroRegistro || '').toString();
+        const fecha = dayjs(row.fechaEmision).format('YYYYMMDD');
         const parts = [
             'Certificado',
             alumno || 'Alumno',
@@ -103,40 +105,42 @@ export default function CertificateList({rows, setRows, printed}:Props)
     const handleDownload = async (id: GridRowId) => {
         const row = rows.find(r => r.id === id);
         if (!row) return;
-        const isDigital = row.tipo !== 'fisico';
+        const isDigital = row.tipo !== 'FISICO';
         const doc = isDigital ? (
             <CertificateFormatVirtual
                 duplicado={row.duplicado as boolean}
-                curricula_antigua={row.curricula_antigua as boolean}
-                certificado_anterior={row.certificado_anterior}
+                curricula_antigua={row.curriculaAnterior as boolean}
+                certificado_anterior={row.certificadoOriginal}
                 id={row.id as string}
                 formato={row.idioma === 'INGLES' && row.nivel === 'BASICO' ? 1 : 0}
-                fecha_emision={dayjs(row.fecha_emision).format('D [de] MMMM [de] YYYY')}
-                fecha_conclusion={dayjs(row.fecha_conclusion).format('D [de] MMMM [de] YYYY')}
-                idioma={subjects?.filter(item=>item.value === row.idioma)[0]?.label}
-                nivel={NIVEL.filter(item=>item.value === row.nivel)[0]?.label}
+                fecha_emision={dayjs(row.fechaEmision).format('D [de] MMMM [de] YYYY')}
+                fecha_conclusion={dayjs(row.fechaConcluido).format('D [de] MMMM [de] YYYY')}
+                idioma={row.idioma}
+                nivel={row.nivel}
                 url={`https://ciunac.unac.edu.pe/validacion-certificado/?url=${row.id}`}
-                alumno={row.alumno as string}
-                horas={row.horas as number}
-                elaborador={row.elaborador}
-                numero_folio={row.numero_registro as string}
+                alumno={row.estudiante as string}
+                horas={row.cantidadHoras as number}
+                elaborador={row.elaboradoPor}
+                numero_folio={row.numeroRegistro as string}
+                notas={row.notas}
             />
         ) : (
             <CertificateFormat
                 duplicado={row.duplicado as boolean}
-                curricula_antigua={row.curricula_antigua as boolean}
-                certificado_anterior={row.certificado_anterior}
+                curricula_antigua={row.curriculaAnterior as boolean}
+                certificado_anterior={row.certificadoOriginal}
                 id={row.id as string}
                 formato={row.idioma === 'INGLES' && row.nivel === 'BASICO' ? 1 : 0}
-                fecha_emision={dayjs(row.fecha_emision).format('D [de] MMMM [de] YYYY')}
-                fecha_conclusion={dayjs(row.fecha_conclusion).format('D [de] MMMM [de] YYYY')}
-                idioma={subjects?.filter(item=>item.value === row.idioma)[0]?.label}
-                nivel={NIVEL.filter(item=>item.value === row.nivel)[0]?.label}
+                fecha_emision={dayjs(row.fechaEmision).format('D [de] MMMM [de] YYYY')}
+                fecha_conclusion={dayjs(row.fechaConcluido).format('D [de] MMMM [de] YYYY')}
+                idioma={row.idioma}
+                nivel={row.nivel}
                 url={`https://ciunac.unac.edu.pe/validacion-certificado/?url=${row.id}`}
-                alumno={row.alumno as string}
-                horas={row.horas as number}
-                elaborador={row.elaborador}
-                numero_folio={row.numero_registro as string}
+                alumno={row.estudiante as string}
+                horas={row.cantidadHoras as number}
+                elaborador={row.elaboradoPor}
+                numero_folio={row.numeroRegistro as string}
+                notas={row.notas}
             />
         );
         const blob = await pdf(doc).toBlob();
@@ -149,21 +153,26 @@ export default function CertificateList({rows, setRows, printed}:Props)
         a.remove();
         URL.revokeObjectURL(url);
     }
+
+    const formatFecha: GridValueFormatter = (value: string | Date | null| undefined) => {
+        if (!value) return '';
+        return new Date(value).toLocaleDateString('es-PE', {year: 'numeric', month: '2-digit', day: '2-digit'})
+    }
     
 	//Columnas ***************
     const columns: GridColDef[] = [
-        { field: 'numero_registro', headerName: 'N°REGISTRO', width: 150 },
+        { field: 'numeroRegistro', headerName: 'N°REGISTRO', width: 120 },
         {
             field: 'tipo',
             headerName: 'MODALIDAD',
-            width: 120,
+            width: 110,
             renderCell: (params) =>{
                 switch(params.value){
-                    case 'virtual':
+                    case 'VIRTUAL':
                         return <Chip label='DIGITAL' color="secondary" />
-                    case 'digital':
+                    case 'DIGITAL':
                         return <Chip label='DIGITAL' color="secondary" />
-                    case 'fisico':
+                    case 'FISICO':
                         return <Chip label='FISICO' color="primary" />
                     default:
                         return <Chip label={params.value} />
@@ -171,10 +180,16 @@ export default function CertificateList({rows, setRows, printed}:Props)
                 
             }
         },
-        { field: 'alumno', headerName: 'ALUMNO', width: 230 },
-        { field: 'fecha_emision', headerName: 'FECHA EMISIÓN', type: 'date', width: 140 },
-        { field: 'idioma', headerName: 'IDIOMA', type: 'singleSelect', valueOptions: subjects, width: 130 },
-        { field: 'nivel', headerName: 'NIVEL', type: 'singleSelect', valueOptions: NIVEL, width:130},
+        { field: 'estudiante', headerName: 'ALUMNO', width: 230 },
+        { 
+            field: 'fechaEmision', 
+            headerName: 'FECHA EMISIÓN', 
+            type: 'date',
+            valueFormatter: formatFecha,
+            width: 130 
+        },
+        { field: 'idioma', headerName: 'IDIOMA', width: 130 },
+        { field: 'nivel', headerName: 'NIVEL', width:120},
         {
             field: 'impreso',
             headerName: 'IMPRESO',
@@ -183,6 +198,18 @@ export default function CertificateList({rows, setRows, printed}:Props)
                 return <Checkbox 
                     checked={params.value as boolean}
                     onChange={(e)=>{handleCheckboxChange(params.id as GridRowId, e.target.checked)}} 
+                    inputProps={{'aria-label': 'Checkbox Impreso'}}
+                />
+            }
+        },
+        {
+            field: 'aceptado',
+            headerName: 'ENTREGADO',
+            width: 100,
+            renderCell: (params) => {
+                return <Checkbox 
+                    checked={params.value as boolean}
+                    onChange={(e)=>{handleAccept(params.id as GridRowId, e.target.checked)}} 
                     inputProps={{'aria-label': 'Checkbox Impreso'}}
                 />
             }
@@ -213,7 +240,7 @@ export default function CertificateList({rows, setRows, printed}:Props)
                     extraActions={(id:GridRowId) => {
                         const row = rows.find(r => r.id === id);
                         
-                        if (row?.tipo !== 'fisico' ) {
+                        if (row?.tipo !== 'FISICO' ) {
                             return [
                                 <GridActionsCellItem
                                     key='download'
@@ -252,19 +279,21 @@ export default function CertificateList({rows, setRows, printed}:Props)
                     <PDFViewer width={800} height={500}>
                         <CertificateFormat
                             duplicado={selectData?.duplicado as boolean}
-                            curricula_antigua={selectData?.curricula_antigua as boolean}
-                            certificado_anterior={selectData?.certificado_anterior}
+                            curricula_antigua={selectData?.curriculaAnterior as boolean}
+                            certificado_anterior={selectData?.certificadoOriginal}
                             id={selectData?.id as string}
-                            formato={selectData?.idioma === 'INGLES' && selectData.nivel === 'BASICO' ? 1 : 0}
-                            fecha_emision={dayjs(selectData?.fecha_emision).format('D [de] MMMM [de] YYYY' )}
-                            fecha_conclusion={dayjs(selectData?.fecha_conclusion).format('D [de] MMMM [de] YYYY' )} 
-                            idioma={subjects?.filter(item=>item.value === selectData?.idioma)[0]?.label}
-                            nivel={NIVEL.filter(item=>item.value === selectData?.nivel)[0]?.label} 
+                            formato={selectData?.idioma === 'INGLÉS' && selectData.nivel === 'BÁSICO' ? 1 : 0}
+                            fecha_emision={dayjs(selectData?.fechaEmision).format('D [de] MMMM [de] YYYY' )}
+                            fecha_conclusion={dayjs(selectData?.fechaConcluido).format('D [de] MMMM [de] YYYY' )} 
+                            idioma={selectData?.idioma}
+                            nivel={String(selectData?.nivel)} 
                             url={`https://ciunac.unac.edu.pe/validacion-certificado/?url=${selectData?.id}`}
-                            alumno={selectData?.alumno as string} 
-                            horas={selectData?.horas as number}
-                            elaborador={selectData?.elaborador}
-                            numero_folio={selectData?.numero_registro as string}/>
+                            alumno={selectData?.estudiante as string} 
+                            horas={selectData?.cantidadHoras as number}
+                            elaborador={selectData?.elaboradoPor}
+                            numero_folio={String(selectData?.numeroRegistro)}
+                            notas={selectData?.notas}
+                        />
                     </PDFViewer>
                 </>}
             />

@@ -29,6 +29,7 @@ export default function MySelect({variant='outlined', disabled=false,name,handle
             onChange={e=>handleChange(e)}
             name={name}
             label={label}
+            slotProps={{inputLabel: { shrink: true, }}}
             value={value || ''}
             helperText={helperText}
             error={error}

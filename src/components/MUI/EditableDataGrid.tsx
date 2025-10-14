@@ -31,6 +31,13 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
 {
     //hooks
     const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+    const getRowId = (row: any) => row.id ?? row.tempId;
+    const handleContainerKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
 
     //functions
     const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -53,10 +60,10 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
           [id]: { mode: GridRowModes.View, ignoreModifications: true },
         });
     
-        const editedRow = rows.find((row) => row.id === id);
+        const editedRow = rows.find((row) => getRowId(row) === id);
         
         if (editedRow!.isNew) {
-          setRows(rows.filter((row) => row.id !== id));
+          setRows(rows.filter((row) => getRowId(row) !== id));
         }
         
     };
@@ -130,7 +137,7 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
     ]
 
     return (
-        <Box minHeight={400} sx={{
+        <Box minHeight={400} onKeyDown={handleContainerKeyDown} sx={{
             width: '100%',
             height: '72vh',
             '& .actions': {
@@ -145,6 +152,7 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
                 columns={cols}
                 editMode='row'
                 slots={{toolbar:GridToolbar}}
+                getRowId={getRowId}
                 rowModesModel={rowModesModel}
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}

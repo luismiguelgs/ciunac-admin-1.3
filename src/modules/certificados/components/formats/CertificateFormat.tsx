@@ -6,7 +6,7 @@ import selloCoordinadora from '@/assets/coordinadora.jpg'
 //import selloCoordinadoraTeporal from '@/assets/sello.jpg'
 import selloElaborador from '@/assets/elaboradortemporal.jpg'
 //import selloElaborador  from '@/assets/elaboradoring.jpg'
-import { IcertificadoDetalle } from '@/modules/certificados/interfaces/certificado.interface'
+import { ICertificadoNota } from '@/modules/certificados/interfaces/certificado.interface'
 import React from 'react'
 import CertificadosService from '@/modules/certificados/services/certificados.service'
 import { capitalizeFirstLetterOfEachWord } from '@/lib/utils'
@@ -115,34 +115,24 @@ type Props = {
     numero_folio: string,
 	id: string,
 	elaborador?: string,
-	curricula_antigua?: boolean
+	curricula_antigua?: boolean,
+	notas: ICertificadoNota[] | undefined
 }
 export default function CertificateFormat({certificado_anterior, curricula_antigua,
-	duplicado=true,formato,id,url, idioma='IDIOMA', nivel, fecha_emision, fecha_conclusion, alumno, horas, numero_folio, elaborador=''}:Props) 
+	duplicado=true,formato,id,url, idioma='IDIOMA', nivel, fecha_emision, fecha_conclusion, notas, alumno, horas, numero_folio, elaborador=''}:Props) 
 {
     const QRCode = generateSessionPDFQrCode(url)
-	const [data, setData] = React.useState<IcertificadoDetalle[]>([]);
-
-	React.useEffect(()=>{
-        const getDetail = async () =>{
-            const res = await CertificadosService.fetchItemsDetail(id as string)   
-			setData(res)         
-        }
-        if(data.length === 0){
-            getDetail()
-        }
-    },[])
-
-	const sortedData = data.sort((a,b)=>{
-		const aNumber = parseInt(a.curso.match(/\d+$/)?.[0] || '0');
-  		const bNumber = parseInt(b.curso.match(/\d+$/)?.[0] || '0');
+	
+	const sortedData = notas?.sort((a,b)=>{
+		const aNumber = parseInt(a.ciclo.match(/\d+$/)?.[0] || '0');
+  		const bNumber = parseInt(b.ciclo.match(/\d+$/)?.[0] || '0');
 		return aNumber - bNumber;
 	});
 	
-	const rows = [...sortedData];
+	const rows = [...sortedData	as Array<ICertificadoNota>];
 	const rowsToAdd = 9 - rows.length;
 	for (let i = 0; i < rowsToAdd; i++) {
-		rows.push({curso:'',ciclo:'', modalidad:'', nota:0, id_certificado: '', isNew: false});
+		rows.push({ciclo:'',periodo:'', modalidad:'', nota:0});
 	}
 
     return (
@@ -250,10 +240,10 @@ export default function CertificateFormat({certificado_anterior, curricula_antig
 					{rows.map((item, index)=>(
 						<View style={styles.tableRow} key={index}>
 							<View style={[styles.tableCol, {width: '38%'}]}>
-								<Text style={styles.tableCell}>{item.curso}</Text>
+								<Text style={styles.tableCell}>{item.ciclo}</Text>
 							</View>
 							<View style={[styles.tableCol, {width: '38%'}]}>
-								{item.modalidad !== '' && <Text style={styles.tableCell}>{`${item.ciclo} (${item.modalidad})`}</Text>}
+								{item.modalidad !== '' && <Text style={styles.tableCell}>{`${item.periodo} (${item.modalidad})`}</Text>}
 								{/*curricula_antigua && index === 8 && <Text style={styles.tableCell}>CURRICULA ANTIGUA</Text>*/}
 								{curricula_antigua && index === 8 && (
 									<View

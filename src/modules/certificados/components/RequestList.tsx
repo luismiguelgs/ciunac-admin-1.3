@@ -1,34 +1,55 @@
 'use client'
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
-import SolicitudesService from '@/services/solicitudes.service';
+import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface';
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service';
 import { Box, Button } from '@mui/material';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridToolbar } from '@mui/x-data-grid';
 import React from 'react'
 import LanguageIcon from '@mui/icons-material/Language';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
-import useStore from '@/hooks/useStore';
-import { useSubjectsStore } from '@/modules/opciones/store/types.stores';
 import PrintIcon from '@mui/icons-material/Print';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { formatDate } from '@/lib/utils';
+
+enum FiltrosSolicitud {
+    EXAMEN = 'examenes-ubiaccion',
+    CONSTANCIAS = 'constancias',
+    CERTIFICADO = 'certificados'
+}
 
 type Props = {
-    setRequest: React.Dispatch<React.SetStateAction<Isolicitud | undefined>>,
+    setRequest: React.Dispatch<React.SetStateAction<ISolicitudRes | undefined>>,
     setReload: React.Dispatch<React.SetStateAction<boolean>>,
-    setOpenDialogFull : React.Dispatch<React.SetStateAction<boolean>>
+    setOpenDialogFull : React.Dispatch<React.SetStateAction<boolean>>,
     filtro?: 'EXAMEN' | 'CONSTANCIAS' | 'CERTIFICADO'
 }
 
 export default function RequestList({setOpenDialogFull, setRequest, setReload, filtro='CERTIFICADO'}:Props) 
 {
-    const [data, setData] = React.useState<Isolicitud[]>([]);
+    const [data, setData] = React.useState<ISolicitudRes[]>([]);
     const [selectionModel, setSelectionModel] = React.useState<GridRowSelectionModel>([]);
 
     React.useEffect(() => {
-        SolicitudesService.fetchItemQuery(setData, 'NUEVO', filtro)
+        const getData = async() => {
+            switch (filtro) {
+                case 'EXAMEN':
+                    const res = await SolicitudesService.fetchItemByState(FiltrosSolicitud.EXAMEN,1)
+                    setData(res)
+                    break;
+                case 'CONSTANCIAS':
+                    const res2 = await SolicitudesService.fetchItemByState(FiltrosSolicitud.CONSTANCIAS,1)
+                    setData(res2)
+                    break;
+                case 'CERTIFICADO':
+                    const res3 = await SolicitudesService.fetchItemByState(FiltrosSolicitud.CERTIFICADO,1)
+                    setData(res3)
+                    break;
+            }
+        }
+        getData()
     }, []);
 
     const handleSaveSelection = async() => {
-        const selectedItems = data.filter(item => selectionModel.includes(item.id as string));
+        const selectedItems = data.filter(item => selectionModel.includes(item.id as number));
         console.log('Selected Items:', selectedItems);
         setRequest(selectedItems[0])
         setReload((oldValue)=> !oldValue)
@@ -64,10 +85,10 @@ export default function RequestList({setOpenDialogFull, setRequest, setReload, f
             field: 'periodo',
             headerName: 'PERIODO',
             type: 'string',
-            width: 110
+            width: 100
         },
         {
-            field: 'creado',
+            field: 'creadoEn',
             type: 'string',
             width: 200,
             renderHeader:() => (
@@ -77,19 +98,16 @@ export default function RequestList({setOpenDialogFull, setRequest, setReload, f
                         📆
                     </span>
                 </strong>
-            ) 
+            ), 
+            valueGetter: (_value, row) => { // Accede a la fila para obtener 'creado'
+                            const createdValue = row.creadoEn;
+                            return formatDate(createdValue);
+                        },
         },
-        { field: 'apellidos', type: 'string', headerName: 'APELLIDOS', width:250 },
-        { field: 'nombres', type: 'string', headerName: 'NOMBRES', width:250 },
-        { 
-            field: 'idioma', 
-            type: 'singleSelect', 
-            headerName: 'IDIOMA',
-            valueOptions: useStore(useSubjectsStore, (state) => state.subjects),
-            editable: false,
-            width: 150
-        },
-        { field: 'nivel', type: 'string', headerName: 'NIVEL', width:160  },
+        { field: 'estudiante.apellidos', type: 'string', headerName: 'APELLIDOS', width:200, valueGetter: (_v, row) => row.estudiante?.apellidos ?? '' },
+        { field: 'estudiante.nombres', type: 'string', headerName: 'NOMBRES', width:200, valueGetter: (_v, row) => row.estudiante?.nombres ?? '' },
+        { field: 'idioma.nombre', type: 'string', headerName: 'IDIOMA', width: 120, valueGetter: (_v, row) => row.idioma?.nombre ?? '' },
+        { field: 'nivel.nombre', type: 'string', headerName: 'NIVEL', width: 120, valueGetter: (_v, row) => row.nivel?.nombre ?? '' },
     ];
     
     return (

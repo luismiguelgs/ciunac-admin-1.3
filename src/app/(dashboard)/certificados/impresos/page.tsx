@@ -1,12 +1,12 @@
 'use client'
 import React from 'react'
-import CertificateList from '../(components)/CertificateList'
+import CertificateList from '@/modules/certificados/components/CertificateList'
 import CertificadosService from '@/modules/certificados/services/certificados.service'
-import { Icertificado } from '@/modules/certificados/interfaces/certificado.interface'
+import { ICertificado } from '@/modules/certificados/interfaces/certificado.interface'
 
 export default function CertifictesPrintedPage() 
 {
-    const [rows, setRows] = React.useState<Icertificado[]>([])
+    const [rows, setRows] = React.useState<ICertificado[]>([])
     const loadData = async () => {
             const data = await CertificadosService.fetchItems(true)
             setRows(data)

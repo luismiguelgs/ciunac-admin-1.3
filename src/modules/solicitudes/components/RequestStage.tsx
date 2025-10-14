@@ -37,8 +37,7 @@ export function RequestState(props:{state:number, refresh?: number, documents:IB
 
     React.useEffect(()=>{
         const getData = async() => {
-            const res = await SolicitudesService.fetchItemByState(props.state)
-            console.log(res)
+            const res = await SolicitudesService.fetchItemByState('certificados',props.state)
             setData(res)
         }
         getData()

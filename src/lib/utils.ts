@@ -3,6 +3,18 @@ import * as ExcelJS from 'exceljs';
 import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import { IUsuario } from "@/interfaces/usuario.interface";
 
+export function mapId<T extends { _id?: string }>(item: T) {
+    return {
+        ...item,
+        id: item._id,
+        _id: undefined
+    };
+}
+
+export function mapIds<T extends { _id?: string }>(data: T[]) {
+    return data.map(item => mapId(item))
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function formatDate(createdValue:any)
 {

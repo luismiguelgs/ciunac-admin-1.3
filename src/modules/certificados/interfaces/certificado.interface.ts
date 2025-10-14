@@ -1,36 +1,36 @@
-export interface Icertificado{
+export interface ICertificado{
+    _id?:string,
     id?:string,
-    impreso: boolean,
-    alumno: string,
-    tipo: 'virtual' | 'fisico'
-    id_solicitud?: string,
+    tipo: 'VIRTUAL' | 'FISICO'
+    periodo: string
+    estudiante: string,
+    numeroDocumento: string,
     idioma: string,
+    idiomaId?: number,
     nivel: string,
-    horas: number,
-    fecha_emision: Date,
-    numero_registro : string,
-    fecha_conclusion: Date,
-    elaborador?: string,
+    nivelId?: number,
+    cantidadHoras: number,
+    solicitudId: number,
+    fechaEmision: Date,
+    numeroRegistro: string,
+    fechaConcluido: Date,
+    curriculaAnterior?: boolean,
+    impreso?: boolean,
     duplicado?: boolean,
-    certificado_anterior?: string,
-    curricula_antigua?: boolean,
-    dni?: string,
+    certificadoOriginal?: string,
     url?: string,
-    aceptacion?: boolean
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fecha_aceptacion?: any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    creado?: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    modificado?: any
-    
+    aceptado?: boolean,
+    fechaAceptacion?: Date,
+    elaboradoPor?: string,
+    creadoEn?: Date,
+    modificadoEn?: Date
+    notas: ICertificadoNota[]
 }
-export interface IcertificadoDetalle{
+export interface ICertificadoNota{
     id?: string,
-    id_certificado: string,
-    curso: string,
     ciclo: string,
-    modalidad: string
+    periodo: string,
+    modalidad: "C.R." | "C.I." | "EX.U." | ""
     nota: number,
     isNew?: boolean
 }

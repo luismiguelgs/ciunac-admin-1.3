@@ -70,7 +70,7 @@ interface SubjectsState {
         setSubjects: (subs) => set({ subjects: subs }),
       }),
       {
-        name: 'faculties-storage', // name of item in the storage (must be unique)
+        name: 'idiomas-storage', // name of item in the storage (must be unique)
         storage: createJSONStorage(() => sessionStorage), // (optional) by default the 'localStorage' is used
         partialize: (state) => ({ documents: state.subjects }),
       },

@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import CertificateNew from './CertificateNew';
+import CertificateNew from '@/modules/certificados/components/CertificateNew';
 
 export default async function NewCertificatePage() 
 {

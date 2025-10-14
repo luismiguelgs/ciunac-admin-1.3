@@ -27,7 +27,8 @@ export default function SelectSubjects({handleChange, error, value, helperText, 
         } 
         if(!data){
             getData();
-        }   
+        } 
+        
     },[]);
 
     if(!data){

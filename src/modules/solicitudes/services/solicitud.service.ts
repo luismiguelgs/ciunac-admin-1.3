@@ -15,8 +15,8 @@ export default class SolicitudesService
     }
 
 	//Solicitudes por Estado
-	public static async fetchItemByState(state: number): Promise<ISolicitudRes[]> {
-		const response = await apiFetch<ISolicitudRes[]>(`${this.collection}/estado/${state}`, 'GET')
+	public static async fetchItemByState(solicitud:string,state: number): Promise<ISolicitudRes[]> {
+		const response = await apiFetch<ISolicitudRes[]>(`${this.collection}/${solicitud}?estado=${state}`, 'GET')
 		return response
 	}
     
@@ -51,6 +51,11 @@ export default class SolicitudesService
 		const response = await apiFetch<ISolicitudRes>(`${this.collection}/${id}`, 'PATCH', data)
 		return response
 	}
+
+    public static async updateStatus(id:number, state:number):Promise<ISolicitudRes>{
+        const response = await apiFetch<ISolicitudRes>(`${this.collection}/${id}`, 'PATCH', {estadoId: state})
+        return response
+    }
 
 	public static async deleteItem(id:number):Promise<ISolicitudRes>{
 		const response = await apiFetch<ISolicitudRes>(`${this.collection}/${id}`, 'DELETE')

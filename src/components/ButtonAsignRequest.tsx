@@ -2,12 +2,12 @@ import { Button } from '@mui/material'
 import React from 'react'
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DialogFull from '@/components/MUI/Dialogs/DialogFull';
-import RequestList from '../app/(dashboard)/certificados/(components)/RequestList';
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
+import RequestList from '../modules/certificados/components/RequestList';
+import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface';
 
 type Props = {
     setReload: React.Dispatch<React.SetStateAction<boolean>>
-    setData: React.Dispatch<React.SetStateAction<Isolicitud |  undefined>>
+    setData: React.Dispatch<React.SetStateAction<ISolicitudRes |  undefined>>
     filtro?: 'EXAMEN' | 'CONSTANCIAS' | 'CERTIFICADO'
 }
 
@@ -41,7 +41,7 @@ export default function ButtonAsignRequest({ setReload, setData, filtro='CERTIFI
                         setOpenDialogFull={setOpenDialogFull} 
                         setReload={setReload} 
                         setRequest={setData} 
-                        filtro={filtro}    
+                        filtro={filtro}
                     />
                 }
             />

@@ -2,7 +2,7 @@
 import React from 'react'
 import Grid from '@mui/material/Grid2'
 import { FormikProps } from 'formik'
-import { Icertificado } from '@/modules/certificados/interfaces/certificado.interface'
+import { ICertificado } from '@/modules/certificados/interfaces/certificado.interface'
 import { TextField } from '@mui/material'
 import { MySelect, MySwitch } from '@/components/MUI'
 import { NIVEL } from '@/lib/constants'
@@ -13,7 +13,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import SelectSubjects from '@/components/SelectSubjects'
 
 type Props = {
-    formik: FormikProps<Icertificado>,
+    formik: FormikProps<ICertificado>,
     id: string,
     edit?: boolean
 }
@@ -26,48 +26,49 @@ export default function CertificateForm({formik, id, edit=false}:Props)
             <Grid size={{xs: 12, sm: 6}}>
                 <TextField
                     autoFocus
-                    value={formik.values.alumno}
-                    name='alumno'
-                    label="Alumno"
-                    error={formik.touched.alumno && Boolean(formik.errors.alumno)}
+                    value={formik.values.estudiante}
+                    name='estudiante'
+                    label="Estudiante"
+                    error={formik.touched.estudiante && Boolean(formik.errors.estudiante)}
                     type="text"
                     fullWidth
                     disabled={id !== 'nuevo' && !edit}
+                    slotProps={{inputLabel: { shrink: true, }}}
                     variant="outlined"
                     onChange={formik.handleChange}
-                    helperText={formik.touched.alumno && formik.errors.alumno}
+                    helperText={formik.touched.estudiante && formik.errors.estudiante}
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 6}}>
                 <TextField
                     autoFocus
-                    value={formik.values.id_solicitud}
-                    name='id_solicitud'
+                    value={formik.values.solicitudId}
+                    name='solicitudId'
                     label="ID Solicitud"
-                    error={formik.touched.id_solicitud && Boolean(formik.errors.id_solicitud)}
+                    error={formik.touched.solicitudId && Boolean(formik.errors.solicitudId)}
                     type="text"
                     fullWidth
                     disabled={id !== 'nuevo' && !edit}
                     slotProps={{inputLabel: { shrink: true, }}}
                     variant="outlined"
                     onChange={formik.handleChange}
-                    helperText={formik.touched.id_solicitud && formik.errors.id_solicitud}
+                    helperText={formik.touched.solicitudId && formik.errors.solicitudId}
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
             <TextField
                     autoFocus
-                    value={formik.values.dni}
-                    name='dni'
+                    value={formik.values.numeroDocumento}
+                    name='numeroDocumento'
                     disabled={id !== 'nuevo' && !edit}
                     label="Documento de Identidad"
-                    error={formik.touched.dni && Boolean(formik.errors.dni)}
-                    type="number"
+                    error={formik.touched.numeroDocumento && Boolean(formik.errors.numeroDocumento)}
+                    type="text"
                     fullWidth
                     slotProps={{inputLabel: { shrink: true, }}}
                     variant="outlined"
                     onChange={formik.handleChange}
-                    helperText={formik.touched.dni && formik.errors.dni}
+                    helperText={formik.touched.numeroDocumento && formik.errors.numeroDocumento}
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
@@ -94,31 +95,31 @@ export default function CertificateForm({formik, id, edit=false}:Props)
             <Grid size={{xs: 12, sm: 3}}>
                 <TextField
                     autoFocus
-                    value={formik.values.horas}
-                    name='horas'
+                    value={formik.values.cantidadHoras}
+                    name='cantidadHoras'
                     disabled={id !== 'nuevo'}
                     label="Cantidad de Horas"
-                    error={formik.touched.horas && Boolean(formik.errors.horas)}
+                    error={formik.touched.cantidadHoras && Boolean(formik.errors.cantidadHoras)}
                     type="number"
                     fullWidth
                     variant="outlined"
                     onChange={formik.handleChange}
-                    helperText={formik.touched.horas && formik.errors.horas}
+                    helperText={formik.touched.cantidadHoras && formik.errors.cantidadHoras}
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
                     <DatePicker 
                         label="Fecha Emisión"
-                        value={dayjs(formik.values.fecha_emision)} 
-                        onChange={(date)=>formik.setFieldValue('fecha_emision',date)} 
+                        value={dayjs(formik.values.fechaEmision)} 
+                        onChange={(date)=>formik.setFieldValue('fechaEmision',date)} 
                         maxDate={dayjs(new Date())}
                         disabled={id !== 'nuevo' && !edit}
                         slotProps={{
                             textField:{
                                 fullWidth:true,
-                                error: Boolean(formik.touched.fecha_emision) && Boolean(formik.errors.fecha_emision),
-                                helperText: (formik.touched.fecha_emision && formik.errors.fecha_emision) as string
+                                error: Boolean(formik.touched.fechaEmision) && Boolean(formik.errors.fechaEmision),
+                                helperText: (formik.touched.fechaEmision && formik.errors.fechaEmision) as string
                             }
                         }}
                     />
@@ -127,31 +128,31 @@ export default function CertificateForm({formik, id, edit=false}:Props)
             <Grid size={{xs: 12, sm: 3}}>
                 <TextField
                     autoFocus
-                    value={formik.values.numero_registro}
-                    name='numero_registro'
+                    value={formik.values.numeroRegistro}
+                    name='numeroRegistro'
                     label="Número de Registro"
                     disabled={id !== 'nuevo' && !edit}
-                    error={formik.touched.numero_registro && Boolean(formik.errors.numero_registro)}
+                    error={formik.touched.numeroRegistro && Boolean(formik.errors.numeroRegistro)}
                     type="text"
                     fullWidth
                     variant="outlined"
                     onChange={formik.handleChange}
-                    helperText={formik.touched.numero_registro && formik.errors.numero_registro}
+                    helperText={formik.touched.numeroRegistro && formik.errors.numeroRegistro}
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
                     <DatePicker 
                         label="Fecha Concluido"
-                        value={dayjs(formik.values.fecha_conclusion)} 
-                        onChange={(date)=>formik.setFieldValue('fecha_conclusion',dayjs(date))} 
+                        value={dayjs(formik.values.fechaConcluido)} 
+                        onChange={(date)=>formik.setFieldValue('fechaConcluido',dayjs(date))} 
                         disabled={id !== 'nuevo' && !edit}
                         maxDate={dayjs(new Date())}
                         slotProps={{
                             textField:{
                                 fullWidth:true,
-                                error: Boolean(formik.touched.fecha_conclusion) && Boolean(formik.errors.fecha_conclusion),
-                                helperText: (formik.touched.fecha_conclusion && formik.errors.fecha_conclusion) as string
+                                error: Boolean(formik.touched.fechaConcluido) && Boolean(formik.errors.fechaConcluido),
+                                helperText: (formik.touched.fechaConcluido && formik.errors.fechaConcluido) as string
                             }
                         }}
                     />
@@ -159,7 +160,7 @@ export default function CertificateForm({formik, id, edit=false}:Props)
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
             <MySelect 
-                    data={[{label:'Físico', value:'fisico'},{label:'Digital', value:'digital'}]}
+                    data={[{label:'Físico', value:'FISICO'},{label:'Digital', value:'VIRTUAL'}]}
                     handleChange={formik.handleChange}
                     label='Tipo de Certificado'
                     name='tipo'
@@ -172,9 +173,9 @@ export default function CertificateForm({formik, id, edit=false}:Props)
             <Grid size={{xs: 12, sm: 3}}>
                 <MySwitch 
                     label='Curricula Antigua'
-                    name='curricula_antigua'
+                    name='curriculaAnterior'
                     disabled={id !== 'nuevo' && !edit}
-                    checked={formik.values.curricula_antigua as boolean}
+                    checked={formik.values.curriculaAnterior as boolean}
                     handleChange={formik.handleChange}
                     sx={{mt:1}}
                 />
@@ -202,9 +203,9 @@ export default function CertificateForm({formik, id, edit=false}:Props)
             <Grid size={{xs: 12, sm: 3}}>
                 <MySwitch 
                     label='Aceptado'
-                    name='aceptacion'
+                    name='aceptado'
                     disabled={true}
-                    checked={formik.values.aceptacion as boolean}
+                    checked={formik.values.aceptado as boolean}
                     handleChange={formik.handleChange}
                     sx={{mt:1}}
                 />
@@ -213,15 +214,15 @@ export default function CertificateForm({formik, id, edit=false}:Props)
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
                     <DatePicker 
                         label="Fecha Aceptación"
-                        value={dayjs(formik.values.fecha_aceptacion)} 
-                        onChange={(date)=>formik.setFieldValue('fecha_aceptacion',dayjs(date))} 
+                        value={dayjs(formik.values.fechaAceptacion)} 
+                        onChange={(date)=>formik.setFieldValue('fechaAceptacion',dayjs(date))} 
                         disabled={id !== 'nuevo' && !edit}
                         maxDate={dayjs(new Date())}
                         slotProps={{
                             textField:{
                                 fullWidth:true,
-                                error: Boolean(formik.touched.fecha_aceptacion) && Boolean(formik.errors.fecha_aceptacion),
-                                helperText: (formik.touched.fecha_aceptacion && formik.errors.fecha_aceptacion) as string
+                                error: Boolean(formik.touched.fechaAceptacion) && Boolean(formik.errors.fechaAceptacion),
+                                helperText: (formik.touched.fechaAceptacion && formik.errors.fechaAceptacion) as string
                             }
                         }}
                     />
@@ -231,30 +232,31 @@ export default function CertificateForm({formik, id, edit=false}:Props)
                 <TextField
                     autoFocus
                     disabled={!formik.values.duplicado as boolean}
-                    value={formik.values.certificado_anterior}
-                    name='certificado_anterior'
+                    value={formik.values.certificadoOriginal}
+                    name='certificadoOriginal'
                     label="Certificado Original"
-                    error={formik.touched.certificado_anterior && Boolean(formik.errors.certificado_anterior)}
+                    error={formik.touched.certificadoOriginal && Boolean(formik.errors.certificadoOriginal)}
                     type="text"
                     fullWidth
                     variant="outlined"
                     onChange={formik.handleChange}
-                    helperText={formik.touched.certificado_anterior && formik.errors.certificado_anterior}
+                    helperText={formik.touched.certificadoOriginal && formik.errors.certificadoOriginal}
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
                 <TextField
                     autoFocus
                     disabled
-                    value={formik.values.elaborador}
-                    name='elaborador'
+                    value={formik.values.elaboradoPor}
+                    name='elaboradoPor'
+                    slotProps={{inputLabel: { shrink: true, }}}
                     label="Elaborado por"
-                    error={formik.touched.elaborador && Boolean(formik.errors.elaborador)}
+                    error={formik.touched.elaboradoPor && Boolean(formik.errors.elaboradoPor)}
                     type="text"
                     fullWidth
                     variant="outlined"
                     onChange={formik.handleChange}
-                    helperText={formik.touched.elaborador && formik.errors.elaborador}
+                    helperText={formik.touched.elaboradoPor && formik.errors.elaboradoPor}
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
