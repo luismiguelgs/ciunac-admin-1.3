@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Grid2'
-import IProspecto from '@/interfaces/prospecto.interface'
+import IProspecto from '../../../interfaces/prospecto.interface'
 import React from 'react'
 import { TextField } from '@mui/material'
 import useStore from '@/hooks/useStore';

@@ -13,9 +13,10 @@ type Props = {
     value: string | number
     disabled?: boolean
     helperText?: React.ReactNode
+    name?: string
 }
 
-export default function SelectDocuments({handleChange, error, value, helperText, disabled}:Props) 
+export default function SelectDocuments({handleChange, error, value, helperText, disabled, name='tipoSolicitudId'}:Props) 
 {
     const [data, setData] = React.useState<ITipoSolicitud[] | undefined>(useStore(useDocumentsStore, (state) => state.documents)); 
 
@@ -43,10 +44,10 @@ export default function SelectDocuments({handleChange, error, value, helperText,
                 error={error}
                 label='Tipo de solicitud'
                 disabled={disabled}
-                name='solicitud'
+                name={name}
                 value={value}
                 helperText={helperText}
-                getOptionValue={(option) => option.id}
+                getOptionValue={(option) => String(option.id)}
                 getOptionLabel={(option) => option.solicitud}
         />)
     )

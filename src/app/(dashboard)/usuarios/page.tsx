@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid2'
 import NewButton from '@/components/NewButton'
 import { Box, Portal } from '@mui/material'
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, GridToolbar, GridToolbarProps, GridToolbarQuickFilter } from '@mui/x-data-grid'
-import { IUsuario } from '@/interfaces/usuario.interface'
+import { IUsuario } from '../../../interfaces/usuario.interface'
 import AuthService from '@/services/auth.service'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';

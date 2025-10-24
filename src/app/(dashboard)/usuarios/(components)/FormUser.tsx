@@ -1,5 +1,5 @@
 import { MySelect } from '@/components/MUI'
-import { IUsuario } from '@/interfaces/usuario.interface'
+import { IUsuario } from '../../../../interfaces/usuario.interface'
 import { TextField } from '@mui/material'
 import { useMask } from '@react-input/mask'
 import React from 'react'

@@ -1,4 +1,4 @@
-import { Iexamen } from '@/interfaces/examen.interface'
+import { Iexamen } from '../../../../modules/examen-ubicacion/interfaces/examen-ubicacion.interface'
 import * as yup from 'yup'
 
 const msgReq = 'Campo requerido'

@@ -13,9 +13,9 @@ import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface
 import BasicInfo from '../../../(componets)/BasicInfo'
 import FinanceInfo from '../../../(componets)/FinanceInfo'
 import BackButton from '@/components/BackButton'
-import IProspecto from '@/interfaces/prospecto.interface'
+import IProspecto from '../../../../../../interfaces/prospecto.interface'
 import ProspectosService from '@/services/prospectos.service'
-import InfoExtra from '../../../../../../modules/solicitudes/components/InfoExtra';
+import InfoExtra from '../../../../../../modules/solicitudes/certificados/components/InfoExtra';
 
 export default function RequestDetail(props:{id:string}) 
 {

@@ -1,5 +1,5 @@
 'use client'
-import IProspecto from '@/interfaces/prospecto.interface'
+import IProspecto from '../../../../../interfaces/prospecto.interface'
 import ProspectosService from '@/services/prospectos.service'
 import { Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'

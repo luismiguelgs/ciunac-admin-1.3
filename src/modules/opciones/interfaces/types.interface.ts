@@ -21,10 +21,26 @@ export interface ITipoSolicitud extends IBaseData{
     precio:number
 }
 export interface ISalon extends IBaseData{
-    capacidad: number
+    capacidad: number,
+    tipo: string,
+    nombre: string,
+    ubicacion: string
 }
 export interface IEscuela extends IBaseData{
     nombre: string,
     facultadId: number
 }
+export interface IModulo extends IBaseData{
+    nombre: string,
+    fechaInicio: Date,
+    fechaFin: Date,
+    orden: number
+}
+
+export interface INivel extends IBaseData{
+    nombre: string,
+    orden: number
+}
+
+
   

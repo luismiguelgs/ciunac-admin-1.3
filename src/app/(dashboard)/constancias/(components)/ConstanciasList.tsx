@@ -1,4 +1,4 @@
-import { Iconstancia } from '@/interfaces/constancia.interface'
+import { Iconstancia } from '../../../../interfaces/constancia.interface'
 import { Collection, ConstanciasService } from '@/services/constancias.service'
 import SolicitudesService from '@/services/solicitudes.service'
 import { Chip, Checkbox, Box } from '@mui/material'

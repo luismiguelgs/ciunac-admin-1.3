@@ -5,9 +5,8 @@ import { useSubjectsStore } from '@/modules/opciones/store/types.stores';
 import { GridRowId } from '@mui/x-data-grid';
 import React from 'react'
 import { useRouter } from 'next/navigation';
-import SolicitudesService from '@/services/solicitudes.service';
-import { RequestState } from './RequestState';
-//import DialogFull from '@/components/MUI/Dialogs/DialogFull';
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service';
+import { RequestState } from '@/modules/solicitudes/examenesubicacion/components/RequestState';
 
 export default function RequestsUbicationPage() 
 {
@@ -21,7 +20,7 @@ export default function RequestsUbicationPage()
     //Dialog
     const handleConfirmDelete = async () => {
         if (idToDelete) {
-            await SolicitudesService.deleteItem(idToDelete as string);
+            await SolicitudesService.deleteItem(idToDelete as number);
             setIdToDelete(null);
             setOpenDialogDelete(false);
         }
@@ -41,7 +40,7 @@ export default function RequestsUbicationPage()
                     {
                         label: 'Nuevas',
                         content: <RequestState 
-                        state='NUEVO' 
+                        state='1' 
                         handleDelete={handleDelete}
                         handleDetails={handleDetails}
                         subjects={subjects}/>,
@@ -51,7 +50,7 @@ export default function RequestsUbicationPage()
                         content: <RequestState 
                         handleDelete={handleDelete}
                         handleDetails={handleDetails}
-                        state='ELABORADO' 
+                        state='2' 
                         subjects={subjects}/>,
                     },
                     {
@@ -59,7 +58,7 @@ export default function RequestsUbicationPage()
                         content: <RequestState 
                         handleDelete={handleDelete}
                         handleDetails={handleDetails}
-                        state='ENTREGADO' 
+                        state='3' 
                         subjects={subjects}/>,
                     }
                 ]}
@@ -72,18 +71,6 @@ export default function RequestsUbicationPage()
                         setOpen={setOpenDialogDelete}
                         actionFunc={handleConfirmDelete}
                     />
-                    {/*
-                    
-                    <DialogFull 
-                        open={openDialogFullDetail} 
-                        setOpen={setOpenDialogFullDetail}
-                        title="Detalle de Solicitud"
-                        content={<RequestDetail
-                            id={ID as string} 
-                        />}
-                    />
-                    
-                    */}   
         </React.Fragment>
     )
 }

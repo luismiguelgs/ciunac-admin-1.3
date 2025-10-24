@@ -1,7 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 import * as ExcelJS from 'exceljs';
 import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
-import { IUsuario } from "@/interfaces/usuario.interface";
+import { IUsuario } from "../interfaces/usuario.interface";
 
 export function mapId<T extends { _id?: string }>(item: T) {
     return {

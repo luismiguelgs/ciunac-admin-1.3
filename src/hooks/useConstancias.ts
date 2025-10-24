@@ -1,4 +1,4 @@
-import { Iconstancia } from "@/interfaces/constancia.interface";
+import { Iconstancia } from "../interfaces/constancia.interface";
 import { ConstanciasService } from "@/services/constancias.service";
 import React from "react";
 

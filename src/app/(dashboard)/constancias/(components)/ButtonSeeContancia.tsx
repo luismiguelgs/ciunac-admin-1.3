@@ -6,7 +6,7 @@ import { MyDialog } from '@/components/MUI'
 import { PDFViewer } from '@react-pdf/renderer'
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import { Iconstancia, IconstanciaDetalle } from '@/interfaces/constancia.interface';
+import { Iconstancia, IconstanciaDetalle } from '../../../../interfaces/constancia.interface';
 import MatriculaFormat from './(formats)/MatriculaFormat'
 import { NIVEL } from '@/lib/constants'
 import useSubjects from '@/hooks/useSubjects'

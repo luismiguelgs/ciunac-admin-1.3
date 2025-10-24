@@ -1,8 +1,6 @@
 'use client';
 
-import IProspecto from '@/interfaces/prospecto.interface'
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
-import SolicitudesService from '@/services/solicitudes.service';
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service';
 import { Chip, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import React from 'react'
@@ -13,10 +11,11 @@ import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import MyAccordion, { PanelData } from '@/components/MUI/MyAccordion';
 import BackButton from '@/components/BackButton';
 import { MyDialog } from '@/components/MUI';
-import BasicInfo from './(components)/BasicInfo';
-import FinanceInfo from './(components)/FinanceInfo';
-import InfoExtra from './(components)/InfoExtra';
-import ProspectosService from '@/services/prospectos.service';
+import BasicInfo from '../../../../../modules/solicitudes/examenesubicacion/components/BasicInfo';
+import FinanceInfo from '../../../../../modules/solicitudes/examenesubicacion/components/FinanceInfo';
+import InfoExtra from '../../../../../modules/solicitudes/examenesubicacion/components/InfoExtra';
+import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface';
+import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 
 export default function RequestUbicationDetail(params: {params:{id: string}}) 
 {
@@ -25,16 +24,13 @@ export default function RequestUbicationDetail(params: {params:{id: string}})
     
     //const navigate = useNavigate()
     const [openDialog, setOpenDialog] = React.useState<boolean>(false);
-    const [solicitud, setSolicitud] = React.useState<Isolicitud>()
-    const [prospecto, setProspecto] = React.useState<IProspecto>()
+    const [solicitud, setSolicitud] = React.useState<ISolicitudRes>()
 
     React.useEffect(()=>{
-        const getData = async(id :string) =>{
+        const getData = async(id :number) =>{
             try{
-                const solicitud = await SolicitudesService.getItem(id) as Isolicitud
+                const solicitud = await SolicitudesService.getItemId(id)
                 setSolicitud(solicitud)
-                const prospecto = await ProspectosService.getItem(solicitud.alumno_id as string)
-                setProspecto(prospecto)
             }
             catch(err){
                 if (err instanceof Error) {
@@ -44,29 +40,37 @@ export default function RequestUbicationDetail(params: {params:{id: string}})
                 }
             }
         }
-        getData(id as string)
+        getData(Number(id))
     },[])
 
-    const saveItem = async (values:Isolicitud) =>{
+    const saveItem = async (values:ISolicitudRes) =>{
         //alert(JSON.stringify({...values, fecha_pago: new Date(values.fecha_pago).toISOString().split('T')[0]},null, 2))
-        SolicitudesService.updateItem({...values, id:id, fecha_pago: new Date(values.fecha_pago).toISOString().split('T')[0]})
+        const data = {
+            estadoId: values.estadoId,
+            idiomaId: values.idiomaId,
+            nivelId: values.nivelId,
+            numeroVoucher: values.numeroVoucher,
+            pago: values.pago,
+            fechaPago: values.fechaPago,
+        } as unknown as Isolicitud
+       
+        SolicitudesService.updateItem(Number(id), data)
         setOpenDialog(true)
     }
 
     const panels:PanelData[] = [
         {
             title: 'Información de solicitud',
-            content: solicitud && (<FinanceInfo item={solicitud as Isolicitud} saveItem={saveItem}/>),
+            content: solicitud && (<FinanceInfo item={solicitud} saveItem={saveItem}/>),
             disabled: false
         },
         {
             title: 'Información de Alumno',
-            content: prospecto && (
+            content: solicitud && (
                 <BasicInfo 
-                    item={prospecto as IProspecto} 
+                    item={solicitud} 
                     edit={false} 
-                    imagen_dni={solicitud?.img_dni as string}
-                    tipoTrabajador={solicitud?.tipo_trabajador as string}
+                    imagen_dni={solicitud?.estudiante?.imgDoc as string}
                 />),
             disabled: false
         },
@@ -83,18 +87,11 @@ export default function RequestUbicationDetail(params: {params:{id: string}})
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }}>
                 {
-                        solicitud?.estado === 'NUEVO' ? 
+                        solicitud?.estadoId === 1 ? 
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Nueva" sx={{m:1}} color="error"/>) : 
-                        solicitud?.estado === 'ELABORADO' ?
+                        solicitud?.estadoId === 2 ?
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Elaborada" sx={{m:1}} color="warning"/>) : 
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Terminada" sx={{m:1}} color="success"/>)
-                }
-                {
-                        prospecto?.facultad !== 'PAR' ? 
-                        (<Chip icon={<FaceIcon />} label="Alumno UNAC" sx={{m:1}} color="primary"/>) : 
-                        solicitud?.trabajador ? 
-                        (<Chip icon={<FaceIcon />} label="Trabajador UNAC" sx={{m:1}} color="primary" />) :
-                        (<Chip icon={<FaceIcon />} label="PARTICULAR" sx={{m:1}} color="primary"/>)
                 }
                 {
                         solicitud?.manual === true ? 

@@ -6,7 +6,7 @@ import DialogFull from "@/components/MUI/Dialogs/DialogFull";
 import { GridRowId } from '@mui/x-data-grid';
 import useStore from '@/hooks/useStore';
 import { useDocumentsStore, useSubjectsStore } from '@/modules/opciones/store/types.stores';
-import { RequestState } from '@/modules/solicitudes/components/RequestStage';
+import { RequestState } from '@/modules/solicitudes/certificados/components/RequestStage';
 import RequestDetail from './[id]/RequestDetail';
 
 

@@ -1,6 +1,6 @@
 'use client'
 import useStore from '@/hooks/useStore'
-import { IexamenNotas } from '@/interfaces/examen.interface'
+import { IexamenNotas } from '../../../../modules/examen-ubicacion/interfaces/examen-ubicacion.interface'
 import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import { Collection, ExamenesService } from '@/services/examenes.service'
 import SolicitudesService from '@/services/solicitudes.service'

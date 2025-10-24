@@ -1,7 +1,7 @@
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, UserCredential} from 'firebase/auth';
 import { firestore } from '@/lib/firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { IUsuario } from '@/interfaces/usuario.interface';
+import { IUsuario } from '../interfaces/usuario.interface';
 import React from 'react';
 import { FirebaseError } from 'firebase/app';
 

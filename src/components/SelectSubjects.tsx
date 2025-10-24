@@ -13,9 +13,10 @@ type Props = {
     value: string | number
     disabled?: boolean
     helperText?: React.ReactNode
+    name?: string
 }
 
-export default function SelectSubjects({handleChange, error, value, helperText, disabled}:Props) 
+export default function SelectSubjects({handleChange, error, value, helperText, disabled, name='idiomaId'}:Props) 
 {
     const [data, setData] = React.useState<IIdioma[] | undefined>(useStore(useSubjectsStore, (state) => state.subjects)); 
 
@@ -44,9 +45,11 @@ export default function SelectSubjects({handleChange, error, value, helperText, 
             error={error}
             label='Idioma'
             disabled={disabled}
-            name='idioma'
+            name={name}
             value={value}
             helperText={helperText}
+            getOptionValue={(option) => String(option.id)}
+            getOptionLabel={(option) => option.nombre}
         />)
     )
 }

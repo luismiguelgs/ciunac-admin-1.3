@@ -22,6 +22,7 @@ export interface ISolicitudRes{
         apellidos: string,
         numeroDocumento: string,
         celular?: string,
+        imgDoc: string,
     },
     tiposSolicitud?: {
         id: number,

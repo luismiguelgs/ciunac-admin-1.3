@@ -5,7 +5,7 @@ import { Box, Portal } from '@mui/material'
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, GridToolbar, GridToolbarProps, GridToolbarQuickFilter } from '@mui/x-data-grid'
 import React from 'react'
 import { useFacultiesStore } from '@/modules/opciones/store/types.stores'
-import IProspecto from '@/interfaces/prospecto.interface'
+import IProspecto from '../../../../interfaces/prospecto.interface'
 import ProspectosService from '@/services/prospectos.service'
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';

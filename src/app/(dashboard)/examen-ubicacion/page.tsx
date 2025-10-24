@@ -6,34 +6,34 @@ import { Box, Chip } from '@mui/material'
 import MyDataGrid from '@/components/MUI/MyDataGrid'
 import { MyDialog } from '@/components/MUI'
 import { useRouter } from 'next/navigation'
-import { Iexamen } from '@/interfaces/examen.interface'
-import { GridColDef, GridRowId } from '@mui/x-data-grid'
-import { Collection, ExamenesService } from '@/services/examenes.service'
+import { GridColDef, GridRowId, GridValueFormatter } from '@mui/x-data-grid'
 import { getIconByCode } from '@/lib/common'
+import ExamenesUbicacionService from '@/modules/examen-ubicacion/services/examenes-ubicacion.service'
+import useExamenesUbicacion from '@/modules/examen-ubicacion/hooks/useExamenesUbicacion'
 
 export default function UbicationExamsPage() 
 {
 	//Hooks ************
     const navigate = useRouter()
+    const { data, loading, setData } = useExamenesUbicacion()
     const [ openDialog, setOpenDialog ] = React.useState<boolean>(false)
-    const [rows, setRows] = React.useState<Iexamen[]>([])
     const [ID, setID] = React.useState<GridRowId | null>(null);
 
-	//Funcions ***************
-    const loadData = async () => {
-        const data = await ExamenesService.fetchItems()
-        setRows(data)
+    const formatFecha: GridValueFormatter = (value: string | Date | null| undefined) => {
+            if (!value) return '';
+            return new Date(value).toLocaleDateString('es-PE', {year: 'numeric', month: '2-digit', day: '2-digit'})
     }
-    const handleConfirmDelete = async () => {
+
+	const handleConfirmDelete = async () => {
         if (ID) {
             //borrar su detalle
-            const data = await ExamenesService.fetchItemsDetail(ID as string)
-            for(const element of data){
-                await ExamenesService.deleteItem(Collection.Examenes_notas, element.id as string)
+            const res = await ExamenesUbicacionService.fetchItemsDetail(ID as number)
+            for(const element of (res ?? [])){
+                await ExamenesUbicacionService.deleteDetail(element.id as number)
             }
             //borrar el item
-            await ExamenesService.deleteItem(Collection.Examenes,ID as string);
-            setRows(rows.filter((row) => row.id !== ID));
+            await ExamenesUbicacionService.delete(ID as number);
+            setData(data.filter((row) => row.id !== ID) ?? []);
             setID(null);
             setOpenDialog(false);
         }
@@ -47,10 +47,6 @@ export default function UbicationExamsPage()
         setOpenDialog(true)
     }
 
-    React.useEffect(() => {
-        loadData() 
-    }, []);
-
 	//Columnas ***************
     const columns: GridColDef[] = [
         {
@@ -59,25 +55,26 @@ export default function UbicationExamsPage()
             width: 150
         },
         {
-            field: 'estado',
+            field: 'estadoId',
             headerName: 'ESTADO',
-            width: 150,
+            width: 130,
             renderCell: (params) =>{
                 switch(params.value){
-                    case 'PROGRAMADO':
-                        return <Chip label={params.value} color="error" />
-                    case 'ASIGNADO':
-                        return <Chip label={params.value} color="primary" />
+                    case 6:
+                        return <Chip label='NUEVO' color="error" />
+                    case 7:
+                        return <Chip label='ASIGNADO' color="primary" />
                     default:
-                        return <Chip label={params.value} />
+                        return <Chip label='TERMINADO' />
                 }
                 
             }
         },
         { 
-            field: 'fecha_examen', 
-            type: 'dateTime', 
+            field: 'fecha', 
+            type: 'date', 
             width: 150,
+            align: 'center',
             editable: false,
             renderHeader:() => (
                 <strong>
@@ -86,25 +83,25 @@ export default function UbicationExamsPage()
                         📆
                     </span>
                 </strong>
-            ), 
-            renderCell: (params) => (
-                <strong>{new Date(params.value).toLocaleDateString()}</strong>
-            )
+            ),
+            valueFormatter: formatFecha
         },
-        { field: 'fecha_final', headerName: 'Fecha Final', type: 'date', width: 120 },
         {
-                    field: 'idioma',
-                    width: 80,
-                    type: 'string',
-                    headerName: 'IDIOMA',
-                        renderCell(params) {
-                           return getIconByCode(params.value)
-                        }
-                },
-        { field: 'nivel', headerName: 'NIVEL', width:100},
-        { field: 'profesor', headerName: 'Profesor', type: 'string', width: 180 },
-        { field: 'salon', headerName: 'Salón', type: 'string', width: 80 },
+            field: 'idiomaId',
+            width: 80,
+            type: 'string',
+            headerName: 'IDIOMA',
+            valueGetter: (_v, row) => row.idiomaId ?? '',
+            renderCell(params) {
+                return getIconByCode(Number(params.value))
+            }
+        },
+        { field: 'docente.apellidos', type: 'string', headerName: 'DOCENTE APELLIDOS', width:180, valueGetter: (_v, row) => row.docente?.apellidos ?? '' },
+        { field: 'docente.nombres', type: 'string', headerName: 'DOCENTE NOMBRES', width:180, valueGetter: (_v, row) => row.docente?.nombres ?? '' },
+        { field: 'aula.nombre', type: 'string', headerName: 'SALA', width: 80, valueGetter: (_v, row) => row.aula?.nombre ?? '' },
     ];
+
+    if (loading) return (<h1>Cargando...</h1>)
 
     return (
 		<Grid container spacing={2} p={1}>
@@ -116,7 +113,7 @@ export default function UbicationExamsPage()
 			</Grid>
 			<Grid minHeight={300} size={{xs:12}}>
 				<MyDataGrid 
-					data={rows}
+					data={data}
 					cols={columns}
 					handleDelete={handleDelete}
 					handleDetails={handleDetails}

@@ -18,8 +18,8 @@ export default class EstudiantesService
             tipoDocumento: body.tipo_documento,
             numeroDocumento: body.dni,
             celular: body.celular,
-            facultadId: +body.facultad,
-            escuelaId: +body.escuela,
+            facultadId: +body.facultad ? +body.facultad : null,
+            escuelaId: +body.escuela ? +body.escuela : null,
             codigo: body.codigo
         } as unknown as IEstudiante
 

@@ -9,10 +9,10 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import FaceIcon from '@mui/icons-material/Face';
 import PowerIcon from '@mui/icons-material/Power';
 import BackButton from '@/components/BackButton'
-import FinanceInfo from '@/modules/solicitudes/components/FinanceInfo';
+import FinanceInfo from '@/modules/solicitudes/certificados/components/FinanceInfo';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
-import BasicInfo from '@/modules/solicitudes/components/BasicInfo';
-import InfoExtra from '@/modules/solicitudes/components/InfoExtra'
+import BasicInfo from '@/modules/solicitudes/certificados/components/BasicInfo';
+import InfoExtra from '@/modules/solicitudes/certificados/components/InfoExtra'
 import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface'
 import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 

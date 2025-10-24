@@ -3,7 +3,7 @@ import { MyDialog } from '@/components/MUI'
 import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import SolicitudesService from '@/modules/solicitudes/services/solicitud.service'
 import React from 'react'
-import FormNuevaSolicitud from '@/modules/solicitudes/components/FormNuevaSolicitud'
+import FormNuevaSolicitud from '@/modules/solicitudes/certificados/components/FormNuevaSolicitud'
 import LoadingDialog from '@/components/MUI/Dialogs/DialogLoading'
 import EstudiantesService from '@/modules/estudiantes/services/estudiantes.service'
 
@@ -29,7 +29,7 @@ export default function NewRequestPage()
         }
             
         const solicitud = {...values, estudianteId} as Isolicitud
-
+        console.log(solicitud)
         await SolicitudesService.newItem(solicitud)
         setLoading(false)
         setOpen(true)

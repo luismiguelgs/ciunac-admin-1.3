@@ -2,7 +2,7 @@ import { StyleSheet, Document, Page, View, Text, Font, Image } from '@react-pdf/
 import logoCiunac from '@/assets/logo-ciunac-trans.png'
 import logoUnac from '@/assets/unac-logo.png'
 import firmaDirector from '@/assets/firma_director.jpg'
-import { IexamenNotas } from '@/interfaces/examen.interface';
+import { IexamenNotas } from '../../../../modules/examen-ubicacion/interfaces/examen-ubicacion.interface';
 
 Font.register({family:'Roboto', src:'https://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf'})
 

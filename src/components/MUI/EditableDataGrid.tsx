@@ -25,9 +25,11 @@ type Props = {
     handleDeleteClick(id:GridRowId): React.MouseEventHandler<HTMLButtonElement>
     processRowUpdate(newRow:GridRowModel):GridValidRowModel
     actions?:GridAction[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onProcessRowUpdateError?: (error:any)=>void
 }
 
-export default function EditableDataGrid({columns, rows, setRows, handleDeleteClick, processRowUpdate, actions=[]}:Props) 
+export default function EditableDataGrid({columns, rows, setRows, handleDeleteClick, processRowUpdate, actions=[], onProcessRowUpdateError}:Props) 
 {
     //hooks
     const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
@@ -157,6 +159,7 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={onProcessRowUpdateError}
                 initialState={{
                     pagination:{paginationModel:{pageSize:10}}
                 }}

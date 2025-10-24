@@ -1,4 +1,4 @@
-import { Iconstancia, IconstanciaDetalle } from "@/interfaces/constancia.interface";
+import { Iconstancia, IconstanciaDetalle } from "../interfaces/constancia.interface";
 import { firestore } from "@/lib/firebase";
 import { changeDate } from "@/lib/utils";
 import { addDoc, collection, getDoc, deleteDoc, doc, getDocs, serverTimestamp, Timestamp, updateDoc, query, where } from "firebase/firestore";

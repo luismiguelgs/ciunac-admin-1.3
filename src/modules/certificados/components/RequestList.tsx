@@ -9,12 +9,9 @@ import KeyboardIcon from '@mui/icons-material/Keyboard';
 import PrintIcon from '@mui/icons-material/Print';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { formatDate } from '@/lib/utils';
+import { FiltrosSolicitud } from '@/lib/constants';
 
-enum FiltrosSolicitud {
-    EXAMEN = 'examenes-ubiaccion',
-    CONSTANCIAS = 'constancias',
-    CERTIFICADO = 'certificados'
-}
+
 
 type Props = {
     setRequest: React.Dispatch<React.SetStateAction<ISolicitudRes | undefined>>,

@@ -1,4 +1,4 @@
-import IProspecto from '@/interfaces/prospecto.interface';
+import IProspecto from '../interfaces/prospecto.interface';
 import { firestore } from '@/lib/firebase';
 import { collection, doc, updateDoc, serverTimestamp, addDoc, deleteDoc, getDocs, getDoc} from 'firebase/firestore'
 

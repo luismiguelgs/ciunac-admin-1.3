@@ -1,6 +1,6 @@
 'use client'
 import MyDataGrid from '@/components/MUI/MyDataGrid'
-import { Iexamen, IexamenNotas } from '@/interfaces/examen.interface'
+import { Iexamen, IexamenNotas } from '../../../../modules/examen-ubicacion/interfaces/examen-ubicacion.interface'
 import { GridColDef } from '@mui/x-data-grid'
 import React from 'react'
 import Grid from '@mui/material/Grid2'

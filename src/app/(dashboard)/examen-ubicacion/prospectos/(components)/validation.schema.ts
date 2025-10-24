@@ -1,5 +1,5 @@
 import * as yup from 'yup'
-import  IProspecto  from '@/interfaces/prospecto.interface'
+import  IProspecto  from '../../../../../interfaces/prospecto.interface'
 
 const msgReq = 'Campo requerido'
 const msgDni = 'Campo de 8 caracteres'

@@ -2,7 +2,7 @@
 import { Button } from '@mui/material'
 import React from 'react'
 import AddIcon from '@mui/icons-material/Add';
-import { IconstanciaDetalle } from '@/interfaces/constancia.interface';
+import { IconstanciaDetalle } from '../../../../interfaces/constancia.interface';
 import { GridColDef, GridRowId, GridRowModel, GridRowModes, GridRowModesModel } from '@mui/x-data-grid';
 import EditableDataGrid from '@/components/MUI/EditableDataGrid';
 import { Collection, ConstanciasService } from '@/services/constancias.service';

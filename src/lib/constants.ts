@@ -3,6 +3,12 @@ import packageJson from '../../package.json';
 export const VERSION = packageJson.version
 export const DRAWER_WIDTH = 240
 
+export enum FiltrosSolicitud {
+    EXAMEN = 'examenes-ubicacion',
+    CONSTANCIAS = 'constancias',
+    CERTIFICADO = 'certificados'
+}
+
 export const MESES = [
     {value:'ENERO', label:'Enero'},
     {value:'FEBRERO', label:'Febrero'},

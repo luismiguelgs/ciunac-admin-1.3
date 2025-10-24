@@ -4,8 +4,11 @@ export enum Collection {
     Tiposolicitud = 'tipossolicitud',
     Facultades = 'facultades',
     Idiomas = 'idiomas',
-    Salones = 'salones',
+    Salones = 'aulas',
     Escuelas = 'escuelas',
+    Modulos = 'modulos',
+    Ciclos = 'ciclos',
+    Niveles = 'niveles'
 }
 
 export default class OpcionesService 

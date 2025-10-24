@@ -1,5 +1,5 @@
 'use client'
-import IProspecto from '@/interfaces/prospecto.interface'
+import IProspecto from '../../../../../interfaces/prospecto.interface'
 import React from 'react'
 import validationSchema from './validation.schema'
 import { useFormik } from 'formik'

@@ -15,7 +15,8 @@ export default class SolicitudesService
     }
 
 	//Solicitudes por Estado
-	public static async fetchItemByState(solicitud:string,state: number): Promise<ISolicitudRes[]> {
+	public static async fetchItemByState(solicitud:string,state: string): Promise<ISolicitudRes[]> {
+        console.log(solicitud, state)
 		const response = await apiFetch<ISolicitudRes[]>(`${this.collection}/${solicitud}?estado=${state}`, 'GET')
 		return response
 	}
