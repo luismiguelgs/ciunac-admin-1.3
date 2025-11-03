@@ -62,5 +62,4 @@ export default class SolicitudesService
 		const response = await apiFetch<ISolicitudRes>(`${this.collection}/${id}`, 'DELETE')
 		return response
 	}
-    
 }

@@ -1,7 +1,9 @@
+import { Dayjs } from "dayjs"
+
 export interface IExamenUbicacion{
     id?:number,
     codigo: string,
-    fecha: Date,
+    fecha: Date | Dayjs | string,
     estadoId: number,
     idiomaId: number,
     docenteId: string,
@@ -38,12 +40,27 @@ export interface IDetalleExamenUbicacion{
     nivelId: number,
     estudianteId: string,
     nota: number,
+    calificacionId: number,
     terminado: boolean,
     creadoEn?: Date,
     modificadoEn?: Date,
-    estudiante:{
+    estudiante?:{
         id:string,
         nombres:string,
         apellidos:string,
+        numeroDocumento: string
     }
+    idioma?:{
+        id:number,
+        nombre:string, 
+    }
+    nivel?:{
+        id:number,
+        nombre:string,
+    }
+    calificacion?:{
+        id:number,
+        nombre:string,
+    }
+    activo?: boolean
 }

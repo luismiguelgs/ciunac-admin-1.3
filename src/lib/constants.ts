@@ -32,9 +32,9 @@ export const ESTADO = [
     {value:'5',label:'RECHAZADO'},
 ]
 export const ESTADO_EXAMEN = [
-    {value:'PROGRAMADO',label:'Programado'},
-    {value:'ASIGNADO',label:'Asignado'},
-    {value:'TERMINADO',label:'Terminado'},
+    {value:'6',label:'PROGRAMADO'},
+    {value:'7',label:'ASIGNADO'},
+    {value:'8',label:'TERMINADO'},
 ]
 export const NIVEL = [
     {value:'1',label:'BÁSICO'},

@@ -11,7 +11,7 @@ const validationSchema = yup.object<Isolicitud>({
     apellidos: yup.string().required(msgReq).trim(),
     nombres: yup.string().trim().required(msgReq),
     solicitud: yup.string().trim().required(msgReq),
-    celular: yup.string().trim().required(msgReq).min(11,'El campo requiere 9 caracteres'),
+    celular: yup.string().trim().required(msgReq).min(9,'El campo requiere 9 caracteres'),
     dni: yup.string().trim().required(msgReq).min(8,msgDni),
     tipoDocumento: yup.string().trim().required(msgReq),
     idioma: yup.string().trim().required(msgReq),

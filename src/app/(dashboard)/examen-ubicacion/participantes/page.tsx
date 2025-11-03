@@ -1,12 +1,13 @@
-import { ExamenesService } from "@/services/examenes.service"
+
 import { Box } from "@mui/material"
 import Participants from "./Participants"
+import ExamenesUbicacionService from "@/modules/examen-ubicacion/services/examenes-ubicacion.service"
 
 async function getParticipants() {
-    return await ExamenesService.fetchExamenesNotas()
+    return await ExamenesUbicacionService.fetchItemsDetail()
 }
 async function getExams() {
-    return await ExamenesService.fetchItems()
+    return await ExamenesUbicacionService.fetchItems()
 }
 
 

@@ -2,7 +2,7 @@ import { StyleSheet, Document, Page, View, Text, Font, Image } from '@react-pdf/
 import logoCiunac from '@/assets/logo-ciunac-trans.png'
 import logoUnac from '@/assets/unac-logo.png'
 import firmaDirector from '@/assets/firma_director.jpg'
-import { IexamenNotas } from '../../../../modules/examen-ubicacion/interfaces/examen-ubicacion.interface';
+import { IDetalleExamenUbicacion } from '../../interfaces/examen-ubicacion.interface'
 
 Font.register({family:'Roboto', src:'https://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf'})
 
@@ -63,14 +63,14 @@ const styles = StyleSheet.create({
         marginTop: 10, // Espacio entre la imagen y el texto
     },
 });
-export default function ConstanciaFormat({data}:{data:IexamenNotas | undefined})
+export default function ConstanciaFormat({data}:{data:IDetalleExamenUbicacion | undefined})
 {
     // Datos dinámicos (pueden venir de los props)
-    const nombreCompleto = data?.nombres + " " + data?.apellidos || "_________________________";
-    const dni = data?.dni || "_____________";
-    const idioma = data?.idioma === 'INGLES' ? 'INGLÉS' : data?.idioma === 'PORTUGUES' ? 'PORTUGUÉS' : 'ITALIANO';
+    const nombreCompleto = data?.estudiante?.nombres + " " + data?.estudiante?.apellidos || "_________________________";
+    const dni = data?.estudiante?.numeroDocumento || "_____________";
+    const idioma = data?.idioma?.nombre || "_____________";
     const puntaje = data?.nota || "______";
-    const ciclo = data?.ubicacion ? data.ubicacion.split(" ")[1] + " " + data.ubicacion.split(" ")[2] : "______";
+    const ciclo = data?.nivel?.nombre || "______";
     
     return(
         <Document>

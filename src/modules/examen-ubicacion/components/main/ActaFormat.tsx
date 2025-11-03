@@ -1,6 +1,8 @@
 import { StyleSheet, Document, Page, View, Text, Font, Image } from '@react-pdf/renderer'
 import logoCiunac from '../../../../../public/logo-ciunac.jpg'
-import { IexamenNotas } from '../../../../modules/examen-ubicacion/interfaces/examen-ubicacion.interface'
+import { IExamenUbicacion } from '../../interfaces/examen-ubicacion.interface'
+import { IDetalleExamenUbicacion } from '../../interfaces/examen-ubicacion.interface'
+import dayjs from 'dayjs'
 
 Font.register({family:'Roboto', src:'https://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf'})
 
@@ -107,20 +109,18 @@ const styles = StyleSheet.create({
 })
 
 type Props = {
-    idioma: string | undefined,
-    fecha: string,
-    profesor: string,
-    data: IexamenNotas[]
+    data: IExamenUbicacion,
+	detalle: IDetalleExamenUbicacion[]
 }
-export default function ActaFormat({idioma,	fecha,	profesor, data }:Props) 
+export default function ActaFormat({data,detalle }:Props) 
 {
 	// Número máximo de filas por página
 	const rowsPerPage = 14;
 
 	// Dividir los datos en páginas
 	const pages = [];
-	for (let i = 0; i < data.length; i += rowsPerPage) {
-	  pages.push(data.slice(i, i + rowsPerPage));
+	for (let i = 0; i < detalle.length; i += rowsPerPage) {
+	  pages.push(detalle.slice(i, i + rowsPerPage));
 	}
 
 	return (
@@ -134,9 +134,9 @@ export default function ActaFormat({idioma,	fecha,	profesor, data }:Props)
 			  <Text style={styles.header} fixed>
 				Dirección del Centro de Idiomas
 			  </Text>
-			  <Text style={styles.title} fixed>{`EXAMEN DE UBICACIÓN - ${idioma}`}</Text>
+			  <Text style={styles.title} fixed>{`EXAMEN DE UBICACIÓN - ${data.idioma?.nombre}`}</Text>
 			  <Text style={styles.subtitle} fixed>
-				{fecha}
+				{dayjs(data.fecha).format('D [de] MMMM [de] YYYY')}
 			  </Text>
 			  <View style={styles.table}>
 				{/* Encabezados de la tabla */}
@@ -164,19 +164,19 @@ export default function ActaFormat({idioma,	fecha,	profesor, data }:Props)
 				{pageData.map((item, index) => (
 				  <View style={styles.tableRow} key={index}>
 					<View style={[styles.tableCol, styles.tableColNombre]}>
-					  <Text style={styles.tableCell}>{item.apellidos.toLocaleUpperCase()}</Text>
+					  <Text style={styles.tableCell}>{item.estudiante?.apellidos.toLocaleUpperCase()}</Text>
 					</View>
 					<View style={[styles.tableCol, styles.tableColNombre]}>
-					  <Text style={styles.tableCell}>{item.nombres.toLocaleUpperCase()}</Text>
+					  <Text style={styles.tableCell}>{item.estudiante?.nombres.toLocaleUpperCase()}</Text>
 					</View>
 					<View style={[styles.tableCol, styles.tableColDatos]}>
-					  <Text style={styles.tableCell}>{item.dni}</Text>
+					  <Text style={styles.tableCell}>{item.estudiante?.numeroDocumento}</Text>
 					</View>
 					<View style={[styles.tableCol, styles.tableColDatos]}>
-					  <Text style={styles.tableCell}>{item.nivel}</Text>
+					  <Text style={styles.tableCell}>{item.nivel?.nombre}</Text>
 					</View>
 					<View style={[styles.tableCol, styles.tableColDatos]}>
-					  <Text style={styles.tableCell}>{item.idioma}</Text>
+					  <Text style={styles.tableCell}>{item.idioma?.nombre}</Text>
 					</View>
 					<View style={[styles.tableCol, styles.tableColNota]}>
 					  <Text style={styles.tableCell}>{item.nota}</Text>
@@ -189,7 +189,7 @@ export default function ActaFormat({idioma,	fecha,	profesor, data }:Props)
 				<>
 				  <View style={{ display: 'flex' }}>
 					<Text style={styles.profesor}>PROFESOR:</Text>
-					<Text style={{ fontSize: 12 }}>{profesor}</Text>
+					<Text style={{ fontSize: 12 }}>{data?.docente?.nombres + ' ' + data?.docente?.apellidos}</Text>
 				  </View>
 				  <Text style={styles.firma}>FIRMA DEL DOCENTE</Text>
 				</>

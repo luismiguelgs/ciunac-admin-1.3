@@ -1,72 +1,77 @@
 'use client'
 import MyDataGrid from '@/components/MUI/MyDataGrid'
-import { Iexamen, IexamenNotas } from '../../../../modules/examen-ubicacion/interfaces/examen-ubicacion.interface'
 import { GridColDef } from '@mui/x-data-grid'
 import React from 'react'
 import Grid from '@mui/material/Grid2'
 import { Box } from '@mui/material'
 import { getIconByCode } from '@/lib/common'
+import { IDetalleExamenUbicacion, IExamenUbicacion } from '@/modules/examen-ubicacion/interfaces/examen-ubicacion.interface'
+import useCalificacionesExamenUbicacion from '@/modules/examen-ubicacion/hooks/useCalificaciones'
+import ICalificacionUbicacion from '@/modules/examen-ubicacion/interfaces/calificacion.interface'
 
 
-export default function Participants({data, exams}:{data:IexamenNotas[] | undefined, exams: Iexamen[] | undefined}) 
+export default function Participants({data, exams}:{data:IDetalleExamenUbicacion[] | undefined, exams: IExamenUbicacion[] | undefined}) 
 {
+    const { data: calificaciones } = useCalificacionesExamenUbicacion()
     const columns: GridColDef[] = [
         {
             field: 'idioma',
             headerName: 'IDIOMA',
-            width: 90,
-            renderCell(params) {
-                return <span style={{alignItems: 'center', display: 'flex', justifyContent: 'center'}}>
-                    {getIconByCode(params.value)}
-                </span>
-            }
+            width: 140,
+            valueGetter: (_v, row) => row.idioma?.nombre ?? '',
         },
         {
-            field: 'examen_id',
-            width: 130,
-            renderHeader:() => (
-                <strong>
-                    {'FECHA EXAMEN '}
-                    <span role='img' aria-label='date'>
-                        📆
-                    </span>
-                </strong>
-            ),
+            field: 'fecha',
+            headerName: 'FECHA EXAMEN',
+            width: 140,
             renderCell(params) {
-                const examen = exams?.find(examen => examen.id === params.value)
-                return <strong>{new Date(examen?.fecha_examen).toLocaleDateString('es-ES')}</strong>
-            } 
+                const examen = exams?.find((e) => e.id === params.row.examenId)
+                const fecha = examen?.fecha ? new Date(examen.fecha as string) : null
+                return <strong>{fecha ? fecha.toLocaleDateString('es-ES') : ''}</strong>
+            },
         },
         {
             field: 'nivel',
             headerName: 'NIVEL',
-            width: 100
+            width: 120,
+            valueGetter: (_v, row) => row.nivel?.nombre ?? '',
         },
         {
             field: 'apellidos',
             headerName: 'APELLIDOS',
-            width: 180
+            width: 180,
+            valueGetter: (_v, row) => row.estudiante?.apellidos ?? '',
         },
         {
             field: 'nombres',
             headerName: 'NOMBRES',
-            width: 180
+            width: 180,
+            valueGetter: (_v, row) => row.estudiante?.nombres ?? '',
         },
         {
-            field: 'dni',
-            headerName: 'DNI',
-            width: 100
+            field: 'documento',
+            headerName: 'DOCUMENTO',
+            width: 140,
+            valueGetter: (_v, row) => row.estudiante?.numeroDocumento ?? '',
         },
         {
             field: 'nota',
             headerName: 'NOTA',
-            width: 80
+            width: 100,
         },
         {
             field: 'ubicacion',
             headerName: 'UBICACIÓN',
-            width: 200
-        }
+            width: 200,
+            renderCell(params) {
+                const row = params.row as IDetalleExamenUbicacion;
+                const calId = row.calificacionId as number | undefined;
+                if (!calId) return '';
+                const cal = (calificaciones || []).find((c: ICalificacionUbicacion) => c.id === calId) as ICalificacionUbicacion | undefined;
+                const ciclo = cal?.ciclo?.nombre ?? cal?.cicloId;
+                return ciclo ? ciclo : '';
+            },
+        },
     ]
 
     return (
