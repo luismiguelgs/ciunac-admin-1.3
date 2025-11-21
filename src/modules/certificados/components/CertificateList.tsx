@@ -9,7 +9,6 @@ import { GridActionsCellItem, GridColDef, GridRowId, GridValueFormatter } from '
 import { ICertificado } from '@/modules/certificados/interfaces/certificado.interface'
 import { useRouter } from 'next/navigation'
 import CertificadosService from '@/modules/certificados/services/certificados.service'
-import { NIVEL } from '@/lib/constants'
 import PrintIcon from '@mui/icons-material/Print';
 import { PDFViewer, pdf } from '@react-pdf/renderer'
 import CertificateFormat from './formats/CertificateFormat'

@@ -1,12 +1,11 @@
 'use client'
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
-import SolicitudesService from '@/services/solicitudes.service';
+import SolicitudesService from '../services/solicitud.service';
 import React from 'react'
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, GridToolbar, GridToolbarContainerProps, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import LanguageIcon from '@mui/icons-material/Language';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
 import { formatDate } from '@/lib/utils';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Grid from '@mui/material/Grid2'
 import NewButton from '@/components/NewButton';
@@ -15,6 +14,7 @@ import { IBaseData } from '@/modules/opciones/interfaces/types.interface';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useRouter } from 'next/navigation';
 import { getIconByCode } from '@/lib/common';
+import { ISolicitudRes } from '../interfaces/solicitudres.interface';
 
 function MyCustomToolbar(props: GridToolbarContainerProps){
     return(
@@ -28,14 +28,18 @@ function MyCustomToolbar(props: GridToolbarContainerProps){
 }
 
 
-export function RequestState(props:{state:string, documents:IBaseData[]|undefined, subjects:IBaseData[]|undefined, handleDetails:(id:GridRowId) => void, handleDelete:(id:GridRowId) => void}) 
+export function RequestState(props:{state:number, documents:IBaseData[]|undefined, subjects:IBaseData[]|undefined, handleDetails:(id:GridRowId) => void, handleDelete:(id:GridRowId) => void}) 
 {
-    const [data, setData] = React.useState<Isolicitud[]>([]);
+    const [data, setData] = React.useState<ISolicitudRes[]>([]);
     const router = useRouter();
 
     React.useEffect(()=>{
-        SolicitudesService.fetchItemQuery(setData, props.state, 'CONSTANCIAS')
-    },[]);
+        const getData = async() => {
+            const res = await SolicitudesService.fetchItemByState('constancias',String(props.state))
+            setData(res)
+        }
+        getData()
+    },[props.state]);
 
 
     const columns: GridColDef[] = [
@@ -54,15 +58,15 @@ export function RequestState(props:{state:string, documents:IBaseData[]|undefine
         },
         { field: 'periodo', type: 'string', headerName: 'PERIODO', width: 85 },
         { 
-            field: 'solicitud', 
-            type: 'singleSelect', 
+            field: 'tiposSolicitud.solicitud', 
+            type: 'string', 
             headerName: 'SOLICITUD',
-            valueOptions: props.documents,
             editable: false,
-            width: 210
+            width: 210,
+            valueGetter: (_value, row) => row.tiposSolicitud?.solicitud ?? ''
         },
         {
-            field: 'creado',
+            field: 'creadoEn',
             type: 'string',
             width: 160,
             renderHeader:() => (
@@ -74,22 +78,23 @@ export function RequestState(props:{state:string, documents:IBaseData[]|undefine
                 </strong>
             ),
             valueGetter: (_value, row) => { // Accede a la fila para obtener 'creado'
-                const createdValue = row.creado;
+                const createdValue = row.creadoEn;
                 return formatDate(createdValue);
             },
         },
-        { field: 'apellidos', type: 'string', headerName: 'APELLIDOS', width:160 },
-        { field: 'nombres', type: 'string', headerName: 'NOMBRES', width:160 },
+        { field: 'estudiante.apellidos', type: 'string', headerName: 'APELLIDOS', width:160, valueGetter: (_v, row) => row.estudiante?.apellidos ?? '' },
+        { field: 'estudiante.nombres', type: 'string', headerName: 'NOMBRES', width:160, valueGetter: (_v, row) => row.estudiante?.nombres ?? '' },
         {
-            field: 'idioma',
+            field: 'idiomaId',
             width: 80,
             type: 'string',
             headerName: 'IDIOMA',
-                renderCell(params) {
-                   return getIconByCode(params.value)
-                }
+            valueGetter: (_v, row) => row.idiomaId ?? '',
+            renderCell(params) {
+                return getIconByCode(Number(params.value))
+            }
         },
-        { field: 'nivel', type: 'string', headerName: 'NIVEL', width: 100  },
+        { field: 'nivel.nombre', type: 'string', headerName: 'NIVEL', width: 100, valueGetter: (_v, row) => row.nivel?.nombre ?? '' },
         { 
             field: 'actions', 
             type: 'actions', 
@@ -110,8 +115,8 @@ export function RequestState(props:{state:string, documents:IBaseData[]|undefine
                 <GridActionsCellItem 
                     key={3}
                     showInMenu
-                    icon={<DeleteIcon />}
-                    label='Borrar'
+                    icon={<ThumbDownIcon />}
+                    label='Rechazar'
                     onClick={()=>props.handleDelete(params.id)}
                 />
             ]

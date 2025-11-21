@@ -6,8 +6,8 @@ import DialogFull from "@/components/MUI/Dialogs/DialogFull";
 import { GridRowId } from '@mui/x-data-grid';
 import useStore from '@/hooks/useStore';
 import { useDocumentsStore, useSubjectsStore } from '@/modules/opciones/store/types.stores';
-import { RequestState } from './(components)/RequestStage';
-import RequestDetail from './[id]/(components)/RequestDetail';
+import { RequestState } from '@/modules/solicitudes/constancias/RequestStage';
+import RequestDetail from '@/modules/solicitudes/constancias/RequestDetail';
 
 
 export default function RequestsConstansPage() 
@@ -20,8 +20,6 @@ export default function RequestsConstansPage()
     const [openDialogDelete, setOpenDialogDelete] = React.useState<boolean>(false);
     const [openDialogFullDetail, setOpenDialogFullDetail] = React.useState<boolean>(false);
 
-    
-    
 	//FUNCTIONS ***********************************************
     const handleDelete = (id:GridRowId) =>{
         setID(id as string)
@@ -43,7 +41,7 @@ export default function RequestsConstansPage()
 					{
 						label: 'Nuevas',
 						content: <RequestState 
-                            state='NUEVO' 
+                            state={1} //'NUEVO' 
                             handleDelete={handleDelete}
                             handleDetails={handleDetails}
                             documents={documents} 
@@ -54,7 +52,7 @@ export default function RequestsConstansPage()
 						content: <RequestState 
                             handleDelete={handleDelete}
                             handleDetails={handleDetails}
-                            state='ELABORADO' 
+                            state={2} //'ELABORADO' 
                             documents={documents} 
                             subjects={subjects}/>,
 					},
@@ -63,7 +61,7 @@ export default function RequestsConstansPage()
 						content: <RequestState 
                             handleDelete={handleDelete}
                             handleDetails={handleDetails}
-                            state='ENTREGADO' 
+                            state={3} //'ENTREGADO' 
                             documents={documents} 
                             subjects={subjects}/>,
 					}

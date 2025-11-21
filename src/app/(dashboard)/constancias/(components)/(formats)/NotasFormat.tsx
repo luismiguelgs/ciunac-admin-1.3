@@ -1,7 +1,7 @@
 import { StyleSheet, Document, Page, View, Text, Font, Image } from '@react-pdf/renderer'
 import logoCiunac from '@/assets/logo-ciunac-trans.png'
 import logoUnac from '@/assets/unac-logo.png'
-import { IconstanciaDetalle } from '../../../../../interfaces/constancia.interface'
+import { IconstanciaDetalle } from '../../../../../modules/constancias/interfaces/constancia.interface'
 import React from 'react'
 import { ConstanciasService } from '@/services/constancias.service'
 

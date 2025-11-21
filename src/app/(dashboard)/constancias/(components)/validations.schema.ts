@@ -1,4 +1,4 @@
-import { Iconstancia } from '../../../../interfaces/constancia.interface'
+import { Iconstancia } from '../../../../modules/constancias/interfaces/constancia.interface'
 import * as yup from 'yup'
 
 const msgReq = 'Campo requerido'

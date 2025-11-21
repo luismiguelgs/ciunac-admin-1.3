@@ -6,7 +6,7 @@ import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField 
 import { MySelect, MySwitch } from '@/components/MUI'
 import { NIVEL } from '@/lib/constants'
 import SelectSubjects from '@/components/SelectSubjects'
-import { Iconstancia } from '../../../../interfaces/constancia.interface'
+import { Iconstancia } from '../../../../modules/constancias/interfaces/constancia.interface'
 
 type Props = {
     formik: FormikProps<Iconstancia>,

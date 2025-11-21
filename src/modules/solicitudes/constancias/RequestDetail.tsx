@@ -1,37 +1,33 @@
 'use client'
 import React from 'react'
 import { MyAccordion, MyDialog } from '@/components/MUI'
-import SolicitudesService from '@/services/solicitudes.service'
-import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service'
 import Grid from '@mui/material/Grid2'
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import FaceIcon from '@mui/icons-material/Face';
 import PowerIcon from '@mui/icons-material/Power';
 import { Chip, Typography } from '@mui/material'
 import { PanelData } from '@/components/MUI/MyAccordion'
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
-import BasicInfo from '../../../(componets)/BasicInfo'
-import FinanceInfo from '../../../(componets)/FinanceInfo'
+import BasicInfo from '@/modules/solicitudes/certificados/components/BasicInfo'
+import FinanceInfo from '@/modules/solicitudes/certificados/components/FinanceInfo'
 import BackButton from '@/components/BackButton'
-import IProspecto from '../../../../../../interfaces/prospecto.interface'
-import ProspectosService from '@/services/prospectos.service'
-import InfoExtra from '../../../../../../modules/solicitudes/certificados/components/InfoExtra';
+import InfoExtra from '@/modules/solicitudes/certificados/components/InfoExtra';
+import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface'
+import { Isolicitud } from '../interfaces/solicitud.interface'
+import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 
 export default function RequestDetail(props:{id:string}) 
 {
     const {id} = props
     //Hooks *************************************************
     const [openDialog, setOpenDialog] = React.useState<boolean>(false);
-    const [solicitud, setSolicitud] = React.useState<Isolicitud>()
-    const [prospecto, setProspecto] = React.useState<IProspecto>()
+    const [solicitud, setSolicitud] = React.useState<ISolicitudRes>()
 
 	React.useEffect(()=>{
         const getData = async(id :string) =>{
             try{
-                const solicitud = await SolicitudesService.getItem(id) as Isolicitud
+                const solicitud = await SolicitudesService.getItemId(Number(id))
                 setSolicitud(solicitud)
-                const prospecto = await ProspectosService.getItem(solicitud.alumno_id as string)
-                setProspecto(prospecto)
             }
             catch(err){
                 if (err instanceof Error) {
@@ -46,24 +42,29 @@ export default function RequestDetail(props:{id:string})
     },[])
 
 	//Functions *************************************************
-	const saveItem = async (values:Isolicitud) =>{
-        if(values.fecha_pago){
-            SolicitudesService.updateItem({...values, id:id, fecha_pago: new Date(values.fecha_pago).toISOString().split('T')[0]})
-        }else{
-            SolicitudesService.updateItem({...values, id: id, pago:solicitud?.pago})
-        }
+	const saveItem = async (values:ISolicitudRes) =>{
+        const data = {
+                    tipoSolicitudId: values.tipoSolicitudId,
+                    estadoId: values.estadoId,
+                    idiomaId: values.idiomaId,
+                    nivelId: values.nivelId,
+                    numeroVoucher: values.numeroVoucher,
+                    pago: values.pago,
+                    fechaPago: values.fechaPago,
+                } as unknown as Isolicitud
+        SolicitudesService.updateItem(Number(id), data)
         setOpenDialog(true)
     }
 
 	const panels:PanelData[] = [
         {
             title: 'Información de solicitud',
-            content: solicitud && (<FinanceInfo item={solicitud as Isolicitud} saveItem={saveItem} />),
+            content: solicitud && (<FinanceInfo item={solicitud as ISolicitudRes} saveItem={saveItem} />),
             disabled: false
         },
         {
             title: 'Información de Alumno',
-            content: solicitud && (<BasicInfo item={solicitud as Isolicitud} saveItem={saveItem} /> ),
+            content: solicitud && (<BasicInfo item={solicitud as ISolicitudRes} saveItem={saveItem} /> ),
             disabled: false
         },
         {
@@ -79,17 +80,15 @@ export default function RequestDetail(props:{id:string})
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }}>
                 {
-                        solicitud?.estado === 'NUEVO' ? 
+                        solicitud?.estadoId === 1 ? 
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Nueva" sx={{m:1}} color="error"/>) : 
-                        solicitud?.estado === 'ELABORADO' ?
+                        solicitud?.estadoId === 2 ?
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Elaborada" sx={{m:1}} color="warning"/>) : 
                         (<Chip icon={<MilitaryTechIcon />} label="Solicitud Terminada" sx={{m:1}} color="success"/>)
                 }
                 {
-                        prospecto?.facultad !== 'PAR' ? 
+                        solicitud?.alumnoCiunac ? 
                         (<Chip icon={<FaceIcon />} label="Alumno UNAC" sx={{m:1}} color="primary"/>) : 
-                        solicitud?.trabajador ? 
-                        (<Chip icon={<FaceIcon />} label="Trabajador UNAC" sx={{m:1}} color="primary" />) :
                         (<Chip icon={<FaceIcon />} label="PARTICULAR" sx={{m:1}} color="primary"/>)
                 }
                 {

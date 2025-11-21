@@ -1,4 +1,4 @@
-import RequestDetail from "./(components)/RequestDetail"
+import RequestDetail from "@/modules/solicitudes/constancias/RequestDetail"
 
 export default function RequestsConstanciasDetail({params}:{params:{id:string}}) 
 {

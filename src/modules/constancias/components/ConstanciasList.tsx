@@ -1,6 +1,6 @@
-import { Iconstancia } from '../../../../interfaces/constancia.interface'
-import { Collection, ConstanciasService } from '@/services/constancias.service'
-import SolicitudesService from '@/services/solicitudes.service'
+import { IConstancia } from '../interfaces/constancia.interface'
+import { ConstanciasService } from '@/modules/constancias/services/constancias.service'
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service'
 import { Chip, Checkbox, Box } from '@mui/material'
 import { GridColDef, GridRowId } from '@mui/x-data-grid'
 import { useRouter } from 'next/navigation'
@@ -14,8 +14,8 @@ import 'dayjs/locale/es';
 dayjs.locale('es');
 
 type Props = {
-    rows: Iconstancia[]
-    setRows: React.Dispatch<React.SetStateAction<Iconstancia[]>>
+    rows: IConstancia[]
+    setRows: React.Dispatch<React.SetStateAction<IConstancia[]>>
     printed?: boolean
 }
 
@@ -32,9 +32,12 @@ export default function ConstanciasList({rows, setRows, printed}: Props)
                 row.id === id ? { ...row, impreso: checked } : row
             )
         );
-        await ConstanciasService.updateStatus(Collection.CONSTANCIAS,id as string, checked)
+        await ConstanciasService.updateStatus(id as string, checked)
         const info = rows.find((row) => row.id === id)
-        await SolicitudesService.updateStatus(info?.id_solicitud as string, 'ENTREGADO')
+		if(checked)
+            await SolicitudesService.updateStatus(info?.solicitud_id as number, 3) //entregardo
+        else
+            await SolicitudesService.updateStatus(info?.solicitud_id as number, 2) //impreso
     }
 	const handleDetails = (id:GridRowId) => {
         setID(id)
@@ -50,16 +53,9 @@ export default function ConstanciasList({rows, setRows, printed}: Props)
 	}
 	const handleConfirmDelete = async () => {
         if (ID) {
-            //borrar su detalle
-            const detail = await ConstanciasService.fetchItemsDetalle(ID as string)
-			if(detail.length > 0) {
-            	for(const element of detail){
-                	await ConstanciasService.deleteItem(Collection.CONSTANCIAS_NOTAS, element.id as string)
-            	}
-			}
             //borrar el item
-            await ConstanciasService.deleteItem(Collection.CONSTANCIAS,ID as string);
-            setRows(rows.filter((row: Iconstancia) => row.id !== ID));
+            await ConstanciasService.deleteItem(ID as string);
+            setRows(rows.filter((row: IConstancia) => row.id !== ID));
             setID(null);
             setOpenDialog(false);
         }

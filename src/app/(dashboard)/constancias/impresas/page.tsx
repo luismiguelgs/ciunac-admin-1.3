@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
-import useConstancias from '@/hooks/useConstancias'
-import ConstanciasList from '../(components)/ConstanciasList'
+import useConstancias from '@/modules/constancias/hooks/useConstancias'
+import ConstanciasList from '../../../../modules/constancias/components/ConstanciasList'
 import { Skeleton } from '@mui/material'
 
 export default function ConstanciasPrintedPage() 

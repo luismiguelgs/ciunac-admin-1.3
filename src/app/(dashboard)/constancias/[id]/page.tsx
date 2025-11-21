@@ -1,5 +1,5 @@
 'use client'
-import { Iconstancia, IconstanciaDetalle } from '../../../../interfaces/constancia.interface'
+import { Iconstancia, IconstanciaDetalle } from '../../../../modules/constancias/interfaces/constancia.interface'
 import { Collection, ConstanciasService } from '@/services/constancias.service'
 import { useFormik } from 'formik'
 import { usePathname, useRouter } from 'next/navigation'
