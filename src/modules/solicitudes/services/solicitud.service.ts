@@ -20,6 +20,13 @@ export default class SolicitudesService
 		const response = await apiFetch<ISolicitudRes[]>(`${this.collection}/${solicitud}?estado=${state}`, 'GET')
 		return response
 	}
+
+    //Solicitudes por Fecha y Tipo
+    public static async fetchItemQueryDate(tipo:'7'|'n', fechaInicial: string, fechaFinal: string): Promise<ISolicitudRes[]> {
+        // GET /solicitudes/reporte-fechas?inicio=2024-01-01&fin=2024-01-31&tipo=7
+        const response = await apiFetch<ISolicitudRes[]>(`${this.collection}/reporte-fechas?inicio=${fechaInicial}&fin=${fechaFinal}&tipo=${tipo}`, 'GET')
+        return response
+    }
     
     public static async newItem(data:Isolicitud):Promise<string| null>
     {

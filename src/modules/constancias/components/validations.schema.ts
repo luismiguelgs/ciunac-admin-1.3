@@ -1,38 +1,39 @@
-import { Iconstancia } from '../../../../modules/constancias/interfaces/constancia.interface'
+import { IConstancia } from '@/modules/constancias/interfaces/constancia.interface'
 import * as yup from 'yup'
 
 const msgReq = 'Campo requerido'
 
-const validationSchema = yup.object<Iconstancia>({
+const validationSchema = yup.object<IConstancia>({
     estudiante: yup.string().required(msgReq),
-    dni: yup.date().required(msgReq),
+    dni: yup.string().required(msgReq),
     idioma: yup.string().trim().required(msgReq),
     nivel: yup.string().trim().required(msgReq),
+    tipo: yup.string().trim().required(msgReq),
     ciclo: yup.string().trim().required(msgReq),
     modalidad: yup.string().trim().when('tipo', {
-        is: 'CONSTANCIA_MATRICULA',
+        is: 'MATRICULA',
         then: (schema:yup.Schema)=> schema.required(msgReq),
         otherwise: (schema:yup.Schema) => schema.optional().nullable(),
     }),
     impreso : yup.boolean(),
-    id_solicitud: yup.string(),
+    solicitud_id: yup.number(),
     horario: yup.string().trim().when('tipo', {
-        is: 'CONSTANCIA_MATRICULA',
+        is: 'MATRICULA',
         then: (schema:yup.Schema)=> schema.required(msgReq),
         otherwise: (schema:yup.Schema) => schema.optional().nullable(),
     })
 })
 
-const initialValues:Iconstancia ={
+const initialValues:IConstancia ={
     estudiante: '',
     idioma: '',
     impreso: false,
     modalidad: 'REGULAR',
     nivel : '',
-    tipo: 'CONSTANCIA_MATRICULA',
+    tipo: 'MATRICULA',
     ciclo: '',
     dni: '',
-    id_solicitud: '',
+    solicitud_id: 0,
     horario: '',
 }
 

@@ -1,22 +1,22 @@
 'use client'
 import DataTable, { Column } from '@/components/MUI/DataTable';
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
-import SolicitudesService from '@/services/solicitudes.service';
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service';
 import { Button, TextField } from '@mui/material';
 import React from 'react'
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Grid from '@mui/material/Grid2';
 import { exportToExcel } from '@/lib/utils';
+import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface';
 
 const columns: Column[] = [
-    { id:'creado', label:'Fecha',minWidth:40},
-    { id: 'apellidos', label: 'Apellidos', minWidth: 150 },
-    { id: 'nombres', label: 'Nombres', minWidth: 120 },
-    { id: 'idioma', label: 'Idioma', minWidth: 25, align: 'right' },
-    { id: 'nivel', label: 'Nivel', minWidth: 25, align: 'right' },
+    { id:'creadoEn', label:'Fecha',minWidth:40},
+    { id: 'estudiante.apellidos', label: 'Apellidos', minWidth: 150 },
+    { id: 'estudiante.nombres', label: 'Nombres', minWidth: 120 },
+    { id: 'idioma.nombre', label: 'Idioma', minWidth: 25, align: 'right' },
+    { id: 'nivel.nombre', label: 'Nivel', minWidth: 25, align: 'right' },
     { id: 'pago', label: 'Abono(S/)', minWidth: 25 },
-    { id: 'numero_voucher', label: 'Número de recibo', minWidth: 80 },
-    { id: 'estado', label: 'Estado', minWidth: 30 },
+    { id: 'numeroVoucher', label: 'Número de recibo', minWidth: 80 },
+    { id: 'estado.nombre', label: 'Estado', minWidth: 30 },
 ];
 export default function ReportCertificate() 
 {
@@ -24,11 +24,14 @@ export default function ReportCertificate()
     const [fechaInicial, setFechaInicial] = React.useState<string>(new Date().toISOString().split('T')[0])
     const [displayFechaFinal, setDisplayFechaFinal] = React.useState<string>(new Date().toISOString().split('T')[0])
     const [fechaFinal, setFechaFinal] = React.useState<string>(new Date().toISOString().split('T')[0])
-    const [data, setData] = React.useState<Isolicitud[]>([]);
+    const [data, setData] = React.useState<ISolicitudRes[]>([]);
     
     React.useEffect(()=>{
-        SolicitudesService.fetchItemQueryDate(setData,fechaInicial,fechaFinal)
-        console.log(data)
+        const getData = async() => {
+            const data = await SolicitudesService.fetchItemQueryDate('n', fechaInicial, fechaFinal)
+            setData(data)
+        }
+        getData()
     },[fechaInicial,fechaFinal]);
 
     //aumenta un dia la fecha final

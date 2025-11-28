@@ -5,7 +5,9 @@ export interface IConstancia {
     estudiante: string;
     dni: string;
     idioma: string;
+    idiomaId?: number;
     nivel: string;
+    nivelId?: number;
     ciclo: string;
     impreso: boolean;
     solicitud_id: number;
@@ -18,6 +20,7 @@ export interface IConstancia {
 }
 
 export interface IConstanciaDetalle {
+    id?: string;
     idioma: string;
     nivel: string;
     ciclo: string;

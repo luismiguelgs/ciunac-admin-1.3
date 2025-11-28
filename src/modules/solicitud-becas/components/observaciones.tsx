@@ -1,12 +1,12 @@
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import { Box, TextField, Button } from '@mui/material'
 import Grid from '@mui/material/Grid2'; // Grid de MUI v5
 import React from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
-import SolicitudesService from '@/services/solicitudes.service';
+import ISolicitudBeca from '../interfaces/solicitud-beca.interfaces';
+import { SolicitudBecasService } from '../services/solicitudes-beca.service';
 
-export default function Observaciones({item}:{item:Isolicitud}) 
+export default function Observaciones({item}:{item:ISolicitudBeca}) 
 {
     const [enabled, setEnabled] = React.useState<boolean>(false)
     const [observaciones, setObservaciones] = React.useState<string>(item.observaciones!)
@@ -17,7 +17,7 @@ export default function Observaciones({item}:{item:Isolicitud})
 
     const handleSave = () => {
         // Logic to save the changes
-        SolicitudesService.updateComentario(item.id!, observaciones)
+        SolicitudBecasService.updateOpbservaciones(item.id as string, observaciones)
         //alert(JSON.stringify(item))
         setEnabled(false);
     };

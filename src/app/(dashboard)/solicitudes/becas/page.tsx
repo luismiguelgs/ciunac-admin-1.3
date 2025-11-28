@@ -3,9 +3,9 @@ import React from "react";
 import { MyDialog, MyTabs } from "@/components/MUI";
 import DialogFull from "@/components/MUI/Dialogs/DialogFull";
 import { GridRowId } from "@mui/x-data-grid";
-import SolicitudesService from "@/services/solicitudes.service";
 import RequestStage from "@/modules/solicitud-becas/components/requestStage";
 import RequestDetail from "@/modules/solicitud-becas/components/requestDetail";
+import { SolicitudBecasService } from "@/modules/solicitud-becas/services/solicitudes-beca.service";
 
 export default function BecasPage() 
 {
@@ -13,6 +13,7 @@ export default function BecasPage()
     const [ID, setID] = React.useState<string| undefined>(''); //Dialog
     const [openDialogDelete, setOpenDialogDelete] = React.useState<boolean>(false);
     const [openDialogFullDetail, setOpenDialogFullDetail] = React.useState<boolean>(false);
+    const [deletedId, setDeletedId] = React.useState<string | null>(null);
 
     //FUNCTIONS ***********************************************
     const handleDelete = (id:GridRowId) =>{
@@ -23,8 +24,9 @@ export default function BecasPage()
         setOpenDialogFullDetail(true)
         setID(id as string)
     }
-    const deleteFunc = () => {
-        SolicitudesService.deleteItem(ID)
+    const deleteFunc = async () => {
+        await SolicitudBecasService.deleteItem(ID as string);
+        setDeletedId(ID as string);
         setOpenDialogDelete(false)
     }
 
@@ -36,9 +38,10 @@ export default function BecasPage()
                     {
                         label: 'Nuevas',
                         content: <RequestStage 
-                            state="NUEVO"
+                            state="PENDIENTE"
                             handleDelete={handleDelete}
                             handleDetails={handleDetails}
+                            deletedId={deletedId}
                         />,
                         
                     },
@@ -48,6 +51,7 @@ export default function BecasPage()
                             state="APROBADO"
                             handleDelete={handleDelete}
                             handleDetails={handleDetails}
+                            deletedId={deletedId}
                         />,
                     },
                     {
@@ -56,6 +60,7 @@ export default function BecasPage()
                             state="RECHAZADO"
                             handleDelete={handleDelete}
                             handleDetails={handleDetails}
+                            deletedId={deletedId}
                         />,
                     }
                 ]}

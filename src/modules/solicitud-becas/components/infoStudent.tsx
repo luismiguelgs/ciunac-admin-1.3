@@ -1,13 +1,13 @@
 import Grid from '@mui/material/Grid2'
-import IProspecto from '../../../interfaces/prospecto.interface'
 import React from 'react'
 import { TextField } from '@mui/material'
 import useStore from '@/hooks/useStore';
 import {  useFacultiesStore } from '@/modules/opciones/store/types.stores';
 import { MySelect } from '@/components/MUI';
 import { ESCUELAS } from '@/lib/constants';
+import ISolicitudBeca from '../interfaces/solicitud-beca.interfaces';
 
-export default function InfoStudent({item}:{item:IProspecto}) 
+export default function InfoStudent({item}:{item:ISolicitudBeca}) 
 {
     console.log(item)
     const faculties = useStore(useFacultiesStore, (state) => state.faculties)
@@ -39,7 +39,7 @@ export default function InfoStudent({item}:{item:IProspecto})
                     disabled
                     variant='standard'
                     fullWidth
-                    value={item?.dni}
+                    value={item?.numero_documento}
                     label="Documento de Identidad"
                     slotProps={{ inputLabel: { shrink: true, } }}
                 />
@@ -55,26 +55,24 @@ export default function InfoStudent({item}:{item:IProspecto})
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 6}} >
-                { faculties && <MySelect
-                        disabled={true}
-                        data={faculties} 
-                        name="facultad" 
-                        variant='standard'
-                        label="Facultad" 
-                        value={item?.facultad} 
-                        handleChange={()=>{}}
-                />}
+                <TextField
+                    disabled
+                    fullWidth
+                    variant='standard'
+                    value={item?.facultad}
+                    label="Facultad"
+                    slotProps={{ inputLabel: { shrink: true, } }}
+                />
             </Grid>
             <Grid size={{xs: 12, sm: 6}} >
-                { faculties && <MySelect
-                        disabled={true}
-                        data={ESCUELAS} 
-                        variant='standard'
-                        name="facultad" 
-                        label="Facultad" 
-                        value={item?.escuela} 
-                        handleChange={()=>{}}
-                />}
+                <TextField
+                    disabled
+                    fullWidth
+                    variant='standard'
+                    value={item?.escuela}
+                    label="Escuela"
+                    slotProps={{ inputLabel: { shrink: true, } }}
+                />
             </Grid>
             <Grid size={{xs: 12, sm: 6}} >
                 <TextField

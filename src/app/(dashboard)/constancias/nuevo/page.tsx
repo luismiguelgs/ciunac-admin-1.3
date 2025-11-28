@@ -1,52 +1,63 @@
 'use client'
-import { Iconstancia } from '../../../../modules/constancias/interfaces/constancia.interface'
-import { Collection, ConstanciasService } from '@/services/constancias.service'
+import { IConstancia } from '@/modules/constancias/interfaces/constancia.interface'
+import { ConstanciasService } from '@/modules/constancias/services/constancias.service'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import Grid from '@mui/material/Grid2';
-import { initialValues, validationSchema } from '../(components)/validations.schema'
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
+import { initialValues, validationSchema } from '@/modules/constancias/components/validations.schema'
 import { Box } from '@mui/material'
 import BackButton from '@/components/BackButton'
 import ButtonSave from '@/components/ButtonSave'
 import LoadingDialog from '@/components/MUI/Dialogs/DialogLoading'
-import ConstanciaForm from '../(components)/ConstanciaForm'
+import ConstanciaForm from '@/modules/constancias/components/ConstanciaForm'
 import ButtonAsignRequest from '@/components/ButtonAsignRequest'
-import SolicitudesService from '@/services/solicitudes.service'
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service'
+import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface'
+import { useSubjectsStore } from '@/modules/opciones/store/types.stores'
+import { NIVEL } from '@/lib/constants'
 
 export default function ConstanciasNewPage() 
 {
     //HOOKS *************************************************
+    const idiomas = useSubjectsStore()
     const [loading, setLoading] = React.useState<boolean>(false)
     const [reload, setReload] = React.useState<boolean>(false)
-    const [dataRequest, setDataRequest] = React.useState<Isolicitud>()
+    const [dataRequest, setDataRequest] = React.useState<ISolicitudRes>()
     
 	const [id, setId] = React.useState<string>('nuevo')
     const navigate = useRouter()
 
-    const formik = useFormik<Iconstancia>({
+    const formik = useFormik<IConstancia>({
         initialValues:initialValues,
         validationSchema : validationSchema,
-        onSubmit: async(values:Iconstancia) =>{
+        onSubmit: async(values:IConstancia) =>{
             setLoading(true)
-            values.estudiante = values.estudiante.toUpperCase()
-            //alert(JSON.stringify(values,null, 2))
-            const id = await ConstanciasService.newItem(Collection.CONSTANCIAS, values)
-            setId(id as string)
-            navigate.push(`./${id}`)
-            await SolicitudesService.updateStatus(values.id_solicitud as string, 'ELABORADO')
+            const formattedValues = {
+                ...values,
+                idioma: idiomas.subjects.find(idioma => idioma.id === +values.idioma)?.nombre,
+                idiomaId: +values.idioma,
+                nivel: NIVEL.find(nivel => nivel.value === String(values.nivel))?.label,
+                nivelId: Number(values.nivel),
+                estudiante: values.estudiante.toUpperCase(),                
+                url: "no-url"
+            } as IConstancia
+            console.log(JSON.stringify(formattedValues,null, 2))
+            const res = await ConstanciasService.newItem(formattedValues)
+            setId(res.id as string)
+            navigate.push(`./${res.id}`)
+            await SolicitudesService.updateStatus(values.solicitud_id as number, 2) //elaborado
             setLoading(false)
         }
     })
 
     React.useEffect(() => {
-        formik.setFieldValue('id_solicitud', dataRequest?.id)
-        formik.setFieldValue('tipo', dataRequest?.solicitud === 'CONSTANCIA_DE_NOTAS' ? 'CONSTANCIA_NOTAS' : 'CONSTANCIA_MATRICULA')
-        formik.setFieldValue('estudiante', dataRequest?.nombres ?  dataRequest?.apellidos + ' ' +  dataRequest?.nombres  : '')
-        formik.setFieldValue('dni', dataRequest?.dni)
-        formik.setFieldValue('idioma', dataRequest?.idioma)
-        formik.setFieldValue('nivel', dataRequest?.nivel)
+        formik.setFieldValue('solicitud_id', dataRequest?.id as number)
+        formik.setFieldValue('tipo', dataRequest?.tipoSolicitudId === 5 ? 'MATRICULA' : 'NOTAS')
+        formik.setFieldValue('estudiante', dataRequest?.estudiante?.nombres ?  dataRequest?.estudiante?.apellidos + ' ' +  dataRequest?.estudiante?.nombres  : '')
+        formik.setFieldValue('dni', dataRequest?.estudiante?.numeroDocumento as string)
+        formik.setFieldValue('idioma', dataRequest?.idiomaId)
+        formik.setFieldValue('nivel', dataRequest?.nivelId)
     }, [reload])
 
     return (

@@ -22,7 +22,7 @@ export class ConstanciasService
         return mapId(response)
     }
 
-    static async updateItem(item:IConstancia): Promise<IConstancia> {
+    static async updateItem(item: IConstancia): Promise<IConstancia> {
         const {id, ...rest} = item
         const response = await apiFetch<IConstancia>(`${collection}/${id}`, 'PATCH', rest)
         return mapId(response)

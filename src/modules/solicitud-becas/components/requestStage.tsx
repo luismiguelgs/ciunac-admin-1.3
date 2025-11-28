@@ -2,13 +2,13 @@ import React from 'react'
 import Grid from '@mui/material/Grid2'
 import { Box, Portal } from '@mui/material'
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, GridToolbar, GridToolbarContainerProps, GridToolbarQuickFilter } from '@mui/x-data-grid'
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface'
 import { useRouter } from 'next/navigation'
-import SolicitudesService from '@/services/solicitudes.service'
 import { formatDate } from '@/lib/utils'
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ISolicitudBeca from '../interfaces/solicitud-beca.interfaces'
+import { SolicitudBecasService } from '../services/solicitudes-beca.service'
 
 function MyCustomToolbar(props: GridToolbarContainerProps){
     return(
@@ -21,19 +21,29 @@ function MyCustomToolbar(props: GridToolbarContainerProps){
     )
 }
 
-export default function RequestStage(props:{state:string, handleDetails:(id:GridRowId) => void, handleDelete:(id:GridRowId) => void}) 
+export default function RequestStage(props:{state:string, handleDetails:(id:GridRowId) => void, handleDelete:(id:GridRowId) => void, deletedId?: string | null}) 
 {
-    const [data, setData] = React.useState<Isolicitud[]>([]);
+    const [data, setData] = React.useState<ISolicitudBeca[]>([]);
     const router = useRouter();
 
     React.useEffect(()=>{
-        SolicitudesService.fetchItemQuery(setData, props.state, 'BECA')
+        const getData = async(state:string) =>{
+            const res = await SolicitudBecasService.fetchItemsByState(state)
+            console.log(res)
+            setData(res)
+        }
+        getData(props.state)
     },[]);
+
+    React.useEffect(()=>{
+        if(!props.deletedId) return;
+        setData(prev => prev.filter(item => item.id !== props.deletedId));
+    }, [props.deletedId]);
 
     const columns: GridColDef[] = [
         { field: 'periodo', type: 'string', headerName: 'PERIODO', width: 100 },
         {
-            field: 'creado',
+            field: 'creado_en',
             type: 'string',
             width: 200,
             renderHeader:() => (
@@ -45,12 +55,14 @@ export default function RequestStage(props:{state:string, handleDetails:(id:Grid
                 </strong>
             ),
             valueGetter: (_value, row) => { // Accede a la fila para obtener 'creado'
-                const createdValue = row.creado;
+                const createdValue = row.creado_en;
                 return formatDate(createdValue);
             },
         },
-        { field: 'apellidos', type: 'string', headerName: 'APELLIDOS', width:200 },
-        { field: 'nombres', type: 'string', headerName: 'NOMBRES', width:200 },
+        { field: 'apellidos', type: 'string', headerName: 'APELLIDOS', width:180 },
+        { field: 'nombres', type: 'string', headerName: 'NOMBRES', width:180 },
+        { field: 'facultad', type: 'string', headerName: 'FACULTAD', width:200 },
+        { field: 'escuela', type: 'string', headerName: 'ESCUELA', width:200 },
         { 
             field: 'actions', 
             type: 'actions', 

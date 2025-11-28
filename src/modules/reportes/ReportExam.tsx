@@ -3,21 +3,20 @@ import React from 'react'
 import { Button, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import DataTable, { Column } from '@/components/MUI/DataTable';
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
-import SolicitudesService from '@/services/solicitudes.service';
+import SolicitudesService from '@/modules/solicitudes/services/solicitud.service';
 import { exportToExcel } from '@/lib/utils';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-
+import { ISolicitudRes } from '@/modules/solicitudes/interfaces/solicitudres.interface';
 
 const columns: Column[] = [
-    { id:'creado', label:'Fecha',minWidth:40},
-    { id: 'apellidos', label: 'Apellidos', minWidth: 150 },
-    { id: 'nombres', label: 'Nombres', minWidth: 120 },
-    { id: 'dni', label: 'DNI', minWidth:100},
+    { id:'creadoEn', label:'Fecha',minWidth:40},
+    { id: 'estudiante.apellidos', label: 'Apellidos', minWidth: 150 },
+    { id: 'estudiante.nombres', label: 'Nombres', minWidth: 120 },
+    { id: 'estudiante.numeroDocumento', label: 'DNI', minWidth:100},
     { id: 'pago', label: 'Abono(S/)', minWidth: 25 },
-    { id: 'numero_voucher', label: 'Número de recibo', minWidth: 80 },
-    { id: 'nivel', label: 'Nivel', minWidth: 25, align: 'right' },
-    { id: 'idioma', label: 'Idioma', minWidth: 25, align: 'right' },
+    { id: 'numeroVoucher', label: 'Número de recibo', minWidth: 80 },
+    { id: 'nivel.nombre', label: 'Nivel', minWidth: 25, align: 'right' },
+    { id: 'idioma.nombre', label: 'Idioma', minWidth: 25, align: 'right' },
 ];
 
 
@@ -27,10 +26,14 @@ export default function ReportExam()
     const [fechaInicial, setFechaInicial] = React.useState<string>(new Date().toISOString().split('T')[0])
     const [displayFechaFinal, setDisplayFechaFinal] = React.useState<string>(new Date().toISOString().split('T')[0])
     const [fechaFinal, setFechaFinal] = React.useState<string>(new Date().toISOString().split('T')[0])
-    const [data, setData] = React.useState<Isolicitud[]>([]);
+    const [data, setData] = React.useState<ISolicitudRes[]>([]);
 
     React.useEffect(()=>{
-        SolicitudesService.fetchItemQueryDate(setData,fechaInicial,fechaFinal,true)
+        const getData = async() => {
+            const data = await SolicitudesService.fetchItemQueryDate('7', fechaInicial, fechaFinal)
+            setData(data)
+        }
+        getData()
     },[fechaInicial,fechaFinal]);
 
     //aumenta un dia la fecha final

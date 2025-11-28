@@ -68,14 +68,20 @@ export default function DataTable({rows, columns, handleDelete, handleEdit, acti
                       origen && (<TableCell align='center'>{ row.manual ? (<KeyboardIcon color='primary' />):(<PublicIcon color='secondary' />)}</TableCell>)
                     }
                     {columns.map((column) => {
-                      const value = row[column.id];
+                      const value = column.id.includes('.')
+                        ? column.id.split('.').reduce((acc: any, key: string) => (acc ? acc[key] : undefined), row)
+                        : row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {
-                            column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value
-                          }
+                          {(() => {
+                            if (column.format && typeof value === 'number') {
+                              return column.format(value);
+                            }
+                            if (value !== null && typeof value === 'object') {
+                              return '';
+                            }
+                            return value as React.ReactNode;
+                          })()}
                         </TableCell>
                       );
                     })}

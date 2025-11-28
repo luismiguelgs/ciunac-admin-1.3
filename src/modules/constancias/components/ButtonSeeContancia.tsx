@@ -6,24 +6,20 @@ import { MyDialog } from '@/components/MUI'
 import { PDFViewer } from '@react-pdf/renderer'
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import { Iconstancia, IconstanciaDetalle } from '../../../../modules/constancias/interfaces/constancia.interface';
-import MatriculaFormat from './(formats)/MatriculaFormat'
-import { NIVEL } from '@/lib/constants'
-import useSubjects from '@/hooks/useSubjects'
-import NotasFormat from './(formats)/NotasFormat';
+import { IConstancia } from '../interfaces/constancia.interface';
+import MatriculaFormat from '../formats/MatriculaFormat'
+import NotasFormat from '../formats/NotasFormat';
 dayjs.locale('es');
 
 type Props = {
     id: string,
-    contancia: Iconstancia,
-    constanciaDetalle?: IconstanciaDetalle[],
+    contancia: IConstancia,
 }
 
-export default function ButtonSeeContancia({ id,contancia, constanciaDetalle }: Props)
+export default function ButtonSeeContancia({ id,contancia }: Props)
 {
     //HOOKS *************************************************
     const [open, setOpen] = React.useState<boolean>(false)
-    const {data} = useSubjects()
 
     return (
         <React.Fragment>
@@ -37,7 +33,7 @@ export default function ButtonSeeContancia({ id,contancia, constanciaDetalle }: 
                     Ver Constancia
             </Button>
             {
-                contancia.tipo === 'CONSTANCIA_MATRICULA' ? (
+                contancia.tipo === 'MATRICULA' ? (
                     <MyDialog 
                         open={open}
                         type='SIMPLE'
@@ -48,12 +44,12 @@ export default function ButtonSeeContancia({ id,contancia, constanciaDetalle }: 
                                 <MatriculaFormat 
                                     estudiante={contancia.estudiante}
                                     dni={contancia.dni}
-                                    curso={data?.filter(item=>item.value === contancia.idioma)[0]?.label as string}
-                                    nivel={NIVEL.filter(item=>item.value === contancia.nivel)[0]?.label}
+                                    curso={contancia.idioma}
+                                    nivel={contancia.nivel}
                                     ciclo={contancia.ciclo}
                                     modalidad={contancia.modalidad as string}
                                     horario={contancia.horario as string}
-                                    fecha={dayjs(contancia.createAt).format('D [de] MMMM [del] YYYY' )}
+                                    fecha={dayjs(contancia.creado_en).format('D [de] MMMM [del] YYYY' )}
                                 />
                             </PDFViewer>
                         </>}>
@@ -69,11 +65,11 @@ export default function ButtonSeeContancia({ id,contancia, constanciaDetalle }: 
                                 <NotasFormat 
                                     estudiante={contancia.estudiante}
                                     dni={contancia.dni}
-                                    curso={data?.filter(item=>item.value === contancia.idioma)[0]?.label as string}
-                                    nivel={NIVEL.filter(item=>item.value === contancia.nivel)[0]?.label}
+                                    curso={contancia.idioma}
+                                    nivel={contancia.nivel}
                                     ciclo={contancia.ciclo}
-                                    fecha={dayjs(contancia.createAt).format('D [de] MMMM [del] YYYY' )}
-                                    detalle={constanciaDetalle}
+                                    fecha={dayjs(contancia.creado_en).format('D [de] MMMM [del] YYYY' )}
+                                    detalle={contancia.detalle}
                                 />
                             </PDFViewer>
                         </>}>

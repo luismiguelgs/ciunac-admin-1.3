@@ -2,6 +2,7 @@ import { Timestamp } from "firebase/firestore";
 import * as ExcelJS from 'exceljs';
 import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import { IUsuario } from "../interfaces/usuario.interface";
+import { ISolicitudRes } from "@/modules/solicitudes/interfaces/solicitudres.interface";
 
 export function mapId<T extends { _id?: string }>(item: T) {
     return {
@@ -80,7 +81,7 @@ export const changeDate = (date:Timestamp, hora=true, formato=false):string|unde
     }
 } 
   
-export async function exportToExcel(data:Isolicitud[])
+export async function exportToExcel(data:ISolicitudRes[])
 {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('DataSheet');
@@ -112,23 +113,21 @@ export async function exportToExcel(data:Isolicitud[])
   document.body.removeChild(a);
   window.URL.revokeObjectURL(url);
 }
-const formatearDatos =(data:Isolicitud[]) =>{
-	const excelData:string[][] = [['Online','Apellidos','Nombres','DNI','Idioma','Nivel','Pago','Fecha Pago','Recibo','Estado','Fecha Solicitud','Trabajador','Tipo Trabajador']]
+const formatearDatos =(data:ISolicitudRes[]) =>{
+	const excelData:string[][] = [['Online','Apellidos','Nombres','DNI','Idioma','Nivel','Pago','Fecha Pago','Recibo','Estado','Fecha Solicitud']]
 	data.forEach((row)=>{
 		excelData.push([
       row.manual? 'MANUAL': 'ONLINE',
-			row.apellidos?.toUpperCase() || '',
-			row.nombres?.toUpperCase() || '', 
-			row.dni || '', 
-			row.idioma, 
-			row.nivel, 
-			row.pago, 
-      row.fecha_pago || '',
-			row.numero_voucher || '', 
-			row.estado || '',
-      row.creado || '',
-      row.trabajador? 'SI': 'NO',
-      row.tipo_trabajador || '',
+			row.estudiante?.apellidos?.toUpperCase() || '',
+			row.estudiante?.nombres?.toUpperCase() || '', 
+			row.estudiante?.numeroDocumento || '', 
+			row.idioma?.nombre || '', 
+			row.nivel?.nombre || '', 
+			String(row.pago), 
+      row.fechaPago || '',
+			row.numeroVoucher || '', 
+			row.estado?.nombre || '',
+      row.creadoEn || '',
 		])
 	})
 	return excelData

@@ -6,10 +6,10 @@ import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField 
 import { MySelect, MySwitch } from '@/components/MUI'
 import { NIVEL } from '@/lib/constants'
 import SelectSubjects from '@/components/SelectSubjects'
-import { Iconstancia } from '../../../../modules/constancias/interfaces/constancia.interface'
+import { IConstancia } from '@/modules/constancias/interfaces/constancia.interface'
 
 type Props = {
-    formik: FormikProps<Iconstancia>,
+    formik: FormikProps<IConstancia>,
     id: string,
     edit?: boolean
 }
@@ -23,11 +23,11 @@ export default function ConstanciaForm({formik, id, edit=false}:Props)
                 <MySelect
                     data={[
                         {
-                            value: 'CONSTANCIA_MATRICULA',
+                            value: 'MATRICULA',
                             label: 'CONSTANCIA DE MATRÍCULA'
                         },
                         {
-                            value: 'CONSTANCIA_NOTAS',
+                            value: 'NOTAS',
                             label: 'CONSTANCIA DE NOTAS'
                         }
                     ]}
@@ -57,17 +57,17 @@ export default function ConstanciaForm({formik, id, edit=false}:Props)
             <Grid size={{xs: 12, sm: 6}}>
                 <TextField
                     autoFocus
-                    value={formik.values.id_solicitud || ''}
-                    name='id_solicitud'
+                    value={formik.values.solicitud_id || ''}
+                    name='solicitud_id'
                     label="ID Solicitud"
-                    error={formik.touched.id_solicitud && Boolean(formik.errors.id_solicitud)}
+                    error={formik.touched.solicitud_id && Boolean(formik.errors.solicitud_id)}
                     type="text"
                     fullWidth
                     disabled={true}
                     slotProps={{inputLabel: { shrink: true, }}}
                     variant="outlined"
                     onChange={formik.handleChange}
-                    helperText={formik.touched.id_solicitud && formik.errors.id_solicitud}
+                    helperText={formik.touched.solicitud_id && formik.errors.solicitud_id}
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
@@ -123,7 +123,7 @@ export default function ConstanciaForm({formik, id, edit=false}:Props)
                 />
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
-                { formik.values.tipo === 'CONSTANCIA_MATRICULA' && <FormControl>
+                { formik.values.tipo === 'MATRICULA' && <FormControl>
                     <FormLabel id="radio-modalidad-label">Modalidad</FormLabel>
                     <RadioGroup 
                         row
@@ -137,7 +137,7 @@ export default function ConstanciaForm({formik, id, edit=false}:Props)
                 </FormControl>}
             </Grid>
             <Grid size={{xs: 12, sm: 3}}>
-                { formik.values.tipo === 'CONSTANCIA_MATRICULA' && <TextField
+                { formik.values.tipo === 'MATRICULA' && <TextField
                     value={formik.values.horario || ''}
                     name='horario'
                     label="Horario Matriculado"

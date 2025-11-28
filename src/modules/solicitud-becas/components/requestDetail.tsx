@@ -2,9 +2,6 @@
 import BackButton from '@/components/BackButton';
 import { MyDialog } from '@/components/MUI';
 import MyAccordion, { PanelData } from '@/components/MUI/MyAccordion';
-import IProspecto from '../../../interfaces/prospecto.interface';
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
-import ProspectosService from '@/services/prospectos.service';
 import SolicitudesService from '@/services/solicitudes.service';
 import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
@@ -12,26 +9,25 @@ import React from 'react'
 import InfoStudent from './infoStudent';
 import InfoSol from './infoSol';
 import Observaciones from './observaciones';
+import { SolicitudBecasService } from '../services/solicitudes-beca.service';
+import ISolicitudBeca from '../interfaces/solicitud-beca.interfaces';
 
-type TEstado = 'NUEVO' | 'APROBADO' | 'RECHAZADO'
+type TEstado = 'PENDIENTE' | 'APROBADO' | 'RECHAZADO'
 
 export default function RequestDetail(props:{id:string}) 
 {
     const {id} = props
     //Hooks *************************************************
     const [openDialog, setOpenDialog] = React.useState<boolean>(false);
-    const [solicitud, setSolicitud] = React.useState<Isolicitud>()
-    const [prospecto, setProspecto] = React.useState<IProspecto>()
-    const [estado, setEstado] = React.useState<TEstado>('NUEVO')
+    const [solicitud, setSolicitud] = React.useState<ISolicitudBeca>()
+    const [estado, setEstado] = React.useState<TEstado>('PENDIENTE')
 
     React.useEffect(()=>{
         const getData = async(id :string) =>{
             try{
-                const solicitud = await SolicitudesService.getItem(id) as Isolicitud
+                const solicitud = await SolicitudBecasService.getItem(id)
                 setSolicitud(solicitud)
                 setEstado(solicitud.estado as TEstado)
-                const prospecto = await ProspectosService.getItem(solicitud.alumno_id as string)
-                setProspecto(prospecto)
             }
             catch(err){
                 if (err instanceof Error) {
@@ -50,7 +46,7 @@ export default function RequestDetail(props:{id:string})
         nuevoEstado: TEstado,
       ) => {
         setEstado(nuevoEstado);
-        SolicitudesService.updateStatus(id, nuevoEstado)
+        SolicitudBecasService.updateStatus(id, nuevoEstado)
         console.log('Event:', event);
         setOpenDialog(true)
     };
@@ -58,7 +54,7 @@ export default function RequestDetail(props:{id:string})
     const panels:PanelData[] = [
         {
             title: 'Información del Estudiante',
-            content: prospecto && (<InfoStudent item={prospecto} />),
+            content: solicitud && (<InfoStudent item={solicitud} />),
             disabled: false
         },
         {
@@ -89,7 +85,7 @@ export default function RequestDetail(props:{id:string})
                         onChange={handleChange}
                         aria-label="Platform"
                         >
-                        <ToggleButton value="NUEVO">NUEVO</ToggleButton>
+                        <ToggleButton value="PENDIENTE">PENDIENTE</ToggleButton>
                         <ToggleButton value="APROBADO">APROBADO</ToggleButton>
                         <ToggleButton value="RECHAZADO">RECHAZADO</ToggleButton>
                     </ToggleButtonGroup>

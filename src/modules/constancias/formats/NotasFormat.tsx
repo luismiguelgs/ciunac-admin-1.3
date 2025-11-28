@@ -1,9 +1,8 @@
 import { StyleSheet, Document, Page, View, Text, Font, Image } from '@react-pdf/renderer'
 import logoCiunac from '@/assets/logo-ciunac-trans.png'
 import logoUnac from '@/assets/unac-logo.png'
-import { IconstanciaDetalle } from '../../../../../modules/constancias/interfaces/constancia.interface'
+import { IConstanciaDetalle } from '../interfaces/constancia.interface'
 import React from 'react'
-import { ConstanciasService } from '@/services/constancias.service'
 
 Font.register({family:'Roboto', src:'https://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf'})
 Font.register({family: 'Roboto-Bold', src:'/fonts/Roboto-Bold.ttf'})
@@ -90,25 +89,14 @@ type Props = {
     ciclo: string,
     fecha: string,
     id_constancia?: string | undefined
-    detalle?: IconstanciaDetalle[] | undefined,
+    detalle?: IConstanciaDetalle[] | undefined,
 }
 
 export default function NotasFormat({estudiante, dni, curso, nivel, ciclo, fecha, detalle, id_constancia}: Props) 
 {
-    const [notas, setNotas] = React.useState<IconstanciaDetalle[] | undefined>(detalle)
-    
-    React.useEffect(()=>{
-        const getDetalle = async() => {
-            const res = await ConstanciasService.fetchItemsDetalle(id_constancia as string)
-            setNotas(res)
-        }
-        if(id_constancia){
-            getDetalle()
-        }
-    },[])
     
     // Sort detalle array by nivel and ciclo
-    const sortedDetalle = notas ? [...notas].sort((a, b) => {
+    const sortedDetalle = detalle ? [...detalle].sort((a, b) => {
         // First sort by nivel
         const nivelComparison = a.nivel.localeCompare(b.nivel);
         // If niveles are equal, sort by ciclo
@@ -140,7 +128,7 @@ export default function NotasFormat({estudiante, dni, curso, nivel, ciclo, fecha
                     <Text style={styles.tableCell}>{item.año}</Text>
 				</View>
                 <View style={[styles.tableCol, {width: '12.5%'}]}>
-                    <Text style={styles.tableCell}>{item.estado}</Text>
+                    <Text style={styles.tableCell}>{item.aprobado ? 'APROBADO' : 'REPROBADO'}</Text>
                 </View>
                 <View style={[styles.tableCol, {width: '10%'}]}>
                     <Text style={styles.tableCell}>{item.nota}</Text>

@@ -1,8 +1,8 @@
 import React from 'react'
 import MyTabs, { PanelTab } from '@/components/MUI/MyTabs';
 import { Box } from '@mui/material';
-import ReportCertificate from './(components)/ReportCertificate';
-import ReportExam from './(components)/ReportExam';
+import ReportCertificate from '@/modules/reportes/ReportCertificate';
+import ReportExam from '../../../modules/reportes/ReportExam';
 
 export default function ReportsPage() 
 {
