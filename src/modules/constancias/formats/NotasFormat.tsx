@@ -4,15 +4,15 @@ import logoUnac from '@/assets/unac-logo.png'
 import { IConstanciaDetalle } from '../interfaces/constancia.interface'
 import React from 'react'
 
-Font.register({family:'Roboto', src:'https://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf'})
-Font.register({family: 'Roboto-Bold', src:'/fonts/Roboto-Bold.ttf'})
+Font.register({ family: 'Roboto', src: 'https://fonts.gstatic.com/s/roboto/v16/zN7GBFwfMP4uA6AR0HCoLQ.ttf' })
+Font.register({ family: 'Roboto-Bold', src: '/fonts/Roboto-Bold.ttf' })
 
 const styles = StyleSheet.create({
-    page:{
-		paddingTop: 35,
-    	paddingBottom: 65,
-    	paddingHorizontal: 30,
-	},
+    page: {
+        paddingTop: 35,
+        paddingBottom: 65,
+        paddingHorizontal: 30,
+    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -47,38 +47,38 @@ const styles = StyleSheet.create({
         lineHeight: 1.5, // Espaciado entre líneas
     },
     table: {
-		width: 'auto',
-		borderStyle: 'solid',
-		borderWidth: 1,
-		borderColor: '#bfbfbf',
-	},
-	tableRow: {
-		flexDirection: 'row',
-	},
-	tableColHeader: {
-		borderStyle: 'solid',
-		borderWidth: 1,
-		borderColor: '#bfbfbf',
-		padding: 3,
-	},
-	tableCellHeader: {
-		fontSize: 12,
-		fontWeight: 'bold',
-		textAlign: 'center',
-	},
-	tableCell: {
-		fontSize: 10,
-		textAlign: 'center',
-	},
+        width: 'auto',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: '#bfbfbf',
+    },
+    tableRow: {
+        flexDirection: 'row',
+    },
+    tableColHeader: {
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: '#bfbfbf',
+        padding: 3,
+    },
+    tableCellHeader: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    tableCell: {
+        fontSize: 10,
+        textAlign: 'center',
+    },
     tableCellText: {
         textAlign: 'center',
     },
     tableCol: {
-		borderStyle: 'solid',
-		borderWidth: 1,
-		borderColor: '#bfbfbf',
-		padding: 3,
-	},
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderColor: '#bfbfbf',
+        padding: 3,
+    },
 })
 
 type Props = {
@@ -92,9 +92,8 @@ type Props = {
     detalle?: IConstanciaDetalle[] | undefined,
 }
 
-export default function NotasFormat({estudiante, dni, curso, nivel, ciclo, fecha, detalle, id_constancia}: Props) 
-{
-    
+export default function NotasFormat({ estudiante, dni, curso, nivel, ciclo, fecha, detalle }: Props) {
+
     // Sort detalle array by nivel and ciclo
     const sortedDetalle = detalle ? [...detalle].sort((a, b) => {
         // First sort by nivel
@@ -105,32 +104,32 @@ export default function NotasFormat({estudiante, dni, curso, nivel, ciclo, fecha
         }
         return nivelComparison;
     }) : undefined;
-    
+
     const constanciaDetalle = sortedDetalle?.map((item, index) => {
         return (
             <View style={styles.tableRow} key={index}>
-				<View style={[styles.tableCol, {width: '15%'}]}>
-					<Text style={styles.tableCell}>{item.idioma}</Text>
-				</View>
-				<View style={[styles.tableCol, {width: '12.5%'}]}>
+                <View style={[styles.tableCol, { width: '15%' }]}>
+                    <Text style={styles.tableCell}>{item.idioma}</Text>
+                </View>
+                <View style={[styles.tableCol, { width: '12.5%' }]}>
                     <Text style={styles.tableCell}>{item.nivel}</Text>
-				</View>
-                <View style={[styles.tableCol, {width: '10%'}]}>
+                </View>
+                <View style={[styles.tableCol, { width: '10%' }]}>
                     <Text style={styles.tableCell}>{item.ciclo}</Text>
-				</View>
-                <View style={[styles.tableCol, {width: '15%'}]}>
+                </View>
+                <View style={[styles.tableCol, { width: '15%' }]}>
                     <Text style={styles.tableCell}>{item.modalidad}</Text>
-				</View>
-                <View style={[styles.tableCol, {width: '15%'}]}>
+                </View>
+                <View style={[styles.tableCol, { width: '15%' }]}>
                     <Text style={styles.tableCell}>{item.mes}</Text>
-				</View>
-                <View style={[styles.tableCol, {width: '10%'}]}>
+                </View>
+                <View style={[styles.tableCol, { width: '10%' }]}>
                     <Text style={styles.tableCell}>{item.año}</Text>
-				</View>
-                <View style={[styles.tableCol, {width: '12.5%'}]}>
+                </View>
+                <View style={[styles.tableCol, { width: '12.5%' }]}>
                     <Text style={styles.tableCell}>{item.aprobado ? 'APROBADO' : 'REPROBADO'}</Text>
                 </View>
-                <View style={[styles.tableCol, {width: '10%'}]}>
+                <View style={[styles.tableCol, { width: '10%' }]}>
                     <Text style={styles.tableCell}>{item.nota}</Text>
                 </View>
             </View>
@@ -141,75 +140,75 @@ export default function NotasFormat({estudiante, dni, curso, nivel, ciclo, fecha
             <Page size="A4" style={styles.page}>
                 <View style={styles.header}>
                     {/* Logo izquierdo */}
-                    <Image src={logoUnac.src} style={{width: 90, height: 120}} />
+                    <Image src={logoUnac.src} style={{ width: 90, height: 120 }} />
 
                     {/* Textos en el medio */}
-                        <View style={{textAlign: 'center', fontFamily: 'Roboto', flex: 1, alignItems: 'center'}}>
-                            <Text style={{fontSize: 18, fontWeight: 'bold'}}>UNIVERSIDAD NACIONAL DEL CALLAO</Text>
-                            <Text style={styles.subtitle}>VICERRECTORADO ACADÉMICO</Text>
-                            <Text style={styles.subtitle}>CENTRO DE IDIOMAS</Text>
-                        </View>
+                    <View style={{ textAlign: 'center', fontFamily: 'Roboto', flex: 1, alignItems: 'center' }}>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>UNIVERSIDAD NACIONAL DEL CALLAO</Text>
+                        <Text style={styles.subtitle}>VICERRECTORADO ACADÉMICO</Text>
+                        <Text style={styles.subtitle}>CENTRO DE IDIOMAS</Text>
+                    </View>
 
-                        {/* Logo derecho */}
-                        <Image src={logoCiunac.src} style={{width: 120, height: 120}} />
+                    {/* Logo derecho */}
+                    <Image src={logoCiunac.src} style={{ width: 120, height: 120 }} />
                 </View>
                 {/* Línea horizontal */}
                 <View style={styles.horizontalLine} />
-                <View style={{textAlign:'center', alignItems: 'center'}}>
+                <View style={{ textAlign: 'center', alignItems: 'center' }}>
                     <Text style={styles.yearText}>&quot;Año de la unidad, la paz y el desarrollo&quot;</Text>
                 </View>
-                
+
                 {/* Título "CONSTANCIA DE ..." */}
-                <View style={{textAlign:'center', alignItems: 'center', marginTop:20, marginBottom:20}}>
+                <View style={{ textAlign: 'center', alignItems: 'center', marginTop: 20, marginBottom: 20 }}>
                     <Text style={styles.constanciaTitle}>CONSTANCIA DE NOTAS</Text>
                 </View>
-                 {/* Cuerpo del texto */}
-                 <Text style={styles.bodyText}>
+                {/* Cuerpo del texto */}
+                <Text style={styles.bodyText}>
                     El director del Centro de Idiomas de la Universidad Nacional del Callao, hace constar:
                     {"\n"}
-                    Que, el (la) estudiante {estudiante.toLocaleUpperCase()}, identificado con DNI {dni}, ha cursado y aprobado el idioma {curso}, 
+                    Que, el (la) estudiante {estudiante.toLocaleUpperCase()}, identificado con DNI {dni}, ha cursado y aprobado el idioma {curso},
                     hasta {nivel} {ciclo}, obteniendo las siguienes calificaciones.
                     {"\n\n"}
                 </Text>
                 <View style={styles.table}>
-					<View style={styles.tableRow}>
-						<View style={[styles.tableColHeader, {width: '15%'}]}>
-							<Text style={styles.tableCellHeader}>IDIOMA</Text>
-						</View>
-						<View style={[styles.tableColHeader, {width: '12.5%'}]}>
-							<Text style={styles.tableCellHeader}>NIVEL</Text>
-						</View>
-						<View style={[styles.tableColHeader, {width: '10%'}]}>
-							<Text style={styles.tableCellHeader}>CICLO</Text>
-						</View>
-                        <View style={[styles.tableColHeader, {width: '15%'}]}>
-							<Text style={styles.tableCellHeader}>MODALIDAD</Text>
-						</View>
-                        <View style={[styles.tableColHeader, {width: '15%'}]}>
-							<Text style={styles.tableCellHeader}>MES</Text>
-						</View>
-                        <View style={[styles.tableColHeader, {width: '10%'}]}>
-							<Text style={styles.tableCellHeader}>AÑO</Text>
-						</View>
-                        <View style={[styles.tableColHeader, {width: '12.5%'}]}>
-							<Text style={styles.tableCellHeader}>ESTADO</Text>
-						</View>
-                        <View style={[styles.tableColHeader, {width: '10%'}]}>
-							<Text style={styles.tableCellHeader}>NOTA</Text>
-						</View>
-					</View>
+                    <View style={styles.tableRow}>
+                        <View style={[styles.tableColHeader, { width: '15%' }]}>
+                            <Text style={styles.tableCellHeader}>IDIOMA</Text>
+                        </View>
+                        <View style={[styles.tableColHeader, { width: '12.5%' }]}>
+                            <Text style={styles.tableCellHeader}>NIVEL</Text>
+                        </View>
+                        <View style={[styles.tableColHeader, { width: '10%' }]}>
+                            <Text style={styles.tableCellHeader}>CICLO</Text>
+                        </View>
+                        <View style={[styles.tableColHeader, { width: '15%' }]}>
+                            <Text style={styles.tableCellHeader}>MODALIDAD</Text>
+                        </View>
+                        <View style={[styles.tableColHeader, { width: '15%' }]}>
+                            <Text style={styles.tableCellHeader}>MES</Text>
+                        </View>
+                        <View style={[styles.tableColHeader, { width: '10%' }]}>
+                            <Text style={styles.tableCellHeader}>AÑO</Text>
+                        </View>
+                        <View style={[styles.tableColHeader, { width: '12.5%' }]}>
+                            <Text style={styles.tableCellHeader}>ESTADO</Text>
+                        </View>
+                        <View style={[styles.tableColHeader, { width: '10%' }]}>
+                            <Text style={styles.tableCellHeader}>NOTA</Text>
+                        </View>
+                    </View>
                 </View>
                 {constanciaDetalle}
                 <Text style={styles.bodyText}>
                     {"\n\n"}
                     Se expide el presente, a solicitud de la parte interesada para los fines pertinentes.
                 </Text>
-                <View style={{textAlign: 'right', marginTop:20}}>
-                    <Text style={{fontSize:12, fontWeight:'bold'}}>
+                <View style={{ textAlign: 'right', marginTop: 20 }}>
+                    <Text style={{ fontSize: 12, fontWeight: 'bold' }}>
                         Callao, {fecha}
                     </Text>
                 </View>
             </Page>
         </Document>
-    ) 
+    )
 }

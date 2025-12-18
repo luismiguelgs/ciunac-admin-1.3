@@ -4,14 +4,12 @@ import { GridColDef } from '@mui/x-data-grid'
 import React from 'react'
 import Grid from '@mui/material/Grid2'
 import { Box } from '@mui/material'
-import { getIconByCode } from '@/lib/common'
 import { IDetalleExamenUbicacion, IExamenUbicacion } from '@/modules/examen-ubicacion/interfaces/examen-ubicacion.interface'
 import useCalificacionesExamenUbicacion from '@/modules/examen-ubicacion/hooks/useCalificaciones'
 import ICalificacionUbicacion from '@/modules/examen-ubicacion/interfaces/calificacion.interface'
 
 
-export default function Participants({data, exams}:{data:IDetalleExamenUbicacion[] | undefined, exams: IExamenUbicacion[] | undefined}) 
-{
+export default function Participants({ data, exams }: { data: IDetalleExamenUbicacion[] | undefined, exams: IExamenUbicacion[] | undefined }) {
     const { data: calificaciones } = useCalificacionesExamenUbicacion()
     const columns: GridColDef[] = [
         {
@@ -76,18 +74,18 @@ export default function Participants({data, exams}:{data:IDetalleExamenUbicacion
 
     return (
         <Grid container spacing={2}>
-            <Grid size={{xs:12}} display={'flex'} justifyContent={'flex-end'}>
-				<Box id='filter-panel' />
-			</Grid>
-            <Grid minHeight={300} size={{xs:12}}>
-				<MyDataGrid 
-					data={data || []}
-					cols={columns}
-					handleDelete={()=>{}}
-					handleDetails={()=>{}}
+            <Grid size={{ xs: 12 }} display={'flex'} justifyContent={'flex-end'}>
+                <Box id='filter-panel' />
+            </Grid>
+            <Grid minHeight={300} size={{ xs: 12 }}>
+                <MyDataGrid
+                    data={data || []}
+                    cols={columns}
+                    handleDelete={() => { }}
+                    handleDetails={() => { }}
                     actions={false}
-				/>
-			</Grid>
+                />
+            </Grid>
         </Grid>
     )
 }

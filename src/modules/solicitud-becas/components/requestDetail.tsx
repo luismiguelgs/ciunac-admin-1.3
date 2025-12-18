@@ -2,7 +2,6 @@
 import BackButton from '@/components/BackButton';
 import { MyDialog } from '@/components/MUI';
 import MyAccordion, { PanelData } from '@/components/MUI/MyAccordion';
-import SolicitudesService from '@/services/solicitudes.service';
 import { ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import React from 'react'
@@ -14,22 +13,21 @@ import ISolicitudBeca from '../interfaces/solicitud-beca.interfaces';
 
 type TEstado = 'PENDIENTE' | 'APROBADO' | 'RECHAZADO'
 
-export default function RequestDetail(props:{id:string}) 
-{
-    const {id} = props
+export default function RequestDetail(props: { id: string }) {
+    const { id } = props
     //Hooks *************************************************
     const [openDialog, setOpenDialog] = React.useState<boolean>(false);
     const [solicitud, setSolicitud] = React.useState<ISolicitudBeca>()
     const [estado, setEstado] = React.useState<TEstado>('PENDIENTE')
 
-    React.useEffect(()=>{
-        const getData = async(id :string) =>{
-            try{
+    React.useEffect(() => {
+        const getData = async (id: string) => {
+            try {
                 const solicitud = await SolicitudBecasService.getItem(id)
                 setSolicitud(solicitud)
                 setEstado(solicitud.estado as TEstado)
             }
-            catch(err){
+            catch (err) {
                 if (err instanceof Error) {
                     console.error('Error al actualizar el elemento:', err.message);
                 } else {
@@ -38,20 +36,20 @@ export default function RequestDetail(props:{id:string})
             }
         }
         getData(id as string)
-    },[])
+    }, [])
 
     //Functions *************************************************
     const handleChange = async (
         event: React.MouseEvent<HTMLElement>,
         nuevoEstado: TEstado,
-      ) => {
+    ) => {
         setEstado(nuevoEstado);
         SolicitudBecasService.updateStatus(id, nuevoEstado)
         console.log('Event:', event);
         setOpenDialog(true)
     };
-	
-    const panels:PanelData[] = [
+
+    const panels: PanelData[] = [
         {
             title: 'Información del Estudiante',
             content: solicitud && (<InfoStudent item={solicitud} />),
@@ -84,19 +82,19 @@ export default function RequestDetail(props:{id:string})
                         exclusive
                         onChange={handleChange}
                         aria-label="Platform"
-                        >
+                    >
                         <ToggleButton value="PENDIENTE">PENDIENTE</ToggleButton>
                         <ToggleButton value="APROBADO">APROBADO</ToggleButton>
                         <ToggleButton value="RECHAZADO">RECHAZADO</ToggleButton>
                     </ToggleButtonGroup>
                 </Grid>
             </Grid>
-            <MyDialog 
-                open={openDialog}  
-                setOpen={setOpenDialog} 
+            <MyDialog
+                open={openDialog}
+                setOpen={setOpenDialog}
                 content='Solicitud Guardada !'
-                title='Nueva Solicitud' 
-                type='SIMPLE' 
+                title='Nueva Solicitud'
+                type='SIMPLE'
             />
         </React.Fragment>
     )

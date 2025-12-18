@@ -12,35 +12,34 @@ import { getIconByCode } from '@/lib/common'
 import ICalificacionUbicacion from '../../interfaces/calificacion.interface'
 
 type Props = {
-    examenId : number,
-    idiomaId : number,
+    examenId: number,
+    idiomaId: number,
     setReload: React.Dispatch<React.SetStateAction<boolean>>,
-    setOpenDialogFull : React.Dispatch<React.SetStateAction<boolean>>
+    setOpenDialogFull: React.Dispatch<React.SetStateAction<boolean>>
     calificaciones: ICalificacionUbicacion[],
     obtenerResultado: (nota: number, idiomaId: number, nivelId: number, ubicaciones: ICalificacionUbicacion[]) => number | null
 }
 
-export default function ExamRequests({examenId, setReload, setOpenDialogFull, idiomaId, calificaciones, obtenerResultado}:Props) 
-{
+export default function ExamRequests({ examenId, setReload, setOpenDialogFull, idiomaId, calificaciones, obtenerResultado }: Props) {
     const [data, setData] = React.useState<ISolicitudRes[]>([]);
     const [selectionModel, setSelectionModel] = React.useState<GridRowSelectionModel>([]);
 
     React.useEffect(() => {
-        const getData = async() => {
-            const res = await SolicitudesService.fetchItemByState('examenes-ubicacion', String(1))
+        const getData = async () => {
+            const res = await SolicitudesService.fetchItemByState('examenes-ubicacion', 1)
             setData(res as ISolicitudRes[])
         }
         getData()
     }, []);
 
-    const handleSaveSelection = async() => {
+    const handleSaveSelection = async () => {
         const selectedItems = data.filter(item => selectionModel.includes(item.id as number));
         console.log('Selected Items:', selectedItems);
 
         // crea un array de promesas para todas las operaciones
         await Promise.all(
-            selectedItems.map(async(element)=>{
-                const item : IDetalleExamenUbicacion = {
+            selectedItems.map(async (element) => {
+                const item: IDetalleExamenUbicacion = {
                     examenId: examenId,
                     solicitudId: Number(element.id),
                     idiomaId: element.idiomaId,
@@ -59,9 +58,9 @@ export default function ExamRequests({examenId, setReload, setOpenDialogFull, id
 
         // actualizar estado del examen
         await ExamenesUbicacionService.updateStatus(examenId, 7);
-        
+
         // recargar tabla
-        setReload((oldValue)=> !oldValue);
+        setReload((oldValue) => !oldValue);
         // cerrar dialogo
         setOpenDialogFull(false);
     };
@@ -72,10 +71,10 @@ export default function ExamRequests({examenId, setReload, setOpenDialogFull, id
             type: 'boolean',
             headerName: '',
             renderCell(params) {
-                if(params.value){
-                    return <KeyboardIcon color="secondary"/>
-                }else{
-                    return <LanguageIcon color="primary"/>
+                if (params.value) {
+                    return <KeyboardIcon color="secondary" />
+                } else {
+                    return <LanguageIcon color="primary" />
                 }
             },
         },
@@ -83,22 +82,22 @@ export default function ExamRequests({examenId, setReload, setOpenDialogFull, id
             field: 'creadoEn',
             type: 'string',
             width: 120,
-            renderHeader:() => (
+            renderHeader: () => (
                 <strong>
                     {'FECHA '}
                     <span role='img' aria-label='date'>
                         📆
                     </span>
                 </strong>
-            ), 
+            ),
             renderCell: (params) => (
                 <strong>{new Date(params.value).toLocaleDateString('es-ES')}</strong>
             )
         },
-        { field: 'estudiante.apellidos', type: 'string', headerName: 'APELLIDOS', width:200, valueGetter: (_v, row) => row.estudiante?.apellidos ?? '' },
-        { field: 'estudiante.nombres', type: 'string', headerName: 'NOMBRES', width:200, valueGetter: (_v, row) => row.estudiante?.nombres ?? '' },
-        { 
-            field: 'idioma', 
+        { field: 'estudiante.apellidos', type: 'string', headerName: 'APELLIDOS', width: 200, valueGetter: (_v, row) => row.estudiante?.apellidos ?? '' },
+        { field: 'estudiante.nombres', type: 'string', headerName: 'NOMBRES', width: 200, valueGetter: (_v, row) => row.estudiante?.nombres ?? '' },
+        {
+            field: 'idioma',
             headerName: 'IDIOMA',
             editable: false,
             width: 80,
@@ -107,10 +106,10 @@ export default function ExamRequests({examenId, setReload, setOpenDialogFull, id
                 return getIconByCode(Number(params.value))
             }
         },
-        { field: 'nivel.nombre', type: 'string', headerName: 'NIVEL', width:130 ,valueGetter: (_v, row) => row.nivel?.nombre ?? '' },
-        { 
-            field: 'pago', 
-            headerName: 'MONTO(S/)', 
+        { field: 'nivel.nombre', type: 'string', headerName: 'NIVEL', width: 130, valueGetter: (_v, row) => row.nivel?.nombre ?? '' },
+        {
+            field: 'pago',
+            headerName: 'MONTO(S/)',
             align: 'right',
             renderCell(params) {
                 return (<span>{`S/${Number(params.value).toFixed(2)}`}</span>)

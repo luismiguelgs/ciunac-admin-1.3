@@ -15,9 +15,8 @@ import ExamenesUbicacionService from '../../services/examenes-ubicacion.service'
 import { IDetalleExamenUbicacion } from '../../interfaces/examen-ubicacion.interface';
 import ICalificacionUbicacion from '../../interfaces/calificacion.interface';
 
-export default function ExamParticipants({id, idiomaId, calificaciones=undefined}:{id:number | string, idiomaId?:number|undefined, calificaciones?:ICalificacionUbicacion[] | null}) 
-{   
-    const customActions:GridAction[] = [
+export default function ExamParticipants({ id, idiomaId, calificaciones = undefined }: { id: number | string, idiomaId?: number | undefined, calificaciones?: ICalificacionUbicacion[] | null }) {
+    const customActions: GridAction[] = [
         {
             icon: <HistoryEduIcon />,
             label: 'Ver Detalles',
@@ -29,7 +28,7 @@ export default function ExamParticipants({id, idiomaId, calificaciones=undefined
             color: 'primary',
         },
     ]
-    const loadData = async (id:number | undefined) =>{
+    const loadData = async (id: number | undefined) => {
         const data = await ExamenesUbicacionService.fetchItemsDetail(Number(id))
         setRows(data as IDetalleExamenUbicacion[])
     }
@@ -37,36 +36,36 @@ export default function ExamParticipants({id, idiomaId, calificaciones=undefined
     //hooks ******************
     const [rows, setRows] = React.useState<IDetalleExamenUbicacion[]>([])
 
-    const [ reload, setReload ] = React.useState<boolean>(false)
-    const [ openDialog, setOpenDialog ] = React.useState<boolean>(false)
-    const [ openConstacia, setOpenConstacia ] = React.useState<boolean>(false)
-    const [ selectData, setSelectData ] = React.useState<IDetalleExamenUbicacion | undefined>()
-    const [ openDialogFull, setOpenDialogFull ] = React.useState<boolean>(false)
+    const [reload, setReload] = React.useState<boolean>(false)
+    const [openDialog, setOpenDialog] = React.useState<boolean>(false)
+    const [openConstacia, setOpenConstacia] = React.useState<boolean>(false)
+    const [selectData, setSelectData] = React.useState<IDetalleExamenUbicacion | undefined>()
+    const [openDialogFull, setOpenDialogFull] = React.useState<boolean>(false)
     const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
     const [idToDelete, setIdToDelete] = React.useState<GridRowId | null>(null);
 
-    React.useEffect(()=>{
-        if(id && id !== 'nuevo') {
+    React.useEffect(() => {
+        if (id && id !== 'nuevo') {
             loadData(Number(id))
         }
-    },[id,reload])
+    }, [id, reload])
 
     //dialog ***
     const handleConfirmDelete = async () => {
         if (idToDelete) {
             //actualizar el estatus de la solicitud
-            const solicitudId:number = rows.filter((row) => row.id === idToDelete)[0].solicitudId
+            const solicitudId: number = rows.filter((row) => row.id === idToDelete)[0].solicitudId
             await SolicitudesService.updateStatus(solicitudId, 1)
             //borrar el registro asignado
             await ExamenesUbicacionService.deleteDetail(idToDelete as number)
-            
+
             setRows(rows.filter((row) => row.id !== idToDelete));
             setIdToDelete(null);
             setOpenDialog(false);
         }
-    }; 
+    };
     //datagrid ***
-    const handleDeleteClick = (id: GridRowId) => () => {    
+    const handleDeleteClick = (id: GridRowId) => () => {
         setIdToDelete(id)
         setOpenDialog(true)
     };
@@ -79,10 +78,10 @@ export default function ExamParticipants({id, idiomaId, calificaciones=undefined
     ): number | null =>
         ubicaciones.find(
             (u) =>
-            u.idiomaId === idiomaId &&
-            u.nivelId === nivelId &&
-            nota >= u.notaMin &&
-            nota <= u.notaMax
+                u.idiomaId === idiomaId &&
+                u.nivelId === nivelId &&
+                nota >= u.notaMin &&
+                nota <= u.notaMax
         )?.id ?? null;
 
     const processRowUpdate = async (newRow: GridRowModel) => {
@@ -147,12 +146,12 @@ export default function ExamParticipants({id, idiomaId, calificaciones=undefined
     }
 
     //Columns *********************************************************
-    const cols:GridColDef[] = [
-        {field: 'estudiante.numeroDocumento', headerName: 'DNI', editable:false, width: 100, valueGetter: (_v, row) => row.estudiante?.numeroDocumento ?? ''},
-        {field: 'estudiante.apellidos', headerName: 'APELLIDOS', editable: false, width:160, valueGetter: (_v, row) => row.estudiante?.apellidos ?? ''},
-        {field: 'estudiante.nombres', headerName: 'NOMBRES', editable: false, width:160, valueGetter: (_v, row) => row.estudiante?.nombres ?? ''},
-        {field: 'nivel', headerName: 'NIVEL', editable: false, valueGetter: (_v, row) => row.nivel?.nombre ?? '',  width:120},
-        {field: 'nota', headerName: 'NOTA', editable: true, width:100},
+    const cols: GridColDef[] = [
+        { field: 'estudiante.numeroDocumento', headerName: 'DNI', editable: false, width: 100, valueGetter: (_v, row) => row.estudiante?.numeroDocumento ?? '' },
+        { field: 'estudiante.apellidos', headerName: 'APELLIDOS', editable: false, width: 160, valueGetter: (_v, row) => row.estudiante?.apellidos ?? '' },
+        { field: 'estudiante.nombres', headerName: 'NOMBRES', editable: false, width: 160, valueGetter: (_v, row) => row.estudiante?.nombres ?? '' },
+        { field: 'nivel', headerName: 'NIVEL', editable: false, valueGetter: (_v, row) => row.nivel?.nombre ?? '', width: 120 },
+        { field: 'nota', headerName: 'NOTA', editable: true, width: 100 },
         {
             field: 'calificacionId',
             headerName: 'UBICACIÓN',
@@ -160,6 +159,7 @@ export default function ExamParticipants({id, idiomaId, calificaciones=undefined
             width: 200,
             type: 'singleSelect',
             valueGetter: (_v, row) => row.calificacionId ?? row.calificacion?.id ?? '',
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             valueFormatter: (params: any) => {
                 const id = params?.value as number | undefined;
                 if (!id) return '';
@@ -181,25 +181,25 @@ export default function ExamParticipants({id, idiomaId, calificaciones=undefined
             headerName: 'TERMINADO',
             width: 100,
             renderCell: (params) => {
-                return <Checkbox 
+                return <Checkbox
                     checked={params.value as boolean}
-                    onChange={(e)=>{handleCheckboxChange(params.id as GridRowId, e.target.checked)}} 
-                    inputProps={{'aria-label': 'Checkbox Terminado'}}
-                    />
+                    onChange={(e) => { handleCheckboxChange(params.id as GridRowId, e.target.checked) }}
+                    inputProps={{ 'aria-label': 'Checkbox Terminado' }}
+                />
             }
         },
-        
+
     ]
 
     return (
         <React.Fragment>
-            <Button 
-                disabled={id==='nuevo'}
-                variant="contained" 
-                endIcon={<AddIcon /> } 
-                sx={{mb:1}} 
-                onClick={()=>handleNewClick()}>
-                    Asignar Participantes
+            <Button
+                disabled={id === 'nuevo'}
+                variant="contained"
+                endIcon={<AddIcon />}
+                sx={{ mb: 1 }}
+                onClick={() => handleNewClick()}>
+                Asignar Participantes
             </Button>
             <EditableDataGrid
                 columns={cols}
@@ -217,8 +217,8 @@ export default function ExamParticipants({id, idiomaId, calificaciones=undefined
                 content="Confirma borrar el registro?"
                 open={openDialog}
                 setOpen={setOpenDialog}
-                actionFunc={handleConfirmDelete} 
-            /> 
+                actionFunc={handleConfirmDelete}
+            />
             <MyDialog
                 type='SIMPLE'
                 title='Constancia'
@@ -233,12 +233,12 @@ export default function ExamParticipants({id, idiomaId, calificaciones=undefined
                 }
             />
             <DialogFull
-                title='Solicitudes' 
+                title='Solicitudes'
                 open={openDialogFull}
                 setOpen={setOpenDialogFull}
                 content={
-                    <ExamRequests 
-                        examenId={id as number} 
+                    <ExamRequests
+                        examenId={id as number}
                         idiomaId={idiomaId as number}
                         setReload={setReload}
                         setOpenDialogFull={setOpenDialogFull}

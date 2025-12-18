@@ -3,6 +3,8 @@ import { Box } from "@mui/material"
 import Participants from "./Participants"
 import ExamenesUbicacionService from "@/modules/examen-ubicacion/services/examenes-ubicacion.service"
 
+export const dynamic = 'force-dynamic';
+
 async function getParticipants() {
     return await ExamenesUbicacionService.fetchItemsDetail()
 }
@@ -11,14 +13,13 @@ async function getExams() {
 }
 
 
-export default async function ParticipantPage() 
-{
+export default async function ParticipantPage() {
     const participants = await getParticipants()
     const exams = await getExams()
 
     return (
         <Box>
-            <Participants data={participants} exams={exams}/>
+            <Participants data={participants} exams={exams} />
         </Box>
     )
 }

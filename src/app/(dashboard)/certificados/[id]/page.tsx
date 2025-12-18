@@ -18,8 +18,7 @@ import LoadingDialog from '@/components/MUI/Dialogs/DialogLoading'
 import EditIcon from '@mui/icons-material/Edit';
 import { NIVEL } from '@/lib/constants'
 
-export default function CertificateDetailPage() 
-{
+export default function CertificateDetailPage() {
     //HOOKS *************************************************
     const [loading, setLoading] = React.useState<boolean>(true)
     const navigate = useRouter()
@@ -28,23 +27,24 @@ export default function CertificateDetailPage()
 
     const { data: idiomas } = useSubjects()
 
-    const [data , setData] = React.useState<ICertificado | undefined>(undefined)
+    const [data, setData] = React.useState<ICertificado | undefined>(undefined)
     const [detalle, setDetalle] = React.useState<ICertificadoNota[]>([])
     const [edit, setEdit] = React.useState<boolean>(false)
 
     const formik = useFormik<ICertificado>({
         initialValues,
         validationSchema: validationSchema,
-        onSubmit: async(values:ICertificado) =>{
+        onSubmit: async (values: ICertificado) => {
             // Convert dayjs objects to JavaScript Date objects
-            const cleanNotas = detalle.map(({id, isNew, ...rest})=>rest)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const cleanNotas = detalle.map(({ id, isNew, ...rest }) => rest)
             const formattedValues = {
                 ...values,
                 id,
                 idiomaId: Number(values.idioma),
-                idioma: idiomas?.filter(item=>item.id === Number(values.idioma))[0]?.nombre,
+                idioma: idiomas?.filter(item => item.id === Number(values.idioma))[0]?.nombre,
                 nivelId: Number(values.nivel),
-                nivel: NIVEL.filter(item=>item.value === String(values.nivel))[0]?.label,
+                nivel: NIVEL.filter(item => item.value === String(values.nivel))[0]?.label,
                 fechaEmision: dayjs(values.fechaEmision).toDate(),
                 fechaConcluido: dayjs(values.fechaConcluido).toDate(),
                 notas: cleanNotas
@@ -55,8 +55,8 @@ export default function CertificateDetailPage()
         }
     })
 
-    React.useEffect(()=>{
-        const loadData = async (id:string|undefined) =>{
+    React.useEffect(() => {
+        const loadData = async (id: string | undefined) => {
             const data = await CertificadosService.getItem(id as string)
             // If you have a detail endpoint, fetch and set it here.
             setDetalle(data?.notas || [])
@@ -85,41 +85,41 @@ export default function CertificateDetailPage()
             })
             setLoading(false)
         }
-        if(id) loadData(id as string)
+        if (id) loadData(id as string)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[id])
+    }, [id])
 
     return (
         <Box>
-            <Typography variant="h5" gutterBottom>{`Certificado Detalle (${id})` }</Typography>
-            <CertificateForm formik={formik} id={id as string} edit={edit}/>
+            <Typography variant="h5" gutterBottom>{`Certificado Detalle (${id})`}</Typography>
+            <CertificateForm formik={formik} id={id as string} edit={edit} />
             <Grid container spacing={2} p={2} >
-                <Grid size={{xs: 12, md: 3}} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
+                <Grid size={{ xs: 12, md: 3 }} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
                     <BackButton fullWidth />
                 </Grid>
-                <Grid size={{xs: 12, md: 3}} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
-                    <Button fullWidth onClick={()=>setEdit(!edit)} variant="contained" color="primary" startIcon={<EditIcon />}>
+                <Grid size={{ xs: 12, md: 3 }} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
+                    <Button fullWidth onClick={() => setEdit(!edit)} variant="contained" color="primary" startIcon={<EditIcon />}>
                         Editar
                     </Button>
                 </Grid>
-                <Grid size={{xs: 12, md: 3}} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
-                    <ButtonSave fullWidth onClick={()=>formik.submitForm()}/>
+                <Grid size={{ xs: 12, md: 3 }} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
+                    <ButtonSave fullWidth onClick={() => formik.submitForm()} />
                 </Grid>
-                <Grid size={{xs: 12, md: 3}} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
-                    <ButtonSeeCertificate 
-                        data={data} 
-                        id={id as string} 
-                        notas={detalle} 
+                <Grid size={{ xs: 12, md: 3 }} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
+                    <ButtonSeeCertificate
+                        data={data}
+                        id={id as string}
+                        //notas={detalle}
                         virtual={data?.tipo !== 'FISICO'}
                     />
                 </Grid>
-                <Grid size={{xs:12}}>
-                {
-                    loading ?
-                        <LoadingDialog open={loading} message='Cargando...'/>
-                    :
-                        <CertificateDetail data={detalle} setData={setDetalle} idioma={formik.values.idioma}  nivel={formik.values.nivel}/>
-                }
+                <Grid size={{ xs: 12 }}>
+                    {
+                        loading ?
+                            <LoadingDialog open={loading} message='Cargando...' />
+                            :
+                            <CertificateDetail data={detalle} setData={setDetalle} idioma={formik.values.idioma} nivel={formik.values.nivel} />
+                    }
                 </Grid>
             </Grid>
         </Box>

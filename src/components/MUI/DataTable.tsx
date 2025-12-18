@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Table,TableBody,TableCell,TableContainer,TableHead,TablePagination,TableRow, IconButton } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, IconButton } from '@mui/material';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
 import PublicIcon from '@mui/icons-material/Public';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,23 +14,23 @@ export interface Column {
 }
 
 type Props = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    rows:any[],
-    columns:Column[],
-    handleDelete?:(id:string | undefined)=>void,
-    handleEdit?:(id:string | undefined)=>void,
-    action:boolean,
-    origen?:boolean,
-    size?:'medium'|'small'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rows: any[],
+  columns: Column[],
+  handleDelete?: (id: string | undefined) => void,
+  handleEdit?: (id: string | undefined) => void,
+  action: boolean,
+  origen?: boolean,
+  size?: 'medium' | 'small'
 }
 
-export default function DataTable({rows, columns, handleDelete, handleEdit, action, size='medium',origen=false}:Props) {
+export default function DataTable({ rows, columns, handleDelete, handleEdit, action, size = 'medium', origen = false }: Props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     console.log(event);
-    
+
     setPage(newPage);
   };
 
@@ -65,10 +65,11 @@ export default function DataTable({rows, columns, handleDelete, handleEdit, acti
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {
-                      origen && (<TableCell align='center'>{ row.manual ? (<KeyboardIcon color='primary' />):(<PublicIcon color='secondary' />)}</TableCell>)
+                      origen && (<TableCell align='center'>{row.manual ? (<KeyboardIcon color='primary' />) : (<PublicIcon color='secondary' />)}</TableCell>)
                     }
                     {columns.map((column) => {
                       const value = column.id.includes('.')
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         ? column.id.split('.').reduce((acc: any, key: string) => (acc ? acc[key] : undefined), row)
                         : row[column.id];
                       return (
@@ -88,11 +89,11 @@ export default function DataTable({rows, columns, handleDelete, handleEdit, acti
                     {
                       action && (
                         <TableCell>
-                          <IconButton aria-label="edit" color='secondary' onClick={()=> handleEdit?.(row.id)}>
-                              <EditIcon />
+                          <IconButton aria-label="edit" color='secondary' onClick={() => handleEdit?.(row.id)}>
+                            <EditIcon />
                           </IconButton>
-                          <IconButton aria-label="delete" color='error' onClick={()=> handleDelete?.(row.id)}>
-                              <DeleteIcon />
+                          <IconButton aria-label="delete" color='error' onClick={() => handleDelete?.(row.id)}>
+                            <DeleteIcon />
                           </IconButton>
                         </TableCell>
                       )

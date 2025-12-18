@@ -1,88 +1,85 @@
 import { Timestamp } from "firebase/firestore";
 import * as ExcelJS from 'exceljs';
-import { Isolicitud } from '@/modules/solicitudes/interfaces/solicitud.interface';
 import { IUsuario } from "../interfaces/usuario.interface";
 import { ISolicitudRes } from "@/modules/solicitudes/interfaces/solicitudres.interface";
 
 export function mapId<T extends { _id?: string }>(item: T) {
-    return {
-        ...item,
-        id: item._id,
-        _id: undefined
-    };
+  return {
+    ...item,
+    id: item._id,
+    _id: undefined
+  };
 }
 
 export function mapIds<T extends { _id?: string }>(data: T[]) {
-    return data.map(item => mapId(item))
+  return data.map(item => mapId(item))
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function formatDate(createdValue:any)
-{
-	if (!createdValue) return ''; // Si no hay valor, devuelve cadena vacía
+export function formatDate(createdValue: any) {
+  if (!createdValue) return ''; // Si no hay valor, devuelve cadena vacía
 
-	let date: Date | null = null;
+  let date: Date | null = null;
 
-	// Intenta obtener un objeto Date válido
-	if (createdValue instanceof Date && !isNaN(createdValue.getTime())) {
-		date = createdValue;
-	} else {
-		const parsedDate = new Date(createdValue);
-		if (!isNaN(parsedDate.getTime())) {
-			date = parsedDate;
-		}
-	}
+  // Intenta obtener un objeto Date válido
+  if (createdValue instanceof Date && !isNaN(createdValue.getTime())) {
+    date = createdValue;
+  } else {
+    const parsedDate = new Date(createdValue);
+    if (!isNaN(parsedDate.getTime())) {
+      date = parsedDate;
+    }
+  }
 
-	// Si tenemos una fecha válida, la formateamos
-	if (date) {
-		return date.toLocaleString('es-PE', { // Usar locale adecuado
-		year: 'numeric', month: '2-digit', day: '2-digit',
-		hour: '2-digit', minute: '2-digit', second: '2-digit'
-		});
-	}
+  // Si tenemos una fecha válida, la formateamos
+  if (date) {
+    return date.toLocaleString('es-PE', { // Usar locale adecuado
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+  }
 
-	// Si no se pudo obtener una fecha válida, devuelve el valor original si es string, o vacío
-	return typeof createdValue === 'string' ? createdValue : '';
+  // Si no se pudo obtener una fecha válida, devuelve el valor original si es string, o vacío
+  return typeof createdValue === 'string' ? createdValue : '';
 }
 
-export const changeDate = (date:Timestamp, hora=true, formato=false):string|undefined => {
-    if(date === null) {
-      console.log('hay una fecha nula');
-      return
-    }
-    
-    const fecha:Date  = date?.toDate()
-    // Obtener diferentes partes de la fecha y hora
-    const dia = fecha.getDate();
-    const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, se suma 1
-    const anio = fecha.getFullYear();
-    const horas = fecha.getHours();
-    const minutos = fecha.getMinutes();
-    const segundos = fecha.getSeconds();
-    // Formatear los valores para que tengan dos dígitos si es necesario
-    
-    const diaFormateado = String(dia).padStart(2, '0');
-    const mesFormateado = String(mes).padStart(2, '0');
-    if(hora){
-      const horasFormateadas = String(horas).padStart(2, '0');
-      const minutosFormateados = String(minutos).padStart(2, '0');
-      const segundosFormateados = String(segundos).padStart(2, '0');
-      // Generar la cadena con el formato deseado (por ejemplo, dd/mm/aaaa hh:mm:ss)
-      const fechaFormateada = `${diaFormateado}/${mesFormateado}/${anio} ${horasFormateadas}:${minutosFormateados}:${segundosFormateados}`;
-      return fechaFormateada
-    }else{
-      // Generar la cadena con el formato deseado (por ejemplo, dd/mm/aaaa hh:mm:ss)
-      if(formato){
-        const fechaFormateada = `${anio}-${mesFormateado}-${diaFormateado}`;
-        return fechaFormateada
-      }
-      const fechaFormateada = `${diaFormateado}/${mesFormateado}/${anio}`;
+export const changeDate = (date: Timestamp, hora = true, formato = false): string | undefined => {
+  if (date === null) {
+    console.log('hay una fecha nula');
+    return
+  }
+
+  const fecha: Date = date?.toDate()
+  // Obtener diferentes partes de la fecha y hora
+  const dia = fecha.getDate();
+  const mes = fecha.getMonth() + 1; // Los meses comienzan desde 0, se suma 1
+  const anio = fecha.getFullYear();
+  const horas = fecha.getHours();
+  const minutos = fecha.getMinutes();
+  const segundos = fecha.getSeconds();
+  // Formatear los valores para que tengan dos dígitos si es necesario
+
+  const diaFormateado = String(dia).padStart(2, '0');
+  const mesFormateado = String(mes).padStart(2, '0');
+  if (hora) {
+    const horasFormateadas = String(horas).padStart(2, '0');
+    const minutosFormateados = String(minutos).padStart(2, '0');
+    const segundosFormateados = String(segundos).padStart(2, '0');
+    // Generar la cadena con el formato deseado (por ejemplo, dd/mm/aaaa hh:mm:ss)
+    const fechaFormateada = `${diaFormateado}/${mesFormateado}/${anio} ${horasFormateadas}:${minutosFormateados}:${segundosFormateados}`;
+    return fechaFormateada
+  } else {
+    // Generar la cadena con el formato deseado (por ejemplo, dd/mm/aaaa hh:mm:ss)
+    if (formato) {
+      const fechaFormateada = `${anio}-${mesFormateado}-${diaFormateado}`;
       return fechaFormateada
     }
-} 
-  
-export async function exportToExcel(data:ISolicitudRes[])
-{
+    const fechaFormateada = `${diaFormateado}/${mesFormateado}/${anio}`;
+    return fechaFormateada
+  }
+}
+
+export async function exportToExcel(data: ISolicitudRes[]) {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('DataSheet');
 
@@ -113,75 +110,74 @@ export async function exportToExcel(data:ISolicitudRes[])
   document.body.removeChild(a);
   window.URL.revokeObjectURL(url);
 }
-const formatearDatos =(data:ISolicitudRes[]) =>{
-	const excelData:string[][] = [['Online','Apellidos','Nombres','DNI','Idioma','Nivel','Pago','Fecha Pago','Recibo','Estado','Fecha Solicitud']]
-	data.forEach((row)=>{
-		excelData.push([
-      row.manual? 'MANUAL': 'ONLINE',
-			row.estudiante?.apellidos?.toUpperCase() || '',
-			row.estudiante?.nombres?.toUpperCase() || '', 
-			row.estudiante?.numeroDocumento || '', 
-			row.idioma?.nombre || '', 
-			row.nivel?.nombre || '', 
-			String(row.pago), 
+const formatearDatos = (data: ISolicitudRes[]) => {
+  const excelData: string[][] = [['Online', 'Apellidos', 'Nombres', 'DNI', 'Idioma', 'Nivel', 'Pago', 'Fecha Pago', 'Recibo', 'Estado', 'Fecha Solicitud']]
+  data.forEach((row) => {
+    excelData.push([
+      row.manual ? 'MANUAL' : 'ONLINE',
+      row.estudiante?.apellidos?.toUpperCase() || '',
+      row.estudiante?.nombres?.toUpperCase() || '',
+      row.estudiante?.numeroDocumento || '',
+      row.idioma?.nombre || '',
+      row.nivel?.nombre || '',
+      String(row.pago),
       row.fechaPago || '',
-			row.numeroVoucher || '', 
-			row.estado?.nombre || '',
+      row.numeroVoucher || '',
+      row.estado?.nombre || '',
       row.creadoEn || '',
-		])
-	})
-	return excelData
+    ])
+  })
+  return excelData
 }
 
-export function obtenerPeriodo()
-{
-    const fechaActual = new Date();
-    const mes = fechaActual.getMonth() + 1; // Los meses en JavaScript van de 0 a 11, por lo que sumamos 1 para obtener el mes actual
-    const año = fechaActual.getFullYear();
+export function obtenerPeriodo() {
+  const fechaActual = new Date();
+  const mes = fechaActual.getMonth() + 1; // Los meses en JavaScript van de 0 a 11, por lo que sumamos 1 para obtener el mes actual
+  const año = fechaActual.getFullYear();
 
-    // Formatear los valores para que tengan dos dígitos si es necesario
-    const mesFormateado = String(mes).padStart(2, '0');
+  // Formatear los valores para que tengan dos dígitos si es necesario
+  const mesFormateado = String(mes).padStart(2, '0');
 
-    return `${String(año)}${mesFormateado}`
+  return `${String(año)}${mesFormateado}`
 }
 
-export function validateUser(item:IUsuario, setVal:React.Dispatch<React.SetStateAction<{email: boolean; password: boolean; nombre: boolean}>>):boolean{
-    let email:boolean
-    let password:boolean
-    let nombre:boolean
+export function validateUser(item: IUsuario, setVal: React.Dispatch<React.SetStateAction<{ email: boolean; password: boolean; nombre: boolean }>>): boolean {
+  let email: boolean
+  let password: boolean
+  let nombre: boolean
 
-    const emailRegex =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/ 
-  
-    if(item.email === '' || !emailRegex.test(item.email)){
-        email = false
-        setVal((prevBasicVal)=>({...prevBasicVal, email:true}))
-    }else{
-        email = true
-        setVal((prevBasicVal)=>({...prevBasicVal, email:false}))
-    }
-    if(item.password === '' || item.password.length <  6){
-        password = false
-        setVal((prevBasicVal)=>({...prevBasicVal, password:true}))
-    }else{
-        password = true
-        setVal((prevBasicVal)=>({...prevBasicVal, password:false}))
-    }
-    if(item.nombre === ''){
-        nombre = false
-        setVal((prevBasicVal)=>({...prevBasicVal, nombre:true}))
-    }else{
-        nombre = true
-        setVal((prevBasicVal)=>({...prevBasicVal, nombre:false}))
-    }
+  const emailRegex = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
+
+  if (item.email === '' || !emailRegex.test(item.email)) {
+    email = false
+    setVal((prevBasicVal) => ({ ...prevBasicVal, email: true }))
+  } else {
+    email = true
+    setVal((prevBasicVal) => ({ ...prevBasicVal, email: false }))
+  }
+  if (item.password === '' || item.password.length < 6) {
+    password = false
+    setVal((prevBasicVal) => ({ ...prevBasicVal, password: true }))
+  } else {
+    password = true
+    setVal((prevBasicVal) => ({ ...prevBasicVal, password: false }))
+  }
+  if (item.nombre === '') {
+    nombre = false
+    setVal((prevBasicVal) => ({ ...prevBasicVal, nombre: true }))
+  } else {
+    nombre = true
+    setVal((prevBasicVal) => ({ ...prevBasicVal, nombre: false }))
+  }
 
   return email && password && nombre
 }
 
 export const capitalizeFirstLetterOfEachWord = (str: string) => {
-	if (!str) return '';
-	return str
-		.split(' ') // Split the string by spaces
-		.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
-		.join(' '); // Join the words back together with spaces
+  if (!str) return '';
+  return str
+    .split(' ') // Split the string by spaces
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
+    .join(' '); // Join the words back together with spaces
 };
 

@@ -22,17 +22,17 @@ type Props = {
     setRows: React.Dispatch<React.SetStateAction<any[]>>
     rowModesModel: GridRowModesModel
     setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
-    handleDeleteClick(id:GridRowId): React.MouseEventHandler<HTMLButtonElement>
-    processRowUpdate(newRow:GridRowModel):GridValidRowModel
-    actions?:GridAction[]
+    handleDeleteClick(id: GridRowId): React.MouseEventHandler<HTMLButtonElement>
+    processRowUpdate(newRow: GridRowModel): GridValidRowModel
+    actions?: GridAction[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onProcessRowUpdateError?: (error:any)=>void
+    onProcessRowUpdateError?: (error: any) => void
 }
 
-export default function EditableDataGrid({columns, rows, setRows, handleDeleteClick, processRowUpdate, actions=[], onProcessRowUpdateError}:Props) 
-{
+export default function EditableDataGrid({ columns, rows, setRows, handleDeleteClick, processRowUpdate, actions = [], onProcessRowUpdateError }: Props) {
     //hooks
     const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getRowId = (row: any) => row.id ?? row.tempId;
     const handleContainerKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
@@ -58,20 +58,20 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
     };
     const handleCancelClick = (id: GridRowId) => () => {
         setRowModesModel({
-          ...rowModesModel,
-          [id]: { mode: GridRowModes.View, ignoreModifications: true },
+            ...rowModesModel,
+            [id]: { mode: GridRowModes.View, ignoreModifications: true },
         });
-    
+
         const editedRow = rows.find((row) => getRowId(row) === id);
-        
+
         if (editedRow!.isNew) {
-          setRows(rows.filter((row) => getRowId(row) !== id));
+            setRows(rows.filter((row) => getRowId(row) !== id));
         }
-        
+
     };
 
     //cols
-    const cols:GridColDef[] = [
+    const cols: GridColDef[] = [
         ...columns,
         {
             field: 'actions',
@@ -81,16 +81,16 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
             getActions: ({ id }) => {
                 const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
 
-                if(isInEditMode){
+                if (isInEditMode) {
                     return [
-                        <GridActionsCellItem 
+                        <GridActionsCellItem
                             key={1}
                             icon={<SaveIcon />}
                             label='Guardar'
-                            sx={{color: 'primary.main'}}
+                            sx={{ color: 'primary.main' }}
                             onClick={handleSaveClick(id)}
                         />,
-                        <GridActionsCellItem 
+                        <GridActionsCellItem
                             key={2}
                             icon={<CancelIcon />}
                             label='Cancelar'
@@ -121,19 +121,19 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
                 ];
 
                 // Botones personalizados
-                 const customActions = actions
-                 .filter((action) => !action.showInEditMode || isInEditMode) // Filtrar por modo edición
-                 .map((action, index) => (
-                     <GridActionsCellItem
-                         key={`custom-${index}`}
-                         icon={action.icon}
-                         label={action.label}
-                         onClick={action.onClick(id)}
-                         color={action.color || 'inherit'}
-                     />
-                 ));
+                const customActions = actions
+                    .filter((action) => !action.showInEditMode || isInEditMode) // Filtrar por modo edición
+                    .map((action, index) => (
+                        <GridActionsCellItem
+                            key={`custom-${index}`}
+                            icon={action.icon}
+                            label={action.label}
+                            onClick={action.onClick(id)}
+                            color={action.color || 'inherit'}
+                        />
+                    ));
 
-             return [ ...customActions,...defaultActions,];
+                return [...customActions, ...defaultActions,];
             },
         }
     ]
@@ -149,11 +149,11 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
                 color: 'text.primary',
             },
         }}>
-            <DataGrid 
+            <DataGrid
                 rows={rows}
                 columns={cols}
                 editMode='row'
-                slots={{toolbar:GridToolbar}}
+                slots={{ toolbar: GridToolbar }}
                 getRowId={getRowId}
                 rowModesModel={rowModesModel}
                 onRowModesModelChange={handleRowModesModelChange}
@@ -161,9 +161,9 @@ export default function EditableDataGrid({columns, rows, setRows, handleDeleteCl
                 processRowUpdate={processRowUpdate}
                 onProcessRowUpdateError={onProcessRowUpdateError}
                 initialState={{
-                    pagination:{paginationModel:{pageSize:10}}
+                    pagination: { paginationModel: { pageSize: 10 } }
                 }}
-                pageSizeOptions={[10,25,100]}
+                pageSizeOptions={[10, 25, 100]}
             />
         </Box>
     )

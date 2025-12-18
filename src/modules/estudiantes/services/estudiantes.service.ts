@@ -4,14 +4,13 @@ import { apiFetch } from "@/lib/api.service";
 
 const collection = 'estudiantes'
 
-export default class EstudiantesService 
-{
-    static async fetchItemByDNI(dni:string):Promise<IEstudiante>{
+export default class EstudiantesService {
+    static async fetchItemByDNI(dni: string): Promise<IEstudiante> {
         const data = await apiFetch<IEstudiante>(`${collection}/buscar/${dni}`, 'GET')
         return data
     }
-    static async updateItem(id: string, body: any):Promise<IEstudiante>
-    {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    static async updateItem(id: string, body: any): Promise<IEstudiante> {
         const estudianteData = {
             nombres: body.nombres,
             apellidos: body.apellidos,
@@ -26,8 +25,8 @@ export default class EstudiantesService
         const data = await apiFetch<IEstudiante>(`${collection}/${id}`, 'PATCH', estudianteData)
         return data
     }
-    static async newItem(body: any):Promise<IEstudiante>
-    {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    static async newItem(body: any): Promise<IEstudiante> {
         const estudianteData = {
             nombres: body.nombres,
             apellidos: body.apellidos,

@@ -1,18 +1,18 @@
 'use client'
 import Grid from '@mui/material/Grid2';
-import { Button, FormControlLabel,  InputAdornment, TextField, Checkbox } from '@mui/material'
+import { Button, InputAdornment, TextField } from '@mui/material'
 import pdfLogo from '@/assets/pdf.png'
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
-import  Link  from '@mui/material/Link'
+import Link from '@mui/material/Link'
 import { useFormik } from 'formik'
 import React from 'react'
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import SaveIcon from '@mui/icons-material/Save';
 import noImage from '@/assets/no_disponible.png'
 import validationSchema from '../schemas/validation.schema'
-import useStore from '@/hooks/useStore';
-import { useDocumentsStore,  useSubjectsStore } from '@/modules/opciones/store/types.stores';
+//import useStore from '@/hooks/useStore';
+//import { useDocumentsStore,  useSubjectsStore } from '@/modules/opciones/store/types.stores';
 import { MySelect } from '@/components/MUI';
 import { ESTADO, NIVEL } from '@/lib/constants';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -23,22 +23,21 @@ import SelectSubjects from '@/components/SelectSubjects';
 import MyDatePicker from '@/components/MyDatePicker';
 
 type Props = {
-  item: ISolicitudRes,
-  saveItem(values:Partial<ISolicitudRes>) : void
+    item: ISolicitudRes,
+    saveItem(values: Partial<ISolicitudRes>): void
 }
 
-export default function FinanceInfo({item, saveItem}:Props) 
-{
-    const documents = useStore(useDocumentsStore, (state) => state.documents)
-    const subjects = useStore(useSubjectsStore, (state) => state.subjects)
+export default function FinanceInfo({ item, saveItem }: Props) {
+    //const documents = useStore(useDocumentsStore, (state) => state.documents)
+    //const subjects = useStore(useSubjectsStore, (state) => state.subjects)
     const [edit, setEdit] = React.useState<boolean>(false)
     const isPdf = item.imgVoucher?.split('?')[0].slice(-3) === 'pdf'
     const hasImage = Boolean(item.imgVoucher)
- 
+
     const formik = useFormik<Partial<ISolicitudRes>>({
-        initialValues:{
+        initialValues: {
             periodo: item.periodo,
-            tipoSolicitudId : 7,//item.tipoSolicitudId,
+            tipoSolicitudId: 7,//item.tipoSolicitudId,
             estadoId: item.estadoId,
             idiomaId: item.idiomaId,
             nivelId: item.nivelId,
@@ -47,7 +46,7 @@ export default function FinanceInfo({item, saveItem}:Props)
             fechaPago: item.fechaPago,//dayjs(new Date(item.fechaPago)),
         },
         validationSchema: validationSchema,
-        onSubmit: (values)=>{
+        onSubmit: (values) => {
             const payload = {
                 ...values,
                 estadoId: values.estadoId != null ? Number(values.estadoId as unknown as string) : undefined,
@@ -61,15 +60,15 @@ export default function FinanceInfo({item, saveItem}:Props)
     })
 
     //funciones
-    const handleClickEdit = () =>{
+    const handleClickEdit = () => {
         setEdit(true)
     }
 
     return (
         <Grid container spacing={2} p={1}>
-            <Grid container spacing={2} size={{xs:12, md:8}} component='form' onSubmit={formik.handleSubmit}>
+            <Grid container spacing={2} size={{ xs: 12, md: 8 }} component='form' onSubmit={formik.handleSubmit}>
                 {/**Tipo de Solicitud */}
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectDocuments
                         handleChange={formik.handleChange}
                         value={formik.values.tipoSolicitudId != null ? String(formik.values.tipoSolicitudId) : ''}
@@ -79,14 +78,14 @@ export default function FinanceInfo({item, saveItem}:Props)
                     />
                 </Grid>
                 {/**Estado */}
-                <Grid size={{xs:12, sm:6}}>
-                    <MySelect 
-                        disabled={!edit} 
-                        data={ESTADO} 
-                        name="estadoId" 
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <MySelect
+                        disabled={!edit}
+                        data={ESTADO}
+                        name="estadoId"
                         error={formik.touched.estadoId && Boolean(formik.errors.estadoId)}
-                        label="Estado" 
-                        value={formik.values.estadoId != null ? String(formik.values.estadoId) : ''} 
+                        label="Estado"
+                        value={formik.values.estadoId != null ? String(formik.values.estadoId) : ''}
                         handleChange={formik.handleChange}
                         helperText={formik.touched.estadoId && formik.errors.estadoId}
                         getOptionValue={(option) => option.value}
@@ -94,7 +93,7 @@ export default function FinanceInfo({item, saveItem}:Props)
                     />
                 </Grid>
                 {/**Idioma */}
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectSubjects
                         handleChange={formik.handleChange}
                         value={formik.values.idiomaId != null ? String(formik.values.idiomaId) : ''}
@@ -104,10 +103,10 @@ export default function FinanceInfo({item, saveItem}:Props)
                     />
                 </Grid>
                 {/**Nivel */}
-                <Grid size={{xs:12, sm:6}}>
-                    <MySelect 
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <MySelect
                         data={NIVEL}
-                        disabled={!edit} 
+                        disabled={!edit}
                         error={formik.touched.nivelId && Boolean(formik.errors.nivelId)}
                         name='nivelId'
                         label='Nivel'
@@ -119,7 +118,7 @@ export default function FinanceInfo({item, saveItem}:Props)
                     />
                 </Grid>
                 {/**Número Voucher */}
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <TextField
                         required
                         disabled={!edit}
@@ -129,11 +128,11 @@ export default function FinanceInfo({item, saveItem}:Props)
                         onChange={formik.handleChange}
                         name="numeroVoucher"
                         label="Número de voucher"
-                        slotProps={{inputLabel: {shrink: true,}}}
+                        slotProps={{ inputLabel: { shrink: true, } }}
                         helperText={formik.touched.numeroVoucher && formik.errors.numeroVoucher}
                     />
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <TextField
                         type='number'
                         fullWidth
@@ -143,14 +142,14 @@ export default function FinanceInfo({item, saveItem}:Props)
                         label='Monto pagado'
                         value={formik.values.pago ?? ''}
                         slotProps={{
-                            input:{startAdornment: <InputAdornment position="start">S/</InputAdornment>,},
+                            input: { startAdornment: <InputAdornment position="start">S/</InputAdornment>, },
                         }}
                         onChange={formik.handleChange}
                         name="pago"
                         helperText={formik.touched.pago && formik.errors.pago}
                     />
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <MyDatePicker
                         label='Fecha de Pago'
                         name='fechaPago'
@@ -159,9 +158,9 @@ export default function FinanceInfo({item, saveItem}:Props)
                         value={formik.values.fechaPago ? dayjs(formik.values.fechaPago) : null}
                         error={Boolean(formik.touched.fechaPago) && Boolean(formik.errors.fechaPago)}
                         helperText={(formik.touched.fechaPago && formik.errors.fechaPago) as React.ReactNode}
-                    />  
+                    />
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <TextField
                         disabled
                         fullWidth
@@ -169,36 +168,36 @@ export default function FinanceInfo({item, saveItem}:Props)
                         onChange={formik.handleChange}
                         name="periodo"
                         label="Periodo"
-                        slotProps={{inputLabel: {shrink: true,}}}
+                        slotProps={{ inputLabel: { shrink: true, } }}
                         helperText={formik.touched.periodo && formik.errors.periodo}
                     />
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
-                {   Boolean(item.imgVoucher) ?
-                        (<Link href={item?.imgVoucher} underline='always' target='_blank' rel="noopener">VER VOUCHER</Link>) 
-                    :null
-                }
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    {Boolean(item.imgVoucher) ?
+                        (<Link href={item?.imgVoucher} underline='always' target='_blank' rel="noopener">VER VOUCHER</Link>)
+                        : null
+                    }
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
-                    
+                <Grid size={{ xs: 12, sm: 6 }}>
+
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
-                        <DateTimePicker 
+                        <DateTimePicker
                             label="Fecha de creación"
                             disabled
                             value={dayjs(new Date(item.creadoEn))}
                             ampm
                             slotProps={{
-                                textField:{
-                                    fullWidth:true,
+                                textField: {
+                                    fullWidth: true,
                                     variant: 'standard'
                                 }
                             }}
                         />
                     </LocalizationProvider>
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
                         <DateTimePicker
                             label="Fecha de última edición"
@@ -206,58 +205,58 @@ export default function FinanceInfo({item, saveItem}:Props)
                             disabled
                             value={dayjs(new Date(item.modificadoEn))}
                             slotProps={{
-                                textField:{
-                                    fullWidth:true,
-                                    variant:'standard'
+                                textField: {
+                                    fullWidth: true,
+                                    variant: 'standard'
                                 }
                             }}
                         />
                     </LocalizationProvider>
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <Button
-                        variant="contained" 
-                        color="primary" 
-                        sx={{ml:0, mr:2}} 
+                        variant="contained"
+                        color="primary"
+                        sx={{ ml: 0, mr: 2 }}
                         fullWidth
-                        onClick={handleClickEdit} 
+                        onClick={handleClickEdit}
                         endIcon={<EditNoteIcon />}
                         disabled={edit}>
                         Editar
                     </Button>
                 </Grid>
-                <Grid size={{xs:12, sm:6}}>
-                    <Button 
-                        variant="contained" 
-                        color="success" 
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <Button
+                        variant="contained"
+                        color="success"
                         type='submit'
                         fullWidth
-                        sx={{ml:0, mr:2}} 
+                        sx={{ ml: 0, mr: 2 }}
                         endIcon={<SaveIcon />}
                         disabled={!edit}>
                         Guardar
                     </Button>
                 </Grid>
             </Grid>
-            <Grid container spacing={1} size={{xs:12, md:4}}>
-                    {/*Imagen*/}
-                    <Grid 
-                        size={{xs:12}} 
-                        display='flex' 
-                        alignContent='center' 
-                        alignItems='center'
-                        justifyContent='center'
-                        sx={{ maxHeight: 440, overflow: 'hidden' }}
-                    >
-                    { 
-                        isPdf ? 
-                            (<img src={pdfLogo.src} style={{ width:'100%', height:'auto', maxHeight:'440px', objectFit:'contain', display:'block' }}/>):
+            <Grid container spacing={1} size={{ xs: 12, md: 4 }}>
+                {/*Imagen*/}
+                <Grid
+                    size={{ xs: 12 }}
+                    display='flex'
+                    alignContent='center'
+                    alignItems='center'
+                    justifyContent='center'
+                    sx={{ maxHeight: 440, overflow: 'hidden' }}
+                >
+                    {
+                        isPdf ?
+                            (<img src={pdfLogo.src} style={{ width: '100%', height: 'auto', maxHeight: '440px', objectFit: 'contain', display: 'block' }} />) :
                             hasImage ?
-                                (<img src={item?.imgVoucher} style={{ width:'100%', height:'auto', maxHeight:'440px', objectFit:'contain', display:'block' }}/>) : 
-                                (<img src={noImage.src} style={{ width:'100%', height:'auto', maxHeight:'440px', objectFit:'contain', display:'block' }}/>)
+                                (<img src={item?.imgVoucher} style={{ width: '100%', height: 'auto', maxHeight: '440px', objectFit: 'contain', display: 'block' }} />) :
+                                (<img src={noImage.src} style={{ width: '100%', height: 'auto', maxHeight: '440px', objectFit: 'contain', display: 'block' }} />)
                     }
-                    </Grid>
                 </Grid>
             </Grid>
+        </Grid>
     )
 }

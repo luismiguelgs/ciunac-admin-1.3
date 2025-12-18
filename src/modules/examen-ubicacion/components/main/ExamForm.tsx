@@ -1,5 +1,4 @@
 'use client'
-import  ICalificacionUbicacion  from '@/modules/examen-ubicacion/interfaces/calificacion.interface'
 import { IExamenUbicacion } from '@/modules/examen-ubicacion/interfaces/examen-ubicacion.interface'
 import { IProfesor } from '@/modules/examen-ubicacion/interfaces/profesores.interface'
 import { ISalon } from '@/modules/opciones/interfaces/types.interface'
@@ -9,7 +8,7 @@ import validationSchema from './validation.schema'
 import 'dayjs/locale/es';
 import Grid from '@mui/material/Grid2';
 import { MySelect } from '@/components/MUI'
-import { ESTADO_EXAMEN, NIVEL } from '@/lib/constants'
+import { ESTADO_EXAMEN } from '@/lib/constants'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from '@mui/material'
@@ -27,18 +26,17 @@ type Props = {
     handleClickActa: () => void,
     salones: ISalon[],
     profesores: IProfesor[],
-    handleClickSave: (value:IExamenUbicacion) => void
+    handleClickSave: (value: IExamenUbicacion) => void
 }
 
 
-export default function ExamForm({ID, handleClickActa, salones, profesores, handleClickSave, data}:Props) 
-{
+export default function ExamForm({ ID, handleClickActa, salones, profesores, handleClickSave, data }: Props) {
     //HOOKS *************************************************
-	//const subjects = useStore(useSubjectsStore, (state) => state.subjects)
+    //const subjects = useStore(useSubjectsStore, (state) => state.subjects)
     const [editar, setEditar] = React.useState<boolean>(false)
 
     const formik = useFormik<IExamenUbicacion>({
-        initialValues:{
+        initialValues: {
             estadoId: data?.estadoId ?? 6,
             fecha: data?.fecha ? dayjs(new Date(data.fecha as Date)) : dayjs(new Date()),
             aulaId: data?.aulaId || 1,
@@ -49,7 +47,7 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
         validationSchema: validationSchema,
         onSubmit: (values) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { fecha, ...rest} = values
+            const { fecha, ...rest } = values
             const examenData = {
                 ...rest,
                 fecha: fecha ? new Date(fecha as Date) : null,
@@ -67,7 +65,7 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
 
     return (
         <Grid container spacing={2} p={3} component='form' onSubmit={formik.handleSubmit}>
-            <Grid size={{xs: 12, md: 4}} >
+            <Grid size={{ xs: 12, md: 4 }} >
                 <MySelect
                     data={ESTADO_EXAMEN}
                     handleChange={formik.handleChange}
@@ -79,18 +77,18 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
                     helperText={formik.touched.estado && formik.errors.estado}
                 />
             </Grid>
-            <Grid size={{xs: 12, md: 4}} >
+            <Grid size={{ xs: 12, md: 4 }} >
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
-                    <DatePicker 
+                    <DatePicker
                         label="Fecha de Examen"
                         name='fecha'
                         disabled={ID !== 'nuevo' && !editar}
-                        value={dayjs(formik.values.fecha as Date)} 
-                        onChange={(date)=>formik.setFieldValue('fecha',date)} 
+                        value={dayjs(formik.values.fecha as Date)}
+                        onChange={(date) => formik.setFieldValue('fecha', date)}
                         minDate={dayjs(new Date())}
                         slotProps={{
-                            textField:{
-                                fullWidth:true,
+                            textField: {
+                                fullWidth: true,
                                 error: Boolean(formik.touched.fecha) && Boolean(formik.errors.fecha),
                                 helperText: (formik.touched.fecha && formik.errors.fecha) as string
                             }
@@ -98,8 +96,8 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
                     />
                 </LocalizationProvider>
             </Grid>
-            <Grid size={{xs: 12, md: 4}} >
-                <MySelect 
+            <Grid size={{ xs: 12, md: 4 }} >
+                <MySelect
                     data={salones}
                     handleChange={formik.handleChange}
                     error={formik.touched.aulaId && Boolean(formik.errors.aulaId)}
@@ -110,10 +108,10 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
                     helperText={formik.touched.aulaId && formik.errors.aulaId}
                 />
             </Grid>
-            <Grid size={{xs: 12, md: 4}} >
+            <Grid size={{ xs: 12, md: 4 }} >
                 <FormControl
-                    sx={{minWidth: 120, width:'100%'}} 
-                    disabled={ID !== 'nuevo' && !editar} 
+                    sx={{ minWidth: 120, width: '100%' }}
+                    disabled={ID !== 'nuevo' && !editar}
                     error={formik.touched.docenteId && Boolean(formik.errors.docenteId)}>
                     <InputLabel>Profesor</InputLabel>
                     <Select
@@ -122,7 +120,7 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
                         value={formik.values.docenteId}
                         label='Profesor'>
                         {
-                            profesores.map((item,index)=>(
+                            profesores.map((item, index) => (
                                 <MenuItem key={index} value={item.id}>
                                     {`${item.nombres} ${item.apellidos}`}
                                 </MenuItem>
@@ -132,7 +130,7 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
                     <FormHelperText>{(formik.touched.docenteId && formik.errors.docenteId) as string}</FormHelperText>
                 </FormControl>
             </Grid>
-            <Grid size={{xs: 12, md: 4}} >
+            <Grid size={{ xs: 12, md: 4 }} >
                 <SelectSubjects
                     handleChange={formik.handleChange}
                     error={formik.touched.idiomaId && Boolean(formik.errors.idiomaId)}
@@ -140,7 +138,7 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
                     disabled={ID !== 'nuevo'}
                 />
             </Grid>
-            <Grid size={{xs: 12, md: 4}} >
+            <Grid size={{ xs: 12, md: 4 }} >
                 <TextField
                     autoFocus
                     value={formik.values.codigo}
@@ -155,40 +153,40 @@ export default function ExamForm({ID, handleClickActa, salones, profesores, hand
                     helperText={formik.touched.codigo && formik.errors.codigo}
                 />
             </Grid>
-            <Grid size={{xs: 12, md:3}} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
-                <BackButton fullWidth/>
+            <Grid size={{ xs: 12, md: 3 }} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
+                <BackButton fullWidth />
             </Grid>
-            <Grid size={{xs: 12, md:3}} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
+            <Grid size={{ xs: 12, md: 3 }} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
                 <Button
-                    fullWidth 
+                    fullWidth
                     disabled={ID === 'nuevo' || editar}
-                    onClick={()=>{setEditar(true)}} 
-                    variant="contained" 
-                    color="primary" 
+                    onClick={() => { setEditar(true) }}
+                    variant="contained"
+                    color="primary"
                     startIcon={<EditNoteIcon />}>
-                        Editar
+                    Editar
                 </Button>
             </Grid>
-            <Grid size={{xs: 12, md:3}} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
+            <Grid size={{ xs: 12, md: 3 }} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
                 <Button
-                    fullWidth 
+                    fullWidth
                     type='submit'
-                    variant="contained" 
-                    color="success" 
+                    variant="contained"
+                    color="success"
                     disabled={ID !== 'nuevo' && !editar}
                     startIcon={<SaveIcon />}>
-                        Guardar
+                    Guardar
                 </Button>
             </Grid>
-            <Grid size={{xs: 12, md:3}} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
+            <Grid size={{ xs: 12, md: 3 }} display='flex' alignItems='center' justifyContent='center' alignContent='center'>
                 <Button
-                    fullWidth 
+                    fullWidth
                     onClick={handleClickActa}
-                    variant="contained" 
-                    color="error" 
-                    disabled={ID === 'nuevo'} 
+                    variant="contained"
+                    color="error"
+                    disabled={ID === 'nuevo'}
                     startIcon={<PreviewIcon />}>
-                        Ver Acta
+                    Ver Acta
                 </Button>
             </Grid>
         </Grid>

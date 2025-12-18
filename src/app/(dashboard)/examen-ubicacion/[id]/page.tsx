@@ -1,10 +1,8 @@
 'use client'
-import useStore from '@/hooks/useStore'
 import { ISalon } from '@/modules/opciones/interfaces/types.interface'
 import ExamenesUbicacionService from '@/modules/examen-ubicacion/services/examenes-ubicacion.service'
 import OpcionesService, { Collection } from '@/modules/opciones/services/opciones.service'
 import ProfesoresService from '@/modules/examen-ubicacion/services/profesores.service'
-import { useSubjectsStore } from '@/modules/opciones/store/types.stores'
 import { Box, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -20,14 +18,13 @@ import { IDetalleExamenUbicacion, IExamenUbicacion } from '@/modules/examen-ubic
 import useCalificacionesExamenUbicacion from '@/modules/examen-ubicacion/hooks/useCalificaciones'
 dayjs.locale('es');
 
-export default function ExamDetailPage(params:{params:{id:string}}) 
-{
+export default function ExamDetailPage(params: { params: { id: string } }) {
     const id = +params.params.id
     const navigate = useRouter()
-    const subjects = useStore(useSubjectsStore, (state) => state.subjects)
+    //const subjects = useStore(useSubjectsStore, (state) => state.subjects)
 
-    const { data:ubicaciones } = useCalificacionesExamenUbicacion()
-    
+    const { data: ubicaciones } = useCalificacionesExamenUbicacion()
+
     const [profesores, setProfesores] = React.useState<IProfesor[]>([])
     const [salones, setSalones] = React.useState<ISalon[]>([])
     const [participantes, setParticipantes] = React.useState<IDetalleExamenUbicacion[]>([])
@@ -35,8 +32,8 @@ export default function ExamDetailPage(params:{params:{id:string}})
     const [open, setOpen] = React.useState<boolean>(false)
     const [profesor, setProfesor] = React.useState<string>('')
 
-    React.useEffect(()=>{
-        const loadData = async (id:number|undefined) =>{
+    React.useEffect(() => {
+        const loadData = async (id: number | undefined) => {
             const dataProfesores = await ProfesoresService.fetchItems()
             const dataSalones = await OpcionesService.fetchItems<ISalon>(Collection.Salones)
             setProfesores(dataProfesores as IProfesor[])
@@ -47,15 +44,16 @@ export default function ExamDetailPage(params:{params:{id:string}})
             setParticipantes(participantes as IDetalleExamenUbicacion[])
         }
         loadData(Number(id))
-    },[])
+    }, [])
 
     const handleClickActa = () => {
         const item = profesores.filter(item => item.id === data?.docenteId)[0]
         setProfesor(`${item.nombres} ${item.apellidos}`)
+        console.info(profesor)
         setOpen(true)
     }
-    const handleClickSave = async(values:IExamenUbicacion) => {
-        await ExamenesUbicacionService.update(id, {...values})
+    const handleClickSave = async (values: IExamenUbicacion) => {
+        await ExamenesUbicacionService.update(id, { ...values })
         navigate.back()
     }
 
@@ -63,33 +61,33 @@ export default function ExamDetailPage(params:{params:{id:string}})
         <Box>
             <Typography variant='h5' gutterBottom>Examen Detalle ({id})</Typography>
             {
-                data ? 
-                <ExamForm 
-                    ID={id}
-                    salones={salones}
-                    profesores={profesores}
-                    data={data}
-                    handleClickActa={handleClickActa}
-                    handleClickSave={handleClickSave}
-                /> : <Typography variant='h6' gutterBottom>Loading...</Typography>
+                data ?
+                    <ExamForm
+                        ID={id}
+                        salones={salones}
+                        profesores={profesores}
+                        data={data}
+                        handleClickActa={handleClickActa}
+                        handleClickSave={handleClickSave}
+                    /> : <Typography variant='h6' gutterBottom>Loading...</Typography>
             }
-            {data && <ExamParticipants id={id} idiomaId={data?.idiomaId} calificaciones={ubicaciones}/> }
-            <MyDialog 
+            {data && <ExamParticipants id={id} idiomaId={data?.idiomaId} calificaciones={ubicaciones} />}
+            <MyDialog
                 open={open}
                 type='SIMPLE'
                 title='ACTA DEL EXAMEN'
                 setOpen={setOpen}
-                content={ open ? (<>
+                content={open ? (<>
                     <PDFViewer width={800} height={500}>
-				        <ActaFormat
-                            detalle={participantes} 
+                        <ActaFormat
+                            detalle={participantes}
                             data={{
-                                    fecha:dayjs(new Date(data?.fecha as Date ?? '')).format('D [de] MMMM [de] YYYY' ),
-                                    ...data
-                                } as IExamenUbicacion    
+                                fecha: dayjs(new Date(data?.fecha as Date ?? '')).format('D [de] MMMM [de] YYYY'),
+                                ...data
+                            } as IExamenUbicacion
                             }
                         />
-			        </PDFViewer>
+                    </PDFViewer>
                 </>) : null}
             />
         </Box>
