@@ -5,18 +5,18 @@ import CertificadosService from '@/modules/certificados/services/certificados.se
 import CertificateList from '@/modules/certificados/components/CertificateList'
 
 
-export default function CertificatesPage() 
-{
-	const [rows, setRows] = React.useState<ICertificado[]>([])
+export default function CertificatesPage() {
+    const [rows, setRows] = React.useState<ICertificado[]>([])
     const loadData = async () => {
         const data = await CertificadosService.fetchItems(false)
+        //console.log(data)
         setRows(data)
     }
-    React.useEffect(()=> {
-            loadData()
-    },[])
-    
+    React.useEffect(() => {
+        loadData()
+    }, [])
+
     return (
-        <CertificateList rows={rows} setRows={setRows} printed={false}/>
+        <CertificateList rows={rows} setRows={setRows} printed={false} />
     )
 }

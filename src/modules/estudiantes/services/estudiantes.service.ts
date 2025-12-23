@@ -30,7 +30,7 @@ export default class EstudiantesService {
         const estudianteData = {
             nombres: body.nombres,
             apellidos: body.apellidos,
-            tipoDocumento: body.tipo_documento,
+            tipoDocumento: body.tipoDocumento,
             numeroDocumento: body.dni,
             celular: body.celular,
             facultadId: +body.facultad,
