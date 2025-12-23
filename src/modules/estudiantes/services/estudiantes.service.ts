@@ -17,10 +17,12 @@ export default class EstudiantesService {
             tipoDocumento: body.tipo_documento,
             numeroDocumento: body.dni,
             celular: body.celular,
-            facultadId: +body.facultad ? +body.facultad : null,
-            escuelaId: +body.escuela ? +body.escuela : null,
+            facultadId: Number(body.facultad) ? Number(body.facultad) : null,
+            escuelaId: Number(body.escuela) ? Number(body.escuela) : null,
             codigo: body.codigo
         } as unknown as IEstudiante
+
+
 
         const data = await apiFetch<IEstudiante>(`${collection}/${id}`, 'PATCH', estudianteData)
         return data
@@ -33,10 +35,12 @@ export default class EstudiantesService {
             tipoDocumento: body.tipoDocumento,
             numeroDocumento: body.dni,
             celular: body.celular,
-            facultadId: +body.facultad,
-            escuelaId: +body.escuela,
+            facultadId: Number(body.facultad) ? Number(body.facultad) : null,
+            escuelaId: Number(body.escuela) ? Number(body.escuela) : null,
             codigo: body.codigo
         } as unknown as IEstudiante
+
+        console.log(estudianteData)
 
         const data = await apiFetch<IEstudiante>(`${collection}`, 'POST', estudianteData)
         return data

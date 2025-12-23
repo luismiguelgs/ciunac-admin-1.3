@@ -23,8 +23,6 @@ export default function NewRequestPage() {
         if (estudianteId) {
             await EstudiantesService.updateItem(estudianteId, values)
         } else {
-            console.log(values)
-            values.tipoDocumento = 'DNI'
             const res = await EstudiantesService.newItem(values)
             estudianteId = res.id
         }
