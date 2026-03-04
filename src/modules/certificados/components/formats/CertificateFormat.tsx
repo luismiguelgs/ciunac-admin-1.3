@@ -9,6 +9,7 @@ import selloElaborador from '@/assets/elaboradoring.jpg'
 import { ICertificadoNota } from '@/modules/certificados/interfaces/certificado.interface'
 import React from 'react'
 import { capitalizeFirstLetterOfEachWord } from '@/lib/utils'
+import BodyView from './BodyView'
 
 Font.register({ family: 'Dancing Script', src: '/fonts/DancingScript-VariableFont_wght.ttf' })
 Font.register({ family: 'PinyonScript', src: '/fonts/PinyonScript-Regular.ttf' })
@@ -104,7 +105,6 @@ type Props = {
 	duplicado: boolean,
 	certificado_anterior?: string,
 	url: string,
-	formato: number,
 	idioma: string | undefined,
 	fecha_emision: string,
 	fecha_conclusion: string,
@@ -118,7 +118,7 @@ type Props = {
 	notas: ICertificadoNota[] | undefined
 }
 export default function CertificateFormat({ certificado_anterior, curricula_antigua,
-	duplicado = true, formato, url, idioma = 'IDIOMA', nivel, fecha_emision, fecha_conclusion, notas, alumno, horas, numero_folio, elaborador = '' }: Props) {
+	duplicado = true, url, idioma = 'IDIOMA', nivel, fecha_emision, fecha_conclusion, notas, alumno, horas, numero_folio, elaborador = '' }: Props) {
 	const QRCode = generateSessionPDFQrCode(url)
 
 	const sortedData = notas?.sort((a, b) => {
@@ -164,32 +164,7 @@ export default function CertificateFormat({ certificado_anterior, curricula_anti
 							</Text>
 						</View>
 					) : (
-						<View>
-							{
-								formato === 1 ?
-									(
-										<Text style={[styles.text2, { textAlign: 'justify' }]} hyphenationCallback={(word) => [word]}>
-											ha concluido satisfactoriamente el <Text style={styles.text3}>{` NIVEL ${nivel} `}</Text>
-											del idioma <Text style={styles.text3}>{idioma}</Text>, de acuerdo al <Text style={{ fontFamily: 'Roboto-Bold' }}>MARCO COMÚN EUROPEO DE
-												REFERENCIA PARA LAS LENGUAS</Text>, en el nivel <Text style={styles.text3}>A2</Text>, en nuestra Casa
-											Superior de Estudios con un total de <Text style={styles.text3}>{horas}</Text>  horas.
-											Se le expide el presente, a solicitud de la parte interesada para los fines pertinentes.
-										</Text>
-									) : (
-										<>
-											<Text style={[styles.text2, { textAlign: 'justify' }]} hyphenationCallback={(word) => [word]}>
-												ha concluido satisfactoriamente el <Text style={styles.text3}>{` NIVEL ${nivel} `}</Text>
-												del idioma <Text style={styles.text3}>{idioma}</Text>, en nuestra casa
-												Superior de Estudios con un total de <Text style={styles.text3}>{horas}</Text>{' '}horas.
-											</Text>
-											<Text style={[styles.text2, { textAlign: 'justify' }]}>
-												Se le expide el presente, a solicitud de la parte interesada para los fines pertinentes.
-											</Text>
-											<View style={{ marginTop: 10 }}></View>
-										</>
-									)
-							}
-						</View>
+						<BodyView idioma={idioma} nivel={nivel} horas={horas} />
 					)
 				}
 

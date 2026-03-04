@@ -64,7 +64,6 @@ export default function ButtonSeeCertificate({ id, data, virtual = false }: Prop
                                             curricula_antigua={data?.curriculaAnterior as boolean}
                                             certificado_anterior={data?.certificadoOriginal}
                                             id={id}
-                                            formato={data?.idioma === 'INGLES' && data?.nivel === 'BASICO' ? 1 : 0}
                                             fecha_emision={dayjs(data?.fechaEmision).format('D [de] MMMM [de] YYYY')}
                                             fecha_conclusion={dayjs(data?.fechaConcluido).format('D [de] MMMM [de] YYYY')}
                                             idioma={data?.idioma}
@@ -88,7 +87,6 @@ export default function ButtonSeeCertificate({ id, data, virtual = false }: Prop
                                     curricula_antigua={data?.curriculaAnterior as boolean}
                                     certificado_anterior={data?.certificadoOriginal}
                                     id={id}
-                                    formato={data?.idioma === 'INGLES' && data?.nivel === 'BASICO' ? 1 : 0}
                                     fecha_emision={dayjs(data?.fechaEmision).format('D [de] MMMM [de] YYYY')}
                                     fecha_conclusion={dayjs(data?.fechaConcluido).format('D [de] MMMM [de] YYYY')}
                                     idioma={data?.idioma}
@@ -118,7 +116,6 @@ export default function ButtonSeeCertificate({ id, data, virtual = false }: Prop
                                             curricula_antigua={data?.curriculaAnterior as boolean}
                                             certificado_anterior={data?.certificadoOriginal}
                                             id={id}
-                                            formato={data?.idioma === 'INGLES' && data?.nivel === 'BASICO' ? 1 : 0}
                                             fecha_emision={dayjs(data?.fechaEmision).format('D [de] MMMM [de] YYYY')}
                                             fecha_conclusion={dayjs(data?.fechaConcluido).format('D [de] MMMM [de] YYYY')}
                                             idioma={data?.idioma}
@@ -142,7 +139,6 @@ export default function ButtonSeeCertificate({ id, data, virtual = false }: Prop
                                     curricula_antigua={data?.curriculaAnterior as boolean}
                                     certificado_anterior={data?.certificadoOriginal}
                                     id={id}
-                                    formato={data?.idioma === 'INGLES' && data?.nivel === 'BASICO' ? 1 : 0}
                                     fecha_emision={dayjs(data?.fechaEmision).format('D [de] MMMM [de] YYYY')}
                                     fecha_conclusion={dayjs(data?.fechaConcluido).format('D [de] MMMM [de] YYYY')}
                                     idioma={data?.idioma}

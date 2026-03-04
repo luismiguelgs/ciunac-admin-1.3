@@ -47,7 +47,7 @@ export default function ExamForm({ ID, handleClickActa, salones, profesores, han
         validationSchema: validationSchema,
         onSubmit: (values) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { fecha, ...rest } = values
+            const { fecha, estado, idioma, docente, aula, nivel, ...rest } = values
             const examenData = {
                 ...rest,
                 fecha: fecha ? new Date(fecha as Date) : null,
@@ -69,12 +69,12 @@ export default function ExamForm({ ID, handleClickActa, salones, profesores, han
                 <MySelect
                     data={ESTADO_EXAMEN}
                     handleChange={formik.handleChange}
-                    error={formik.touched.estado && Boolean(formik.errors.estado)}
-                    label='Extado'
-                    name='estado'
+                    error={formik.touched.estadoId && Boolean(formik.errors.estadoId)}
+                    label='Estado'
+                    name='estadoId'
                     disabled={!editar}
                     value={Number(formik.values.estadoId)}
-                    helperText={formik.touched.estado && formik.errors.estado}
+                    helperText={formik.touched.estadoId && formik.errors.estadoId}
                 />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }} >
