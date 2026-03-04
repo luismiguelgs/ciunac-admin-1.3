@@ -8,41 +8,40 @@ import React from 'react'
 
 import * as yup from 'yup'
 
-const validationSchema = yup.object<{email:string, password:string, remember:boolean}>({
+const validationSchema = yup.object<{ email: string, password: string, remember: boolean }>({
     email: yup.string().required('Email requerido'),
     password: yup.string().required('Password requerido'),
     remember: yup.boolean()
 })
 
-export default function LoginForm() 
-{
+export default function LoginForm() {
     const router = useRouter()
     const [error, setError] = React.useState<string>('') //Error Message
     const [open, setOpen] = React.useState<boolean>(false) //Alert
 
-    const formik = useFormik<{email:string, password:string, remember:boolean}>({
-        initialValues:{
+    const formik = useFormik<{ email: string, password: string, remember: boolean }>({
+        initialValues: {
             email: '',
             password: '',
             remember: false
         },
         validationSchema,
-        onSubmit: async(values) =>{
+        onSubmit: async (values) => {
             //alert(JSON.stringify(values,null, 2))
-            
+
             const res = await signIn('credentials', {
-                email: values.email, 
-                password: values.password, 
-                remember: values.remember
+                email: values.email,
+                password: values.password,
+                remember: values.remember,
+                redirect: false
             })
-            console.log(res);
-            if(res?.error){
+            if (res?.error) {
                 setError(res.error)
                 setOpen(true)
-            }else{
+            } else {
                 router.push('/')
                 router.refresh()
-            }  
+            }
         }
     })
 
@@ -83,7 +82,7 @@ export default function LoginForm()
                     Login
                 </Button>
             </Box>
-            <MyDialog 
+            <MyDialog
                 content={error}
                 open={open}
                 setOpen={setOpen}

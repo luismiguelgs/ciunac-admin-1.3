@@ -28,7 +28,7 @@ export default function NewRequestPage() {
         }
 
         const solicitud = { ...values, estudianteId } as Isolicitud
-        console.log(solicitud)
+        //console.log(solicitud)
         await SolicitudesService.newItem(solicitud)
         setLoading(false)
         setOpen(true)
