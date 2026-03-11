@@ -184,10 +184,10 @@ export default function CertificateFormat({ certificado_anterior, curricula_anti
 							Callao, <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
 								{fecha_emision}</Text>
 						</Text>
-						<Image style={{ marginBottom: 10, marginHorizontal: 20, width: 150, marginTop: 30 }} src={selloDirector.src} />
+						<Image style={{ marginBottom: 5, marginHorizontal: 20, width: 150, marginTop: 20 }} src={selloDirector.src} />
 					</View>
 				</View>
-				<View style={{ marginTop: 10 }}>
+				<View style={{ marginTop: 5 }}>
 					<Text style={styles.text2}>
 						N° de Registro: <Text style={styles.text3}>{numero_folio}</Text>
 					</Text>
