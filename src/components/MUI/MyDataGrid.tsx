@@ -1,23 +1,25 @@
 ''
 import { Portal } from "@mui/material";
-import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, GridToolbar, GridToolbarProps, GridToolbarQuickFilter } from "@mui/x-data-grid";
+import { DataGrid, DataGridProps, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, GridToolbar, GridToolbarProps, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import React from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-type Props = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: any[],
-    cols: GridColDef[],
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Props<R extends { id?: GridRowId } = any> = {
+    data: R[],
+    cols: GridColDef<R>[],
     handleDetails(id: GridRowId): void
     handleDelete(id: GridRowId): void;
-    getRowId?: (row: any) => GridRowId;
+    getRowId?: (row: R) => GridRowId;
     extraActions?: (id: GridRowId) => React.ReactNode[];
     actions?: boolean;
-    initialState?: any;
+    initialState?: DataGridProps['initialState'];
 }
 
-export default function MyDataGrid({ data, cols, handleDetails, handleDelete, getRowId, extraActions, actions = true, initialState }: Props) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function MyDataGrid<R extends { id?: GridRowId } = any>({ data, cols, handleDetails, handleDelete, getRowId, extraActions, actions = true, initialState }: Props<R>) {
     const MyCustomToolbar = (props: GridToolbarProps) => {
         return (
             <React.Fragment>

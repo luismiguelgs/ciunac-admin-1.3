@@ -4,14 +4,26 @@ import { apiFetch } from "@/lib/api.service";
 
 const collection = 'estudiantes'
 
+interface IEstudianteInput {
+    nombres?: string;
+    apellidos?: string;
+    tipo_documento?: string;
+    tipoDocumento?: string;
+    dni?: string;
+    celular?: string;
+    facultad?: string | number;
+    escuela?: string | number;
+    codigo?: string;
+}
+
 export default class EstudiantesService {
     static async fetchItemByDNI(dni: string): Promise<IEstudiante> {
         const data = await apiFetch<IEstudiante>(`${collection}/buscar/${dni}`, 'GET')
         return data
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    static async updateItem(id: string, body: any): Promise<IEstudiante> {
-        const estudianteData: any = {}
+
+    static async updateItem(id: string, body: IEstudianteInput): Promise<IEstudiante> {
+        const estudianteData: Partial<IEstudiante> = {}
         if (body.nombres) estudianteData.nombres = body.nombres
         if (body.apellidos) estudianteData.apellidos = body.apellidos
         if (body.tipo_documento) estudianteData.tipoDocumento = body.tipo_documento
@@ -24,18 +36,18 @@ export default class EstudiantesService {
         const data = await apiFetch<IEstudiante>(`${collection}/${id}`, 'PATCH', estudianteData)
         return data
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    static async newItem(body: any): Promise<IEstudiante> {
-        const estudianteData = {
-            nombres: body.nombres,
-            apellidos: body.apellidos,
-            tipoDocumento: body.tipoDocumento,
-            numeroDocumento: body.dni,
-            celular: body.celular,
-            facultadId: Number(body.facultad) ? Number(body.facultad) : null,
-            escuelaId: Number(body.escuela) ? Number(body.escuela) : null,
+
+    static async newItem(body: IEstudianteInput): Promise<IEstudiante> {
+        const estudianteData: IEstudiante = {
+            nombres: body.nombres || '',
+            apellidos: body.apellidos || '',
+            tipoDocumento: body.tipoDocumento || body.tipo_documento,
+            numeroDocumento: body.dni || '',
+            celular: body.celular || '',
+            facultadId: Number(body.facultad) ? Number(body.facultad) : undefined,
+            escuelaId: Number(body.escuela) ? Number(body.escuela) : undefined,
             codigo: body.codigo
-        } as unknown as IEstudiante
+        }
 
         console.log(estudianteData)
 

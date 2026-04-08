@@ -4,7 +4,7 @@ export default interface IEstudiante {
     apellidos:string,
     genero?:string,
     fechaNacimiento?:Date,
-    tipoDocumento?: 'DNI' | 'CE' | 'PASAPORTE',
+    tipoDocumento?: string,
     numeroDocumento:string,
     celular:string,
     imgDoc?:string,

@@ -5,10 +5,17 @@ import { formatDate, mapId } from "@/lib/utils";
 
 const collection = 'constancias'
 
+interface IRawConstancia extends Omit<IConstancia, 'creado_en' | 'modificado_en'> {
+    creado_en?: string;
+    creadoAt?: string;
+    createAt?: string;
+    id_solicitud?: number;
+}
+
 export class ConstanciasService
 {
     static async fetchItems(impreso: boolean): Promise<IConstancia[]> {
-        const response = await apiFetch<any[]>(`${collection}/impresos?impreso=${impreso}`, 'GET')
+        const response = await apiFetch<IRawConstancia[]>(`${collection}/impresos?impreso=${impreso}`, 'GET')
         return response.map(item => {
             const mapped = mapId(item)
             return {

@@ -16,6 +16,7 @@ export interface IConstancia {
     modalidad?: 'REGULAR' | 'INTENSIVO';
     creado_en?: Date;
     modificado_en?: Date;
+    createAt?: string;
     detalle?: IConstanciaDetalle[];
 }
 

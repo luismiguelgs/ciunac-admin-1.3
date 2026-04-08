@@ -22,6 +22,20 @@ type Props = {
     setOpen?: React.Dispatch<React.SetStateAction<boolean>> | undefined
 }
 
+interface ISaveItemValues {
+    nombres?: string;
+    apellidos?: string;
+    numeroDocumento?: string;
+    celular?: string;
+    tipoSolicitudId?: number | string;
+    estadoId?: number | string;
+    idiomaId?: number | string;
+    nivelId?: number | string;
+    pago?: number | string;
+    fechaPago?: string;
+    numeroVoucher?: string;
+}
+
 export default function RequestDetail({ id, setOpen }: Props) {
     //Hooks *************************************************
     const [openDialog, setOpenDialog] = React.useState<boolean>(false);
@@ -46,7 +60,7 @@ export default function RequestDetail({ id, setOpen }: Props) {
     }, [])
 
     //Functions *************************************************
-    const saveItem = async (values: any) => {
+    const saveItem = async (values: ISaveItemValues) => {
         if (values.apellidos) {
             // Informacion de Alumno
             const studentData = {
@@ -55,7 +69,9 @@ export default function RequestDetail({ id, setOpen }: Props) {
                 dni: values.numeroDocumento,
                 celular: values.celular,
             }
-            await EstudiantesService.updateItem(solicitud?.estudianteId!, studentData)
+            if (solicitud?.estudianteId) {
+                await EstudiantesService.updateItem(solicitud.estudianteId, studentData)
+            }
         } else {
             // Informacion de Solicitud
             let digital: boolean = false
