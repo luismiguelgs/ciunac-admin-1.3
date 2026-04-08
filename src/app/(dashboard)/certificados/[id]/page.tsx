@@ -118,7 +118,7 @@ export default function CertificateDetailPage() {
                         loading ?
                             <LoadingDialog open={loading} message='Cargando...' />
                             :
-                            <CertificateDetail data={detalle} setData={setDetalle} idioma={formik.values.idioma} nivel={formik.values.nivel} />
+                            <CertificateDetail data={detalle} setData={setDetalle} idioma={formik.values.idioma} nivel={formik.values.nivel} curriculaAnterior={formik.values.curriculaAnterior} />
                     }
                 </Grid>
             </Grid>

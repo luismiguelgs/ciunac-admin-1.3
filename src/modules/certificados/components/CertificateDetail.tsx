@@ -19,10 +19,11 @@ type Props = {
     setData?: React.Dispatch<React.SetStateAction<ICertificadoNota[]>>
     idioma?: string | null
     nivel?: string | null
-    nuevo?: boolean
+    nuevo?: boolean,
+    curriculaAnterior?: boolean
 }
 
-export default function CertificateDetail({ data, setData, idioma = null, nivel = null, nuevo = false }: Props) {
+export default function CertificateDetail({ data, setData, idioma = null, nivel = null, nuevo = false, curriculaAnterior = false }: Props) {
     const cursos: { value: string, label: string }[] = []
     if (idioma && nivel) {
         const { niveles, label } = PROGRAMAS.filter(item => item.id === `${idioma}-${nivel}`)[0]
@@ -137,7 +138,14 @@ export default function CertificateDetail({ data, setData, idioma = null, nivel 
     }
 
     const cols: GridColDef[] = [
-        { field: 'ciclo', headerName: 'CURSO', editable: true, type: 'singleSelect', valueOptions: cursos, width: 240 },
+        {
+            field: 'ciclo',
+            headerName: 'CURSO',
+            editable: true,
+            type: curriculaAnterior ? 'string' : 'singleSelect',
+            valueOptions: curriculaAnterior ? undefined : cursos,
+            width: 240
+        },
         { field: 'periodo', headerName: 'CICLO', editable: true, width: 200 },
         { field: 'modalidad', headerName: 'MODALIDAD', type: 'singleSelect', valueOptions: modeOptions, width: 240, editable: true },
         { field: 'nota', headerName: 'NOTA', editable: true, type: 'number' }
