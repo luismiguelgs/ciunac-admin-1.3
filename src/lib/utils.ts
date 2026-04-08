@@ -3,10 +3,10 @@ import * as ExcelJS from 'exceljs';
 import { IUsuario } from "../interfaces/usuario.interface";
 import { ISolicitudRes } from "@/modules/solicitudes/interfaces/solicitudres.interface";
 
-export function mapId<T extends { _id?: string }>(item: T) {
+export function mapId<T extends { _id?: string, id?: string }>(item: T) {
   return {
     ...item,
-    id: item._id,
+    id: item.id || item._id,
     _id: undefined
   };
 }

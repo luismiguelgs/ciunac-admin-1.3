@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import noImage from '@/assets/no_disponible.png'
 import Grid from '@mui/material/Grid2'
 import React from 'react'
@@ -7,6 +7,8 @@ import { validationSchemaBasic } from '../schemas/validation.schema'
 import Image from 'next/image'
 import IEstudiante from '@/modules/estudiantes/interfaces/estudiante.interface'
 import { ISolicitudRes } from '../../interfaces/solicitudres.interface'
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import SaveIcon from '@mui/icons-material/Save';
 
 type Props = {
     item: ISolicitudRes,
@@ -16,8 +18,6 @@ type Props = {
 
 export default function BasicInfo({ item, saveItem }: Props) {
     const [edit, setEdit] = React.useState<boolean>(false)
-
-    console.log(item)
 
     const formik = useFormik<IEstudiante>({
         initialValues: {
@@ -90,6 +90,30 @@ export default function BasicInfo({ item, saveItem }: Props) {
                         slotProps={{ inputLabel: { shrink: true, } }}
                         helperText={formik.touched.celular && formik.errors.celular}
                     />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ ml: 0, mr: 2 }}
+                        fullWidth
+                        onClick={() => setEdit(true)}
+                        endIcon={<EditNoteIcon />}
+                        disabled={edit}>
+                        Editar
+                    </Button>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        type='submit'
+                        fullWidth
+                        sx={{ ml: 0, mr: 2 }}
+                        endIcon={<SaveIcon />}
+                        disabled={!edit}>
+                        Guardar
+                    </Button>
                 </Grid>
             </Grid>
             <Grid container spacing={1} size={{ xs: 12, md: 4 }}>

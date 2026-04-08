@@ -26,13 +26,7 @@ type Props = {
 
 export default function FinanceInfo({item, saveItem}:Props) 
 {
-    let voucher = null
-
-    if(item.imgVoucher){
-        voucher = item.imgVoucher
-    }else{
-        voucher = item.imgVoucher
-    }
+    const voucher = item.imgVoucher && item.imgVoucher !== '0' ? item.imgVoucher : null
     
     const [edit, setEdit] = React.useState<boolean>(false)
     const isPdf = voucher?.split('?')[0].slice(-3) === 'pdf'
@@ -217,7 +211,7 @@ export default function FinanceInfo({item, saveItem}:Props)
                     </Grid>
                     <Grid size={{xs:12}} sx={{display:'flex', justifyContent:'center', alignItems:'center', mt: -2}}>
                     {   Boolean(voucher) ?
-                            (<Link href={voucher} underline='always' target='_blank' rel="noopener" sx={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%'}}>VER VOUCHER</Link>) 
+                            (<Link href={voucher || ''} underline='always' target='_blank' rel="noopener" sx={{display:'flex', justifyContent:'center', alignItems:'center', width:'100%'}}>VER VOUCHER</Link>) 
                         :null
                     }
                     </Grid>

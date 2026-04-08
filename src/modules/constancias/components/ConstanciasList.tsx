@@ -14,58 +14,57 @@ import 'dayjs/locale/es';
 dayjs.locale('es');
 
 type Props = {
-    rows: IConstancia[]
-    setRows: React.Dispatch<React.SetStateAction<IConstancia[]>>
-    printed?: boolean
+	rows: IConstancia[]
+	setRows: React.Dispatch<React.SetStateAction<IConstancia[]>>
+	printed?: boolean
 }
 
-export default function ConstanciasList({rows, setRows, printed}: Props)
-{
-    const navigate = useRouter()
-    const [ openDialog, setOpenDialog ] = React.useState<boolean>(false)
-    const [ID, setID] = React.useState<GridRowId | null>(null);
+export default function ConstanciasList({ rows, setRows, printed }: Props) {
+	const navigate = useRouter()
+	const [openDialog, setOpenDialog] = React.useState<boolean>(false)
+	const [ID, setID] = React.useState<GridRowId | null>(null);
 
-    //Funcions **********************************************************
-    const handleCheckboxChange = async (id:GridRowId, checked:boolean) => {
-        setRows((prevRows) =>
-            prevRows.map((row) =>
-                row.id === id ? { ...row, impreso: checked } : row
-            )
-        );
-        await ConstanciasService.updateStatus(id as string, checked)
-        const info = rows.find((row) => row.id === id)
-		if(checked)
-            await SolicitudesService.updateStatus(info?.solicitud_id as number, 3) //entregardo
-        else
-            await SolicitudesService.updateStatus(info?.solicitud_id as number, 2) //impreso
-    }
-	const handleDetails = (id:GridRowId) => {
-        setID(id)
-		if(printed){
+	//Funcions **********************************************************
+	const handleCheckboxChange = async (id: GridRowId, checked: boolean) => {
+		setRows((prevRows) =>
+			prevRows.map((row) =>
+				row.id === id ? { ...row, impreso: checked } : row
+			)
+		);
+		await ConstanciasService.updateStatus(id as string, checked)
+		const info = rows.find((row) => row.id === id)
+		if (checked)
+			await SolicitudesService.updateStatus(info?.solicitud_id as number, 3) //entregardo
+		else
+			await SolicitudesService.updateStatus(info?.solicitud_id as number, 2) //impreso
+	}
+	const handleDetails = (id: GridRowId) => {
+		setID(id)
+		if (printed) {
 			navigate.push(`../constancias/${id}`)
-		}else{
+		} else {
 			navigate.push(`./constancias/${id}`)
 		}
-    }
-	const handleDelete = (id:GridRowId) => {
+	}
+	const handleDelete = (id: GridRowId) => {
 		setID(id as string)
 		setOpenDialog(true)
 	}
 	const handleConfirmDelete = async () => {
-        if (ID) {
-            //borrar el item
-            await ConstanciasService.deleteItem(ID as string);
-            setRows(rows.filter((row: IConstancia) => row.id !== ID));
-            setID(null);
-            setOpenDialog(false);
-        }
-    };
+		if (ID) {
+			//borrar el item
+			await ConstanciasService.deleteItem(ID as string);
+			setRows(rows.filter((row: IConstancia) => row.id !== ID));
+			setID(null);
+			setOpenDialog(false);
+		}
+	};
 
-    //Columnas *****************************
+	//Columnas *****************************
 	const columns: GridColDef[] = [
-		{ 
-			field: 'tipo', 
-			headerName: 'CONSTANCIA', 
+		{
+			field: 'tipo',
+			headerName: 'CONSTANCIA',
 			width: 150,
 			renderCell: (params) => {
 				switch (params.value) {
@@ -76,7 +75,7 @@ export default function ConstanciasList({rows, setRows, printed}: Props)
 					default:
 						return <Chip label={params.value} />
 				}
-			} 
+			}
 		},
 		{ field: 'estudiante', headerName: 'ESTUDIANTE', width: 220 },
 		{ field: 'dni', headerName: 'DNI', width: 100 },
@@ -84,50 +83,50 @@ export default function ConstanciasList({rows, setRows, printed}: Props)
 		{ field: 'idioma', headerName: 'IDIOMA', width: 100 },
 		{
 			field: 'impreso',
-            headerName: 'IMPRESO',
-            width: 100,
-            renderCell: (params) => {
-                return <Checkbox 
-                    checked={params.value as boolean}
-                    onChange={(e)=>{handleCheckboxChange(params.id as GridRowId, e.target.checked)}} 
-                    inputProps={{'aria-label': 'Checkbox Impreso'}}
-                />
-            }
+			headerName: 'IMPRESO',
+			width: 100,
+			renderCell: (params) => {
+				return <Checkbox
+					checked={params.value as boolean}
+					onChange={(e) => { handleCheckboxChange(params.id as GridRowId, e.target.checked) }}
+					inputProps={{ 'aria-label': 'Checkbox Impreso' }}
+				/>
+			}
 		},
 	]
 
-    return (
+	return (
 		<Grid container spacing={2}>
-			<Grid size={{xs: 12, md: 6}}>
-				<NewButton text="Nueva Constancia" url='./constancias/nuevo'/>
+			<Grid size={{ xs: 12, md: 6 }}>
+				<NewButton text="Nueva Constancia" url='./constancias/nuevo' />
 			</Grid>
-			<Grid size={{xs: 12, md: 6}}>
+			<Grid size={{ xs: 12, md: 6 }}>
 				<Box id='filter-panel' />
 			</Grid>
-			<Grid size={{xs: 12}} minHeight={300}>
-			{
-				printed ? <MyDataGrid
-				data={rows} 
-				cols={columns}
-				handleDetails={handleDetails}
-				handleDelete={handleDelete}
-			/> :
-			<MyDataGrid
-				data={rows}
-				cols={columns}
-				handleDetails={handleDetails}
-				handleDelete={handleDelete}
-			/>
-			}
+			<Grid size={{ xs: 12 }} minHeight={300}>
+				{
+					printed ? <MyDataGrid
+						data={rows}
+						cols={columns}
+						handleDetails={handleDetails}
+						handleDelete={handleDelete}
+					/> :
+						<MyDataGrid
+							data={rows}
+							cols={columns}
+							handleDetails={handleDetails}
+							handleDelete={handleDelete}
+						/>
+				}
 			</Grid>
-				<MyDialog 
-					type='ALERT'
-					title='Borrar Registro'
-					content='¿Desea borrar el registro?'
-					open={openDialog}
-					setOpen={setOpenDialog}
-					actionFunc={handleConfirmDelete}
-				/>
+			<MyDialog
+				type='ALERT'
+				title='Borrar Registro'
+				content='¿Desea borrar el registro?'
+				open={openDialog}
+				setOpen={setOpenDialog}
+				actionFunc={handleConfirmDelete}
+			/>
 		</Grid>
 	)
 }

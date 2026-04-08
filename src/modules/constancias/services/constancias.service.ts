@@ -1,15 +1,22 @@
 import { apiFetch } from "@/lib/api.service";
 import { IConstancia } from "../interfaces/constancia.interface";
-import { mapId, mapIds } from "@/lib/utils";
+import { formatDate, mapId } from "@/lib/utils";
 
 
 const collection = 'constancias'
 
 export class ConstanciasService
 {
-    static async fetchItems(impreso:boolean): Promise<IConstancia[]> {
-        const response = await apiFetch<IConstancia[]>(`${collection}/impresos?impreso=${impreso}`, 'GET')
-        return mapIds(response)
+    static async fetchItems(impreso: boolean): Promise<IConstancia[]> {
+        const response = await apiFetch<any[]>(`${collection}/impresos?impreso=${impreso}`, 'GET')
+        return response.map(item => {
+            const mapped = mapId(item)
+            return {
+                ...mapped,
+                solicitud_id: item.solicitud_id || item.id_solicitud,
+                createAt: formatDate(item.createAt || item.creado_en || item.creadoAt)
+            }
+        }) as IConstancia[]
     }
 
     static async getItem(id:string): Promise<IConstancia> {

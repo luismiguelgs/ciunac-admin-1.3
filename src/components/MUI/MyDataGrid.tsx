@@ -9,18 +9,19 @@ type Props = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any[],
     cols: GridColDef[],
-    handleDetails(id:GridRowId): void
-    handleDelete(id:GridRowId): void
+    handleDetails(id: GridRowId): void
+    handleDelete(id: GridRowId): void;
+    getRowId?: (row: any) => GridRowId;
     extraActions?: (id: GridRowId) => React.ReactNode[];
-    actions?: boolean
+    actions?: boolean;
+    initialState?: any;
 }
 
-export default function MyDataGrid({data, cols,handleDetails, handleDelete, extraActions, actions=true}:Props) 
-{
-    const MyCustomToolbar = (props: GridToolbarProps)=> {
-        return(
+export default function MyDataGrid({ data, cols, handleDetails, handleDelete, getRowId, extraActions, actions = true, initialState }: Props) {
+    const MyCustomToolbar = (props: GridToolbarProps) => {
+        return (
             <React.Fragment>
-                <Portal container={()=>document.getElementById('filter-panel')!}>
+                <Portal container={() => document.getElementById('filter-panel')!}>
                     <GridToolbarQuickFilter />
                 </Portal>
                 <GridToolbar {...props} />
@@ -28,50 +29,59 @@ export default function MyDataGrid({data, cols,handleDetails, handleDelete, extr
         )
     }
 
-    const columns:GridColDef[] = [
+    const columns: GridColDef[] = [
         ...cols,
-        { 
-            field: 'actions', 
-            type: 'actions', 
-            getActions: (params:GridRowParams): React.ReactElement[] => [
-                <GridActionsCellItem 
+        {
+            field: 'actions',
+            type: 'actions',
+            getActions: (params: GridRowParams): React.ReactElement[] => [
+                <GridActionsCellItem
                     key='details'
                     icon={<VisibilityIcon />}
                     label='Detalles'
-                    onClick={()=>handleDetails(params.id)}
+                    onClick={() => handleDetails(params.id)}
                 />,
                 ...(extraActions ? extraActions(params.id) as React.ReactElement[] : []),
-                <GridActionsCellItem 
+                <GridActionsCellItem
                     key='delete'
                     showInMenu
                     icon={<DeleteIcon />}
                     label='Borrar'
-                    onClick={()=>handleDelete(params.id)}
+                    onClick={() => handleDelete(params.id)}
                 />
             ]
         }
-    ]
-    if(!actions) columns.pop();
+    ];
+
+    if (!actions) columns.pop();
+
     return (
-        <DataGrid 
-            pageSizeOptions={[10,25,100]}
+        <DataGrid
+            pageSizeOptions={[10, 25, 100]}
             rows={data}
+            getRowId={getRowId}
             columns={columns}
             disableColumnMenu
-                    slots={{toolbar: MyCustomToolbar}}
-                    initialState={{
-                        filter:{
-                            filterModel:{
-                                items: [],
-                                quickFilterExcludeHiddenColumns:true
-                            }
-                        }
-                    }}
-                    slotProps={{
-                        columnsManagement:{
-                            disableResetButton:true,
-                            disableShowHideToggle: true
-                        }
+            slots={{ toolbar: MyCustomToolbar }}
+            initialState={{
+                filter: {
+                    filterModel: {
+                        items: [],
+                        quickFilterExcludeHiddenColumns: true
+                    },
+                    ...initialState?.filter
+                },
+                sorting: {
+                    sortModel: initialState?.sorting?.sortModel || [],
+                    ...initialState?.sorting
+                },
+                ...initialState
+            }}
+            slotProps={{
+                columnsManagement: {
+                    disableResetButton: true,
+                    disableShowHideToggle: true
+                }
             }}
         />
     )

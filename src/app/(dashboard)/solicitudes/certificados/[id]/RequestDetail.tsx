@@ -2,6 +2,7 @@
 import React from 'react'
 import { MyAccordion, MyDialog } from '@/components/MUI'
 import SolicitudesService from '@/modules/solicitudes/services/solicitud.service'
+import EstudiantesService from '@/modules/estudiantes/services/estudiantes.service'
 import Grid from '@mui/material/Grid2'
 import { Button, Chip, Typography } from '@mui/material'
 import { PanelData } from '@/components/MUI/MyAccordion'
@@ -26,48 +27,60 @@ export default function RequestDetail({ id, setOpen }: Props) {
     const [openDialog, setOpenDialog] = React.useState<boolean>(false);
     const [solicitud, setSolicitud] = React.useState<ISolicitudRes>()
 
-    React.useEffect(() => {
-        const getData = async (id: string) => {
-            try {
-                const solicitud = await SolicitudesService.getItemId(Number(id))
-                setSolicitud(solicitud)
-            }
-            catch (err) {
-                if (err instanceof Error) {
-                    console.error('Error al actualizar el elemento:', err.message);
-                } else {
-                    console.error('Error desconocido al actualizar el elemento:', err);
-                }
+    const getData = async (id: string) => {
+        try {
+            const solicitud = await SolicitudesService.getItemId(Number(id))
+            setSolicitud(solicitud)
+        }
+        catch (err) {
+            if (err instanceof Error) {
+                console.error('Error al actualizar el elemento:', err.message);
+            } else {
+                console.error('Error desconocido al actualizar el elemento:', err);
             }
         }
-        getData(id as string)
+    }
 
+    React.useEffect(() => {
+        getData(id as string)
     }, [])
 
     //Functions *************************************************
-    const saveItem = async (values: ISolicitudRes) => {
-        //Documentos digitales
-        let digital: boolean = false
-        if (Number(values.tipoSolicitudId) === 2 || Number(values.tipoSolicitudId) === 4) {
-            digital = true
+    const saveItem = async (values: any) => {
+        if (values.apellidos) {
+            // Informacion de Alumno
+            const studentData = {
+                nombres: values.nombres,
+                apellidos: values.apellidos,
+                dni: values.numeroDocumento,
+                celular: values.celular,
+            }
+            await EstudiantesService.updateItem(solicitud?.estudianteId!, studentData)
+        } else {
+            // Informacion de Solicitud
+            let digital: boolean = false
+            if (Number(values.tipoSolicitudId) === 2 || Number(values.tipoSolicitudId) === 4) {
+                digital = true
+            }
+            else {
+                digital = false
+            }
+            const data = {
+                tipoSolicitudId: values.tipoSolicitudId,
+                estadoId: values.estadoId,
+                idiomaId: values.idiomaId,
+                nivelId: values.nivelId,
+                digital: digital,
+                numeroVoucher: values.numeroVoucher,
+                pago: values.pago,
+                fechaPago: values.fechaPago,
+            } as unknown as Isolicitud
+            console.log(data)
+            await SolicitudesService.updateItem(Number(id), data)
         }
-        else {
-            digital = false
-        }
-        const data = {
-            tipoSolicitudId: values.tipoSolicitudId,
-            estadoId: values.estadoId,
-            idiomaId: values.idiomaId,
-            nivelId: values.nivelId,
-            digital: digital,
-            numeroVoucher: values.numeroVoucher,
-            pago: values.pago,
-            fechaPago: values.fechaPago,
-        } as unknown as Isolicitud
-        console.log(data)
-        //SolicitudesService.updateItem(Number(id), data)
 
         setOpenDialog(true)
+        getData(id)
     }
 
     const panels: PanelData[] = [
