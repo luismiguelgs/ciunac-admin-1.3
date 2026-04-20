@@ -18,9 +18,11 @@ export class ConstanciasService
         const response = await apiFetch<IRawConstancia[]>(`${collection}/impresos?impreso=${impreso}`, 'GET')
         return response.map(item => {
             const mapped = mapId(item)
+            const solicitudId = item.solicitud_id || item.id_solicitud;
             return {
                 ...mapped,
-                solicitud_id: item.solicitud_id || item.id_solicitud,
+                id: mapped.id || solicitudId?.toString(),
+                solicitud_id: solicitudId,
                 createAt: formatDate(item.createAt || item.creado_en || item.creadoAt)
             }
         }) as IConstancia[]
