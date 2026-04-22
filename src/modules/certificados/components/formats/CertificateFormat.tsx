@@ -3,7 +3,7 @@ import { StyleSheet, Document, Page, View, Text, Font, Image } from '@react-pdf/
 import QRCode from 'qrcode'
 import selloDirector from '@/assets/firma.jpg'
 //import selloCoordinadora from '@/assets/coordinadora.jpg'
-import selloCoordinadora from '@/assets/sello.jpg'
+import selloCoordinadora from '@/assets/verificadora-lic.jpeg'
 //import selloElaborador from '@/assets/elaboradortemporal.jpg'
 import selloElaborador from '@/assets/elaboradoring.jpg'
 import { ICertificadoNota } from '@/modules/certificados/interfaces/certificado.interface'
