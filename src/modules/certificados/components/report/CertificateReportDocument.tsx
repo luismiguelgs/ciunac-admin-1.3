@@ -3,6 +3,7 @@ import React from 'react'
 import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import unacLogo from '@/assets/unac-logo.png'
 import ciunacLogo from '@/assets/logo-ciunac-trans.png'
+import elaboradorSignature from '@/assets/elaboradoring.jpg'
 import {
     ICertificadoReporteItem,
     ICertificadoReporteResponse,
@@ -198,6 +199,22 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica-Bold',
         fontSize: 9.5,
     },
+    closing: {
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    closingText: {
+        width: '100%',
+        marginBottom: 2,
+        fontSize: 9.5,
+        lineHeight: 1.45,
+        textAlign: 'left',
+    },
+    signature: {
+        width: 180,
+        height: 62,
+        objectFit: 'contain',
+    },
     footer: {
         position: 'absolute',
         left: 38,
@@ -388,9 +405,16 @@ export default function CertificateReportDocument({ data, reportNumber, generate
                         ))}
 
                         {isLastPage && (
-                            <View style={styles.totals}>
-                                <Text style={styles.grandTotal}>{`TOTAL GENERAL: ${grandTotal} CERTIFICADOS`}</Text>
-                            </View>
+                            <>
+                                <View style={styles.totals}>
+                                    <Text style={styles.grandTotal}>{`TOTAL GENERAL: ${grandTotal} CERTIFICADOS`}</Text>
+                                </View>
+                                <View style={styles.closing} wrap={false}>
+                                    <Text style={styles.closingText}>Es cuanto tengo que informar a usted.</Text>
+                                    <Text style={styles.closingText}>Atentamente,</Text>
+                                    <Image src={getImageSource(elaboradorSignature)} style={styles.signature} />
+                                </View>
+                            </>
                         )}
 
                         <Text
