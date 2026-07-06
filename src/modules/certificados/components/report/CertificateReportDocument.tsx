@@ -245,12 +245,25 @@ const getDateParts = (date: Date) => {
 }
 
 export const getCertificateReportYear = (date = new Date()) => getDateParts(date).year
+const sortByRegistrationNumber = (items: ICertificadoReporteItem[]) => items
+    .map((item, originalIndex) => ({ item, originalIndex }))
+    .sort((left, right) => {
+        const comparison = left.item.numeroRegistro.trim().localeCompare(
+            right.item.numeroRegistro.trim(),
+            'es',
+            { numeric: true, sensitivity: 'base' },
+        )
+
+        return comparison || left.originalIndex - right.originalIndex
+    })
+    .map(({ item }) => item)
+
 
 const getGroups = (data: ICertificadoReporteResponse): ReportGroup[] => [
-    { title: 'Certificados básicos digitales', items: data.basico?.digitales ?? [] },
-    { title: 'Certificados básicos físicos', items: data.basico?.fisicos ?? [] },
-    { title: 'Certificados intermedios y avanzados digitales', items: data.intermedioAvanzado?.digitales ?? [] },
-    { title: 'Certificados intermedios y avanzados físicos', items: data.intermedioAvanzado?.fisicos ?? [] },
+    { title: 'Certificados básicos digitales', items: sortByRegistrationNumber(data.basico?.digitales ?? []) },
+    { title: 'Certificados básicos físicos', items: sortByRegistrationNumber(data.basico?.fisicos ?? []) },
+    { title: 'Certificados intermedios y avanzados digitales', items: sortByRegistrationNumber(data.intermedioAvanzado?.digitales ?? []) },
+    { title: 'Certificados intermedios y avanzados físicos', items: sortByRegistrationNumber(data.intermedioAvanzado?.fisicos ?? []) },
 ].filter((group) => group.items.length > 0)
 
 const paginateGroups = (groups: ReportGroup[]): ReportPage[] => {
