@@ -8,7 +8,7 @@ import { ICertificado } from "@/modules/certificados/interfaces/certificado.inte
 import {initialValues, validationSchema} from "./form/validation.schema";
 import dayjs from 'dayjs'
 import CertificadosService from "@/modules/certificados/services/certificados.service";
-import { Box } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import BackButton from "@/components/BackButton";
 import CertificateDetail from "./CertificateDetail";
@@ -28,6 +28,7 @@ export default function CertificateNew({ session }: { session: Session | null })
     const [loading, setLoading] = React.useState<boolean>(false)
     const [reload, setReload] = React.useState<boolean>(false)
     const [dataRequest, setDataRequest] = React.useState<ISolicitudRes>()
+    const [openCreateErrorDialog, setOpenCreateErrorDialog] = React.useState<boolean>(false)
     
 	const [id, setId] = React.useState<string>('nuevo')
     const navigate = useRouter()
@@ -37,30 +38,38 @@ export default function CertificateNew({ session }: { session: Session | null })
         validationSchema : validationSchema,
         onSubmit: async(values:ICertificado) =>{
             setLoading(true)
-            values.estudiante = values.estudiante.toUpperCase()
-            // Convert dayjs objects to JavaScript Date objects
-            const formattedValues = {
-                ...values,
-                idioma: idiomas.subjects.find(idioma => idioma.id === +values.idioma)?.nombre,
-                idiomaId: +values.idioma,
-                nivel: NIVEL.find(nivel => nivel.value === String(values.nivel))?.label,
-                nivelId: Number(values.nivel),
-                aceptado: false,
-                impreso: false,
-                periodo: obtenerPeriodo(),
-                duplicado: values.duplicado,
-                url:values.url,
-                elaboradoPor: session?.user?.email,
-                fechaEmision: dayjs(values.fechaEmision).toDate(),
-                fechaConcluido: dayjs(values.fechaConcluido).toDate(),
-                fechaAceptacion: dayjs(values.fechaAceptacion).toDate(),
-            } as ICertificado;
-            
-            const res = await CertificadosService.newItem(formattedValues)
-            await SolicitudesService.updateStatus(values?.solicitudId, 2)
-            setId(String(res.id))
-            navigate.push(`./${res.id}`)
-            setLoading(false)
+            setOpenCreateErrorDialog(false)
+            try {
+                // Convert dayjs objects to JavaScript Date objects
+                const formattedValues = {
+                    ...values,
+                    estudiante: values.estudiante.toUpperCase(),
+                    idioma: idiomas.subjects.find(idioma => idioma.id === +values.idioma)?.nombre,
+                    idiomaId: +values.idioma,
+                    nivel: NIVEL.find(nivel => nivel.value === String(values.nivel))?.label,
+                    nivelId: Number(values.nivel),
+                    aceptado: false,
+                    impreso: false,
+                    periodo: obtenerPeriodo(),
+                    duplicado: values.duplicado,
+                    url:values.url,
+                    elaboradoPor: session?.user?.email,
+                    fechaEmision: dayjs(values.fechaEmision).toDate(),
+                    fechaConcluido: dayjs(values.fechaConcluido).toDate(),
+                    fechaAceptacion: dayjs(values.fechaAceptacion).toDate(),
+                } as ICertificado;
+                
+                const res = await CertificadosService.newItem(formattedValues)
+                await SolicitudesService.updateStatus(values?.solicitudId, 2)
+                setId(String(res.id))
+                navigate.push(`./${res.id}`)
+            } catch (error) {
+                console.error('Error al registrar el certificado:', error)
+                formik.setFieldTouched('numeroRegistro', true, false)
+                setOpenCreateErrorDialog(true)
+            } finally {
+                setLoading(false)
+            }
         }
     })
 
@@ -109,6 +118,29 @@ export default function CertificateNew({ session }: { session: Session | null })
 				</Grid>
 			</Grid>
             <LoadingDialog open={loading} message="Cargando..." />
+            <Dialog
+                open={openCreateErrorDialog}
+                onClose={() => setOpenCreateErrorDialog(false)}
+                aria-labelledby="create-certificate-error-title"
+                aria-describedby="create-certificate-error-description"
+            >
+                <DialogTitle id="create-certificate-error-title">
+                    No se pudo registrar el certificado
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="create-certificate-error-description">
+                        No se pudo completar el registro. Revise el número de registro y los datos ingresados; luego intente nuevamente.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenCreateErrorDialog(false)}>
+                        Cancelar
+                    </Button>
+                    <Button onClick={() => setOpenCreateErrorDialog(false)} autoFocus>
+                        Corregir
+                    </Button>
+                </DialogActions>
+            </Dialog>
 		</Box>
 	)
 }
