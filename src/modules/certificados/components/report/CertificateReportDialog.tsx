@@ -73,7 +73,7 @@ export default function CertificateReportDialog({ open, data, reportNumber, gene
                 </Box>
             </DialogTitle>
             <DialogContent dividers sx={{ p: 0, overflow: 'hidden', flex: 1 }}>
-                <PDFViewer width="100%" height="100%" showToolbar>
+                <PDFViewer key={reportNumber + '-' + generatedAt.getTime()} width="100%" height="100%" showToolbar>
                     {document}
                 </PDFViewer>
             </DialogContent>

@@ -4,6 +4,7 @@ export interface ICertificadoReporteItem {
     alumno: string
     idioma: string
     nivel: string
+    periodo: string
     numeroVoucher: string
 }
 

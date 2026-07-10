@@ -160,29 +160,30 @@ const styles = StyleSheet.create({
     cell: {
         justifyContent: 'center',
         paddingVertical: 4,
-        paddingHorizontal: 3,
+        paddingHorizontal: 2,
         borderRightWidth: 0.7,
         borderBottomWidth: 0.7,
         borderColor: '#7c8794',
     },
     headerCell: {
         fontFamily: 'Helvetica-Bold',
-        fontSize: 7.2,
+        fontSize: 6.8,
         textAlign: 'center',
     },
     bodyCell: {
-        fontSize: 7.1,
+        fontSize: 6.8,
         lineHeight: 1.25,
     },
     centered: {
         textAlign: 'center',
     },
     colIndex: { width: '5%' },
-    colRegister: { width: '17%' },
-    colStudent: { width: '32%' },
-    colLanguage: { width: '13%' },
-    colLevel: { width: '14%' },
-    colVoucher: { width: '19%' },
+    colRegister: { width: '15%' },
+    colStudent: { width: '27%' },
+    colLanguage: { width: '11%' },
+    colLevel: { width: '12%' },
+    colPeriod: { width: '13%' },
+    colVoucher: { width: '17%' },
     totals: {
         marginTop: 7,
         alignItems: 'flex-end',
@@ -355,6 +356,7 @@ const ReportTable = ({ title, items, startIndex, continued }: {
                 <View style={[styles.cell, styles.colStudent]}><Text style={styles.headerCell}>ALUMNO</Text></View>
                 <View style={[styles.cell, styles.colLanguage]}><Text style={styles.headerCell}>IDIOMA</Text></View>
                 <View style={[styles.cell, styles.colLevel]}><Text style={styles.headerCell}>NIVEL</Text></View>
+                <View style={[styles.cell, styles.colPeriod]}><Text style={styles.headerCell}>PERIODO</Text></View>
                 <View style={[styles.cell, styles.colVoucher]}><Text style={styles.headerCell}>N° VOUCHER</Text></View>
             </View>
             {items.map((item, index) => (
@@ -364,6 +366,7 @@ const ReportTable = ({ title, items, startIndex, continued }: {
                     <View style={[styles.cell, styles.colStudent]}><Text style={styles.bodyCell}>{item.alumno}</Text></View>
                     <View style={[styles.cell, styles.colLanguage]}><Text style={[styles.bodyCell, styles.centered]}>{item.idioma}</Text></View>
                     <View style={[styles.cell, styles.colLevel]}><Text style={[styles.bodyCell, styles.centered]}>{item.nivel}</Text></View>
+                    <View style={[styles.cell, styles.colPeriod]}><Text style={[styles.bodyCell, styles.centered]}>{String(item.periodo ?? '').trim()}</Text></View>
                     <View style={[styles.cell, styles.colVoucher]}><Text style={[styles.bodyCell, styles.centered]}>{item.numeroVoucher}</Text></View>
                 </View>
             ))}
